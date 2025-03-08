@@ -1,6 +1,9 @@
 {
   "name": "@openathlete/monorepo",
-  "private": true,
+  "version": "1.0.0",
+  "description": "OpenAthlete monorepo",
+  "author": "Tristan Bouillot <tristan@tblt.fr>",
+  "license": "MPL-2.0",
   "engines": {
     "node": "22.14.0",
     "pnpm": "^9"

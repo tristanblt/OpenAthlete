@@ -1,7 +1,9 @@
 {
   "name": "@openathlete/web",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "OpenAthlete web application",
+  "author": "Tristan Bouillot <tristan@tblt.fr>",
+  "license": "MPL-2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -14,10 +16,13 @@
     "tsc:check": "tsc --noEmit"
   },
   "dependencies": {
+    "@openathlete/shared": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@openathlete/eslint-config": "workspace:*",
+    "@openathlete/prettier-config": "workspace:*",
     "@eslint/js": "^9.21.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

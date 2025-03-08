@@ -1,8 +1,9 @@
 {
   "name": "@openathlete/shared",
   "version": "1.0.0",
-  "description": "Shared type library",
-  "license": "UNLICENSED",
+  "description": "OpenAthlete shared library",
+  "author": "Tristan Bouillot <tristan@tblt.fr>",
+  "license": "MPL-2.0",
   "main": "./dist/index.cjs",
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",

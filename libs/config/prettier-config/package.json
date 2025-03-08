@@ -1,7 +1,9 @@
 {
   "name": "@openathlete/prettier-config",
   "version": "1.0.0",
-  "license": "UNLICENSED",
+  "description": "OpenAthlete Prettier configuration",
+  "author": "Tristan Bouillot <tristan@tblt.fr>",
+  "license": "MPL-2.0",
   "main": ".prettierrc.cjs",
   "type": "commonjs",
   "scripts": {
