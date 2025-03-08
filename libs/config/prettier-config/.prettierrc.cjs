@@ -1,0 +1,25 @@
+module.exports = {
+  importOrder: [
+    '^(@mui|@nestjs)/.*$',
+    '^@openathlete/.*$',
+    '^(src$|src.*$)',
+    '^(\\.$|\\.\\.$|\\..*|\\.\\..*$)',
+  ],
+  importOrderParserPlugins: [
+    'typescript',
+    'jsx',
+    'classProperties',
+    'decorators-legacy',
+  ],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+  singleQuote: true,
+  trailingComma: 'all',
+  bracketSameLine: false,
+  bracketSpacing: true,
+  useTabs: false,
+  tabWidth: 2,
+  endOfLine: 'lf',
+  printWidth: 80,
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
+};

@@ -1,0 +1,26 @@
+{
+  "name": "@openathlete/monorepo",
+  "private": true,
+  "engines": {
+    "node": "22.14.0",
+    "pnpm": "^9"
+  },
+  "scripts": {
+    "app": "pnpm --filter \"@openathlete/app\"",
+    "api": "pnpm --filter \"@openathlete/api\"",
+    "shared": "pnpm --filter \"@openathlete/shared\"",
+    "reinstall": "rm -rf ./**/node_modules && pnpm i",
+    "format:write": "pnpm --parallel --aggregate-output format:write",
+    "lint:fix": "pnpm --parallel --aggregate-output lint:fix",
+    "format": "pnpm --parallel --aggregate-output format",
+    "lint": "pnpm --parallel --aggregate-output lint",
+    "tsc:check": "pnpm --parallel --aggregate-output tsc:check",
+    "list:repos": "pnpm m ls --json | jq -r \".[] | {name, path, version}\""
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/node": "22.13.10",
+      "typescript": "5.1.6"
+    }
+  }
+}

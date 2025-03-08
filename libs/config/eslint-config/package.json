@@ -1,0 +1,19 @@
+{
+  "name": "@openathlete/eslint-config",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "main": ".eslintrc.cjs",
+  "type": "commonjs",
+  "scripts": {
+    "rimraf:node_modules": "sudo rm -rf node_modules"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.26.0",
+    "@typescript-eslint/parser": "^8.26.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3"
+  },
+  "peerDependencies": {
+    "eslint": "^9.22.0"
+  }
+}

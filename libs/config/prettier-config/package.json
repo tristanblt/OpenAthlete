@@ -1,0 +1,14 @@
+{
+  "name": "@openathlete/prettier-config",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "main": ".prettierrc.cjs",
+  "type": "commonjs",
+  "scripts": {
+    "rimraf:node_modules": "sudo rm -rf node_modules"
+  },
+  "peerDependencies": {
+    "prettier": "3.0.0",
+    "@trivago/prettier-plugin-sort-imports": "5.2.2"
+  }
+}

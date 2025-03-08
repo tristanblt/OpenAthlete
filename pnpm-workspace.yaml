@@ -1,0 +1,8 @@
+packages:
+  - "apps/**/*"
+  - "libs/**/*"
+  - "!**/legacy/**"
+  - "!**/build"
+  - "!**/dist*"
+  - "!**/cdk.out/*"
+  - "!library/*"

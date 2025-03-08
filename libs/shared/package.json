@@ -1,0 +1,46 @@
+{
+  "name": "@openathlete/shared",
+  "version": "1.0.0",
+  "description": "Shared type library",
+  "license": "UNLICENSED",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "build": "rollup --config",
+    "build:watch": "rollup --config --watch",
+    "format:write": "prettier --write \"src/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "format": "prettier --check \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --max-warnings 0",
+    "tsc:check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@openathlete/eslint-config": "workspace:*",
+    "@openathlete/prettier-config": "workspace:*",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "rollup": "3.26.3",
+    "typescript": "5.1.6"
+  },
+  "dependencies": {
+    "libphonenumber-js": "^1.10.61",
+    "zod": "^3.21.4"
+  },
+  "files": [
+    "dist",
+    "!**/*.spec.*",
+    "!**/*.json",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs",
+      "node": "./dist/index.cjs"
+    }
+  }
+}
