@@ -6,7 +6,7 @@
     "pnpm": "^9"
   },
   "scripts": {
-    "app": "pnpm --filter \"@openathlete/app\"",
+    "web": "pnpm --filter \"@openathlete/web\"",
     "api": "pnpm --filter \"@openathlete/api\"",
     "shared": "pnpm --filter \"@openathlete/shared\"",
     "reinstall": "rm -rf ./**/node_modules && pnpm i",
