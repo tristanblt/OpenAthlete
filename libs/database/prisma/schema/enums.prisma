@@ -1,0 +1,4 @@
+enum user_role {
+  ATHLETE
+  COACH
+}

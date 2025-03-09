@@ -25,7 +25,6 @@ output.json
 # MISC
 .dccache
 scripts/**/assets
-**/*.*sql
 .cache
 
 # OS

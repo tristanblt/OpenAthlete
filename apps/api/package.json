@@ -9,7 +9,7 @@
     "start": "nest start -e \"node -r dotenv/config\"",
     "dev": "nest start -b swc --watch -e \"node -r dotenv/config\"",
     "start:debug": "nest start --debug --watch -e \"node -r dotenv/config\"",
-    "start:prod": "pnpm typeorm:prod migration:run && node -r dotenv/config dist/main",
+    "start:prod": "node -r dotenv/config dist/main",
     "format:write": "prettier --write \"src/**/*.ts\"",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "format": "prettier --check \"src/**/*.ts\"",
