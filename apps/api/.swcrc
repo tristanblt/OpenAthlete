@@ -18,6 +18,10 @@
     },
     "keepClassNames": true,
     "baseUrl": "./",
-    "paths": { "src/*": ["src/*"] }
+    "paths": {
+      "src/*": [
+        "src/*"
+      ]
+    }
   }
 }
