@@ -1,0 +1,23 @@
+{
+  "name": "@openathlete/database",
+  "version": "1.0.0",
+  "description": "OpenAthlete database library",
+  "author": "Tristan Bouillot <tristan@tblt.fr>",
+  "license": "MPL-2.0",
+  "main": "./generated/client/index.js",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "prisma": "catalog:prisma",
+    "tsx": "^4.19.3",
+    "typescript": "5.1.6"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@prisma/client": "6.4.1"
+  }
+}

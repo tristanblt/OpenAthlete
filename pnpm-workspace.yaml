@@ -4,5 +4,7 @@ packages:
   - "!**/legacy/**"
   - "!**/build"
   - "!**/dist*"
-  - "!**/cdk.out/*"
   - "!library/*"
+catalogs:
+  prisma:
+    prisma: latest
