@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "libphonenumber-js": "^1.10.61",
-    "zod": "^3.21.4"
+    "zod": "^3.24.2"
   },
   "files": [
     "dist",
