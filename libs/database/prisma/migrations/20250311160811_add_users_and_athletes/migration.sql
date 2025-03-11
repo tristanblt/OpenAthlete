@@ -9,7 +9,6 @@ CREATE TABLE "user" (
     "roles" "user_role"[],
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
-    "athlete_id" INTEGER,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -19,6 +18,7 @@ CREATE TABLE "user" (
 -- CreateTable
 CREATE TABLE "athlete" (
     "athlete_id" SERIAL NOT NULL,
+    "user_id" INTEGER NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -39,8 +39,11 @@ CREATE TABLE "coach_athlete" (
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_key" ON "user"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "athlete_user_id_key" ON "athlete"("user_id");
+
 -- AddForeignKey
-ALTER TABLE "user" ADD CONSTRAINT "user_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "athlete"("athlete_id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "athlete" ADD CONSTRAINT "athlete_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "coach_athlete" ADD CONSTRAINT "coach_athlete_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("user_id") ON DELETE RESTRICT ON UPDATE CASCADE;

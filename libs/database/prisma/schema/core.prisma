@@ -10,8 +10,7 @@ model user {
   last_name  String
 
   // relationships
-  athlete        athlete?        @relation(fields: [user_id], references: [athlete_id])
-  athlete_id     Int?
+  athlete        athlete?
   coach_athletes coach_athlete[]
 
   // timestamps
@@ -26,7 +25,8 @@ model athlete {
   // fields
 
   // relationships
-  user           user?
+  user           user            @relation(fields: [user_id], references: [user_id])
+  user_id        Int             @unique
   coach_athletes coach_athlete[]
 
   // timestamps
