@@ -6,7 +6,7 @@ CREATE TABLE "user" (
     "user_id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "user_role"[],
+    "roles" "user_role"[],
     "first_name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
     "athlete_id" INTEGER,

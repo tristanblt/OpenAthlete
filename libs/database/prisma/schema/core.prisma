@@ -5,7 +5,7 @@ model user {
   // fields
   email      String      @unique
   password   String
-  role       user_role[]
+  roles      user_role[]
   first_name String
   last_name  String
 
