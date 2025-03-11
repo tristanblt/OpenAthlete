@@ -1,5 +1,6 @@
 import { AuthLayout } from '@/components/layouts/auth.layout';
 import { LoadingScreen } from '@/components/loading-screen';
+import { GuestGuard } from '@/guards';
 import { Suspense, lazy } from 'react';
 import { Outlet, RouteObject } from 'react-router-dom';
 
@@ -11,13 +12,21 @@ const LoginPage = lazy(() =>
   })),
 );
 
+const CreateAccountPage = lazy(() =>
+  import('@/pages/auth/create-account').then((module) => ({
+    default: module.CreateAccountPage,
+  })),
+);
+
 export const authRoutes: RouteObject[] = [
   {
     path: getPath(['auth']),
     element: (
-      <Suspense fallback={<LoadingScreen />}>
-        <Outlet />
-      </Suspense>
+      <GuestGuard>
+        <Suspense fallback={<LoadingScreen />}>
+          <Outlet />
+        </Suspense>
+      </GuestGuard>
     ),
     children: [
       {
@@ -25,6 +34,14 @@ export const authRoutes: RouteObject[] = [
         element: (
           <AuthLayout>
             <LoginPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: getPathEnd(getPath(['auth', 'createAccount'])),
+        element: (
+          <AuthLayout>
+            <CreateAccountPage />
           </AuthLayout>
         ),
       },
