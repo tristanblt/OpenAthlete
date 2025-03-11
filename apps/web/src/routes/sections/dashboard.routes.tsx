@@ -1,5 +1,6 @@
 import DashboardLayout from '@/components/layouts/dashboard.layout';
 import { LoadingScreen } from '@/components/loading-screen';
+import { AuthGuard } from '@/guards';
 import { Suspense, lazy } from 'react';
 import { Outlet, RouteObject } from 'react-router-dom';
 
@@ -15,11 +16,13 @@ export const dashboardRoutes: RouteObject[] = [
   {
     path: getPath(['dashboard']),
     element: (
-      <DashboardLayout>
-        <Suspense fallback={<LoadingScreen />}>
-          <Outlet />
-        </Suspense>
-      </DashboardLayout>
+      <AuthGuard>
+        <DashboardLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </DashboardLayout>
+      </AuthGuard>
     ),
     children: [{ element: <IndexPage />, index: true }],
   },
