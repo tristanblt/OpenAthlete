@@ -17,13 +17,22 @@
     "tsc:check": "tsc --noEmit"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.3",
+    "@casl/prisma": "^1.5.1",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
     "@openathlete/database": "workspace:*",
     "@openathlete/shared": "workspace:*",
     "@prisma/client": "6.4.1",
+    "argon2": "^0.41.1",
     "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
+    "nestjs-zod": "^4.3.1",
+    "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
