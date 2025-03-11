@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { getPath } from '@/routes/paths';
-import { UserService } from '@/services/user/user.service';
+import { UserService } from '@/services/user';
 import { isValidToken } from '@/utils/auth';
 import { ACCESS_TOKEN, clear, getItem, setItem } from '@/utils/local-storage';
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
