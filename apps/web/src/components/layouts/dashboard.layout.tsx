@@ -6,7 +6,7 @@ interface P {
   children: React.ReactNode;
 }
 
-export default function DashboardLayout({ children }: P) {
+export function DashboardLayout({ children }: P) {
   return (
     <SidebarProvider>
       <AppSidebar />

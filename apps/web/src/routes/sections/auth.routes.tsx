@@ -1,4 +1,4 @@
-import { AuthLayout } from '@/components/layouts/auth.layout';
+import { AuthLayout } from '@/components/layouts';
 import { LoadingScreen } from '@/components/loading-screen';
 import { GuestGuard } from '@/guards';
 import { Suspense, lazy } from 'react';

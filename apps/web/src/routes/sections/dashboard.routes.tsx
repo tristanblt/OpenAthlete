@@ -1,4 +1,4 @@
-import DashboardLayout from '@/components/layouts/dashboard.layout';
+import { DashboardLayout } from '@/components/layouts';
 import { LoadingScreen } from '@/components/loading-screen';
 import { AuthGuard } from '@/guards';
 import { Suspense, lazy } from 'react';

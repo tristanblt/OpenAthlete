@@ -1,4 +1,4 @@
-import CompactLayout from '@/components/layouts/compact.layout';
+import { CompactLayout } from '@/components/layouts';
 import { LoadingScreen } from '@/components/loading-screen';
 import { Suspense, lazy } from 'react';
 import { Outlet, RouteObject } from 'react-router-dom';
