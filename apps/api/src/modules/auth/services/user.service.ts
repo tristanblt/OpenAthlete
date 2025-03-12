@@ -9,8 +9,12 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { Prisma, user } from '@openathlete/database';
-import { ApiEnvSchemaType, CreateAccountDto } from '@openathlete/shared';
+import { Prisma, user, user_role } from '@openathlete/database';
+import {
+  ApiEnvSchemaType,
+  CreateAccountDto,
+  keysToCamel,
+} from '@openathlete/shared';
 
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
@@ -48,10 +52,18 @@ export class UserService {
     });
 
   public getMe = async (user: AuthUser) => {
-    return this.prisma.user.findUniqueOrThrow({
-      where: { user_id: user.user_id },
-      select: { user_id: true, email: true, first_name: true, last_name: true },
-    });
+    return keysToCamel(
+      await this.prisma.user.findUniqueOrThrow({
+        where: { user_id: user.user_id },
+        select: {
+          user_id: true,
+          email: true,
+          first_name: true,
+          last_name: true,
+          roles: true,
+        },
+      }),
+    );
   };
 
   public createAccount = async ({
@@ -72,17 +84,20 @@ export class UserService {
       throw new ConflictException('User already exists');
     }
 
-    return this.prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        first_name: firstName,
-        last_name: lastName,
-      },
-      select: {
-        user_id: true,
-      },
-    });
+    return keysToCamel(
+      await this.prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          first_name: firstName,
+          last_name: lastName,
+          roles: [user_role.ATHLETE, user_role.COACH],
+        },
+        select: {
+          user_id: true,
+        },
+      }),
+    );
   };
 
   async comparePasswords(
