@@ -1,4 +1,4 @@
-import { user } from '@openathlete/database';
+import { User } from '@openathlete/shared';
 
 export type ActionMapType<M extends { [index: string]: unknown }> = {
   [Key in keyof M]: M[Key] extends undefined
@@ -14,11 +14,11 @@ export type ActionMapType<M extends { [index: string]: unknown }> = {
 export type AuthStateType = {
   status?: string;
   loading: boolean;
-  user: user | null;
+  user: User | null;
 };
 
 export type AuthContextType = {
-  user: user | null;
+  user: User | null;
   loading: boolean;
   authenticated: boolean;
   unauthenticated: boolean;

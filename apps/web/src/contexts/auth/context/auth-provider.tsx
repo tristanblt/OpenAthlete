@@ -5,7 +5,7 @@ import { isValidToken } from '@/utils/auth';
 import { ACCESS_TOKEN, clear, getItem, setItem } from '@/utils/local-storage';
 import { useCallback, useEffect, useMemo, useReducer } from 'react';
 
-import { user } from '@openathlete/database';
+import { User } from '@openathlete/shared';
 
 import { ActionMapType, AuthContextType, AuthStateType } from '../types';
 import { AuthContext } from './auth-context';
@@ -37,7 +37,7 @@ type Props = {
 
 type Payload = {
   [Types.INITIAL]: {
-    user: user | null;
+    user: User | null;
   };
   [Types.LOGOUT]: undefined;
 };
