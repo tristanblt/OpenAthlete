@@ -21,6 +21,7 @@
   "devDependencies": {
     "@openathlete/eslint-config": "workspace:*",
     "@openathlete/prettier-config": "workspace:*",
+    "@openathlete/database": "workspace:*",
     "@rollup/plugin-typescript": "^11.0.0",
     "rollup": "3.26.3",
     "typescript": "5.1.6"

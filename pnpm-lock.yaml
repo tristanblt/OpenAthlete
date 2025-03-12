@@ -347,6 +347,9 @@ importers:
         specifier: ^3.24.2
         version: 3.24.2
     devDependencies:
+      '@openathlete/database':
+        specifier: workspace:*
+        version: link:../database
       '@openathlete/eslint-config':
         specifier: workspace:*
         version: link:../config/eslint-config
