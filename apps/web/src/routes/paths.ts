@@ -27,6 +27,7 @@ export const paths: Paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
+    calendar: `${ROOTS.DASHBOARD}/calendar`,
   },
 } as const;
 

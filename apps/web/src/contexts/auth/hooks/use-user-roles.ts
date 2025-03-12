@@ -2,7 +2,7 @@ import { useContext } from 'react';
 
 import { AuthContext } from '../context/auth-context';
 
-export const useUserType = () => {
+export const useUserRoles = () => {
   const context = useContext(AuthContext);
 
   if (!context)

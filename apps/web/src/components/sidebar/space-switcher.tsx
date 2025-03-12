@@ -1,38 +1,62 @@
-import * as React from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
-
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
+} from '@/components/ui/sidebar';
+import { useUserRoles } from '@/contexts/auth';
+import { AudioWaveform, ChevronsUpDown, Command } from 'lucide-react';
+import * as React from 'react';
 
-export function TeamSwitcher({
-  teams,
-}: {
-  teams: {
-    name: string
-    logo: React.ElementType
-    plan: string
-  }[]
-}) {
-  const { isMobile } = useSidebar()
-  const [activeTeam, setActiveTeam] = React.useState(teams[0])
+import { UserRole } from '@openathlete/shared';
 
-  if (!activeTeam) {
-    return null
+export function SpaceSwitcher() {
+  const roles = useUserRoles();
+  const { isMobile } = useSidebar();
+  const [activeRole, setActiveRole] = React.useState<UserRole | undefined>(
+    roles?.[0],
+  );
+
+  React.useEffect(() => {
+    setActiveRole(roles?.[0]);
+  }, [roles]);
+
+  const spaces = React.useMemo<
+    { role: UserRole; name: string; logo: React.ElementType }[]
+  >(
+    () =>
+      roles?.map((role) => {
+        switch (role) {
+          case 'ATHLETE':
+            return {
+              role: 'ATHLETE',
+              name: 'Athlete',
+              logo: AudioWaveform,
+            };
+          case 'COACH':
+            return {
+              role: 'COACH',
+              name: 'Coach',
+              logo: Command,
+            };
+        }
+      }) || [],
+    [roles],
+  );
+
+  const activeSpace = spaces.find((space) => space.role === activeRole);
+
+  if (!activeSpace) {
+    return null;
   }
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -43,11 +67,11 @@ export function TeamSwitcher({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <activeTeam.logo className="size-4" />
+                <activeSpace.logo className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{activeTeam.name}</span>
-                <span className="truncate text-xs">{activeTeam.plan}</span>
+                <span className="truncate font-medium">{activeSpace.name}</span>
+                {/* <span className="truncate text-xs">{activeSpace.plan}</span> */}
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -55,35 +79,35 @@ export function TeamSwitcher({
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
             align="start"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Teams
+              Spaces
             </DropdownMenuLabel>
-            {teams.map((team, index) => (
+            {spaces.map((space, index) => (
               <DropdownMenuItem
-                key={team.name}
-                onClick={() => setActiveTeam(team)}
+                key={space.name}
+                onClick={() => setActiveRole(space.role)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-xs border">
-                  <team.logo className="size-4 shrink-0" />
+                  <space.logo className="size-4 shrink-0" />
                 </div>
-                {team.name}
+                {space.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
+            {/* <DropdownMenuSeparator /> */}
+            {/* <DropdownMenuItem className="gap-2 p-2">
               <div className="bg-background flex size-6 items-center justify-center rounded-md border">
                 <Plus className="size-4" />
               </div>
               <div className="text-muted-foreground font-medium">Add team</div>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
