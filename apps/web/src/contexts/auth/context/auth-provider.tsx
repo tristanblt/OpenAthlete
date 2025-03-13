@@ -54,10 +54,10 @@ export function AuthProvider({ children }: Props) {
 
   const initialize = useCallback(async () => {
     try {
-      const access_token = getItem(ACCESS_TOKEN);
+      const accessToken = getItem(ACCESS_TOKEN);
 
-      if (access_token && isValidToken(access_token)) {
-        setItem(ACCESS_TOKEN, access_token);
+      if (accessToken && isValidToken(accessToken)) {
+        setItem(ACCESS_TOKEN, accessToken);
 
         const user = await UserService.getMe();
 
@@ -68,12 +68,23 @@ export function AuthProvider({ children }: Props) {
           },
         });
       } else {
-        dispatch({
-          type: Types.INITIAL,
-          payload: {
-            user: null,
-          },
-        });
+        try {
+          const user = await UserService.getMe();
+
+          dispatch({
+            type: Types.INITIAL,
+            payload: {
+              user,
+            },
+          });
+        } catch (error) {
+          dispatch({
+            type: Types.INITIAL,
+            payload: {
+              user: null,
+            },
+          });
+        }
       }
     } catch (error) {
       dispatch({

@@ -19,7 +19,7 @@ type TokenInfo = {
     }
 );
 
-async function refreshToken(): Promise<TokenInfo | null> {
+export async function refreshToken(): Promise<TokenInfo | null> {
   const token = getItem(REFRESH_TOKEN);
   if (!token) return null;
 
