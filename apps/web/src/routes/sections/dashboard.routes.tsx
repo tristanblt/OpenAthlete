@@ -12,6 +12,12 @@ const IndexPage = lazy(() =>
   })),
 );
 
+const CalendarPage = lazy(() =>
+  import('@/pages/dashboard/calendar').then((module) => ({
+    default: module.CalendarPage,
+  })),
+);
+
 export const dashboardRoutes: RouteObject[] = [
   {
     path: getPath(['dashboard']),
@@ -24,6 +30,12 @@ export const dashboardRoutes: RouteObject[] = [
         </DashboardLayout>
       </AuthGuard>
     ),
-    children: [{ element: <IndexPage />, index: true }],
+    children: [
+      { element: <IndexPage />, index: true },
+      {
+        path: getPath(['dashboard', 'calendar']),
+        element: <CalendarPage />,
+      },
+    ],
   },
 ];
