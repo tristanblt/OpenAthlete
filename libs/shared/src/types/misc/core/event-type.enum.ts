@@ -1,0 +1,5 @@
+export enum EVENT_TYPE {
+  TRAINING = 'TRAINING',
+  COMPETITION = 'COMPETITION',
+  NOTE = 'NOTE',
+}
