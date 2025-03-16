@@ -28,6 +28,7 @@ model athlete {
   user           user            @relation(fields: [user_id], references: [user_id])
   user_id        Int             @unique
   coach_athletes coach_athlete[]
+  events         event[]
 
   // timestamps
   created_at DateTime @default(now())

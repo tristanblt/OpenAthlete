@@ -1,0 +1,54 @@
+model event {
+  // primary key
+  event_id Int @id @default(autoincrement())
+
+  // fields
+  start_date DateTime
+  end_date   DateTime
+  name       String
+  type       event_type
+
+  training    event_training?
+  competition event_competition?
+  note        event_note?
+
+  athlete    athlete @relation(fields: [athlete_id], references: [athlete_id])
+  athlete_id Int     @unique
+
+  // timestamps
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model event_training {
+  // primary key
+  event_training_id Int @id @default(autoincrement())
+
+  // fields
+
+  // relationships
+  event    event @relation(fields: [event_id], references: [event_id])
+  event_id Int   @unique
+}
+
+model event_competition {
+  // primary key
+  event_competition_id Int @id @default(autoincrement())
+
+  // fields
+
+  // relationships
+  event    event @relation(fields: [event_id], references: [event_id])
+  event_id Int   @unique
+}
+
+model event_note {
+  // primary key
+  event_note_id Int @id @default(autoincrement())
+
+  // fields
+
+  // relationships
+  event    event @relation(fields: [event_id], references: [event_id])
+  event_id Int   @unique
+}

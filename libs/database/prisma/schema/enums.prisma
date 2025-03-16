@@ -2,3 +2,9 @@ enum user_role {
   ATHLETE
   COACH
 }
+
+enum event_type {
+  TRAINING
+  COMPETITION
+  NOTE
+}
