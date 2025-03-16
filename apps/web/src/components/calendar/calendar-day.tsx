@@ -45,10 +45,10 @@ export function CalendarDay({ day }: P) {
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64">
           <ContextMenuItem>
-            Plan a workout<ContextMenuShortcut>⌘T</ContextMenuShortcut>
+            Plan a training<ContextMenuShortcut>⌘T</ContextMenuShortcut>
           </ContextMenuItem>
           <ContextMenuItem>
-            Plan a race<ContextMenuShortcut>⌘R</ContextMenuShortcut>
+            Plan a competition<ContextMenuShortcut>⌘R</ContextMenuShortcut>
           </ContextMenuItem>
           <ContextMenuItem>
             Plan a note<ContextMenuShortcut>⌘E</ContextMenuShortcut>
