@@ -15,7 +15,7 @@ interface P {
 }
 
 export function CalendarDay({ day }: P) {
-  const { displayedMonth } = useCalendarContext();
+  const { displayedMonth, createEvent } = useCalendarContext();
   const dayOfMonth = day.getDate();
   const isToday = day.toDateString() === new Date().toDateString();
   const isCurrentMonth = day.getMonth() === displayedMonth.getMonth();
@@ -44,13 +44,13 @@ export function CalendarDay({ day }: P) {
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64">
-          <ContextMenuItem>
+          <ContextMenuItem onClick={() => createEvent(day, 'TRAINING')}>
             Plan a training<ContextMenuShortcut>⌘T</ContextMenuShortcut>
           </ContextMenuItem>
-          <ContextMenuItem>
+          <ContextMenuItem onClick={() => createEvent(day, 'COMPETITION')}>
             Plan a competition<ContextMenuShortcut>⌘R</ContextMenuShortcut>
           </ContextMenuItem>
-          <ContextMenuItem>
+          <ContextMenuItem onClick={() => createEvent(day, 'NOTE')}>
             Plan a note<ContextMenuShortcut>⌘E</ContextMenuShortcut>
           </ContextMenuItem>
         </ContextMenuContent>
