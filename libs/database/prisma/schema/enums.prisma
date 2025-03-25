@@ -8,3 +8,10 @@ enum event_type {
   COMPETITION
   NOTE
 }
+
+enum connector_provider {
+  STRAVA
+  GARMIN
+  FITBIT
+  APPLE_HEALTH
+}
