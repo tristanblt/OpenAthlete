@@ -9,7 +9,7 @@ import {
   event_training,
   user_role,
 } from '@openathlete/database';
-import { CreateEventDto } from '@openathlete/shared';
+import { CreateEventDto, keysToCamel } from '@openathlete/shared';
 
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
@@ -46,7 +46,7 @@ export class EventService {
       userEntity.athlete?.athlete_id
     ) {
       return this.getEventsOfAthlete(userEntity.athlete?.athlete_id).then(
-        (events) => events.map(this.prismaEventToEvent),
+        (events) => events.map((e) => keysToCamel(this.prismaEventToEvent(e))),
       );
     }
   }
@@ -72,17 +72,19 @@ export class EventService {
       throw new Error('Athlete ID is required');
     }
 
-    return this.prisma.event.create({
-      data: {
-        athlete_id: finalAthleteId,
-        start_date: startDate,
-        end_date: endDate,
-        name,
-        type,
-        [type.toLocaleLowerCase()]: {
-          create: rest,
+    return keysToCamel(
+      this.prisma.event.create({
+        data: {
+          athlete_id: finalAthleteId,
+          start_date: startDate,
+          end_date: endDate,
+          name,
+          type,
+          [type.toLocaleLowerCase()]: {
+            create: rest,
+          },
         },
-      },
-    });
+      }),
+    );
   }
 }
