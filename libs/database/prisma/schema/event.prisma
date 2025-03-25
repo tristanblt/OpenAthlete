@@ -13,7 +13,7 @@ model event {
   note        event_note?
 
   athlete    athlete @relation(fields: [athlete_id], references: [athlete_id])
-  athlete_id Int     @unique
+  athlete_id Int
 
   // timestamps
   created_at DateTime @default(now())
