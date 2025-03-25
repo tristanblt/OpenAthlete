@@ -10,6 +10,10 @@ export const ApiEnvSchema = z.object({
   HASH_PEPPER: z.string().nonempty(),
   JWT_SECRET_KEY: z.string().nonempty(),
   DATABASE_URL: z.string().nonempty(),
+
+  STRAVA_CLIENT_ID: z.string().nonempty(),
+  STRAVA_CLIENT_SECRET: z.string().nonempty(),
+  STRAVA_REDIRECT_URI: z.string().nonempty(),
 });
 
 export type ApiEnvSchemaType = z.infer<typeof ApiEnvSchema>;

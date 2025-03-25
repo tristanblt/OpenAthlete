@@ -1,5 +1,6 @@
 import {
   athlete,
+  connector_provider,
   event,
   event_type,
   user,
@@ -10,6 +11,8 @@ import { EVENT_TYPE } from '../types/misc';
 import { ConvertKeysToCamelCase } from '../utils/data.mapper';
 
 export type UserRole = ConvertKeysToCamelCase<user_role>;
+
+export type ConnectorProvider = ConvertKeysToCamelCase<connector_provider>;
 
 export interface User extends ConvertKeysToCamelCase<user> {
   roles: UserRole[];
