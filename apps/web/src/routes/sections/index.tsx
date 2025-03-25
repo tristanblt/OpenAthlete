@@ -10,6 +10,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <Navigate to={PATH_AFTER_LOGIN} replace />,
   },
+
   ...authRoutes,
   ...dashboardRoutes,
   ...mainRoutes,

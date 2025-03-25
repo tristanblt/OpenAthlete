@@ -22,12 +22,14 @@ export const paths: Paths = {
     root: ROOTS.AUTH,
     login: `${ROOTS.AUTH}/login`,
     createAccount: `${ROOTS.AUTH}/create-account`,
+    oauth: `${ROOTS.AUTH}/callback/:provider`,
   },
 
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
     calendar: `${ROOTS.DASHBOARD}/calendar`,
+    settings: `${ROOTS.DASHBOARD}/settings`,
   },
 } as const;
 
