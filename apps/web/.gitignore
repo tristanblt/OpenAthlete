@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build files
+vite.config.js
+vite.config.d.ts
+tsconfig.node.tsbuildinfo
