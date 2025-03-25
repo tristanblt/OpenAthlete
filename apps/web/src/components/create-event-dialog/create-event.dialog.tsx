@@ -2,6 +2,7 @@ import { useCreateEventMutation } from '@/services/event';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { EVENT_TYPE, createEventDtoSchema } from '@openathlete/shared';
@@ -38,6 +39,10 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
   const createEventMutation = useCreateEventMutation({
     onSuccess: () => {
       onClose();
+      toast.success('Event created successfully');
+    },
+    onError: () => {
+      toast.error('Failed to create event');
     },
   });
   const methods = useForm<z.infer<typeof createEventDtoSchema>>({
