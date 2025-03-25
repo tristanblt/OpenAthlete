@@ -17,10 +17,13 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useAuthContext } from '@/contexts/auth';
-import { BadgeCheck, ChevronsUpDown, LogOut } from 'lucide-react';
+import { getPath } from '@/routes/paths';
+import { BadgeCheck, ChevronsUpDown, CogIcon, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export function NavUser() {
   const { logout, user } = useAuthContext();
+  const navigate = useNavigate();
   const { isMobile } = useSidebar();
 
   if (!user) {
@@ -75,9 +78,15 @@ export function NavUser() {
             </DropdownMenuGroup> */}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <BadgeCheck />
                 Account
+              </DropdownMenuItem> */}
+              <DropdownMenuItem
+                onClick={() => navigate(getPath(['dashboard', 'settings']))}
+              >
+                <CogIcon />
+                Settings
               </DropdownMenuItem>
               {/* <DropdownMenuItem>
                 <CreditCard />
