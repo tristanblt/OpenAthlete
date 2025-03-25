@@ -1,10 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 
+import { Event } from '@openathlete/shared';
+
 interface CalendarData {
   defaultMonth?: Date;
+  events?: Event[];
 }
 
-export function useCalendarData({ defaultMonth }: CalendarData) {
+export function useCalendarData({ defaultMonth, events }: CalendarData) {
   const [displayedMonth, setDisplayedMonth] = useState(
     defaultMonth || new Date(),
   );
@@ -89,5 +92,16 @@ export function useCalendarData({ defaultMonth }: CalendarData) {
     nextMonth,
     prevMonth,
     displayedWeeks,
+    events:
+      events?.filter((event) => {
+        const start = new Date(event.startDate);
+        const end = new Date(event.startDate);
+        return (
+          start.getFullYear() === displayedMonth.getFullYear() &&
+          start.getMonth() === displayedMonth.getMonth() &&
+          end.getFullYear() === displayedMonth.getFullYear() &&
+          end.getMonth() === displayedMonth.getMonth()
+        );
+      }) || [],
   };
 }

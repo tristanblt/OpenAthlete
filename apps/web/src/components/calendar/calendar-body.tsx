@@ -4,7 +4,7 @@ import { useCalendarContext } from './hooks/use-calendar-context';
 interface P {}
 
 export function CalendarBody({}: P) {
-  const { displayedWeeks } = useCalendarContext();
+  const { displayedWeeks, events } = useCalendarContext();
 
   return (
     <div className="w-full border-1 rounded-lg">
@@ -24,7 +24,14 @@ export function CalendarBody({}: P) {
           className="grid grid-cols-7 [&:not(:last-child)]:border-b-1"
         >
           {week.map((day, i) => (
-            <CalendarDay key={i} day={day} />
+            <CalendarDay
+              key={i}
+              day={day}
+              events={events.filter(
+                (event) =>
+                  event.startDate.toDateString() === day.toDateString(),
+              )}
+            />
           ))}
         </div>
       ))}
