@@ -15,6 +15,10 @@ export const routes = {
     getMe: '/user/me',
     createAccount: '/user',
   },
+  event: {
+    create: '/event',
+    getMyEvents: '/event',
+  },
 } as const;
 
 const client = axios.create({
