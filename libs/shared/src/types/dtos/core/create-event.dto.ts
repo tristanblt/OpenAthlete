@@ -3,8 +3,8 @@ import { z } from 'zod';
 import { EVENT_TYPE } from '../../misc';
 
 const baseEventSchema = z.object({
-  startDate: z.date(),
-  endDate: z.date(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
   name: z.string(),
   athleteId: z.number().optional(),
 });

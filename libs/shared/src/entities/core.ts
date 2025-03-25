@@ -1,5 +1,12 @@
-import { athlete, event_type, user, user_role } from '@openathlete/database';
+import {
+  athlete,
+  event,
+  event_type,
+  user,
+  user_role,
+} from '@openathlete/database';
 
+import { EVENT_TYPE } from '../types/misc';
 import { ConvertKeysToCamelCase } from '../utils/data.mapper';
 
 export type UserRole = ConvertKeysToCamelCase<user_role>;
@@ -13,15 +20,8 @@ export interface Athlete extends ConvertKeysToCamelCase<athlete> {
   user?: User;
 }
 
-export type EventType = ConvertKeysToCamelCase<event_type>;
-
-export interface Event {
-  event_id: number;
-  name: string;
-  athlete_id: number;
-  start_date: Date;
-  end_date: Date;
-  type: EventType;
+export interface Event extends ConvertKeysToCamelCase<event> {
+  type: EVENT_TYPE;
 }
 
 export interface TrainingEvent extends Event {}
