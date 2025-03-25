@@ -3,6 +3,8 @@ import { getAccessToken } from '@/utils/auth';
 import { QueryClient } from '@tanstack/react-query';
 import axios, { isAxiosError } from 'axios';
 
+import { ConnectorProvider } from '@openathlete/shared';
+
 import { ACCESS_TOKEN, REFRESH_TOKEN, setItem } from './local-storage';
 
 export const routes = {
@@ -20,8 +22,10 @@ export const routes = {
     getMyEvents: '/event',
   },
   connector: {
-    getOAuthUri: (provider: string) => `/connector/${provider}/uri`,
-    setOAuthToken: (provider: string) => `/connector/${provider}/token`,
+    getOAuthUri: (provider: ConnectorProvider) =>
+      `/connector/${provider.toLowerCase()}/uri`,
+    setOAuthToken: (provider: ConnectorProvider) =>
+      `/connector/${provider.toLowerCase()}/token`,
   },
 } as const;
 

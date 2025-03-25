@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useAuthContext } from '@/contexts/auth';
 import { getPath } from '@/routes/paths';
-import { BadgeCheck, ChevronsUpDown, CogIcon, LogOut } from 'lucide-react';
+import { ChevronsUpDown, CogIcon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export function NavUser() {

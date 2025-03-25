@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
+import { ConnectorProvider } from '@openathlete/shared';
+
 export function OAuthCallbackPage() {
   const { provider } = useParams();
   const [searchParams] = useSearchParams();
@@ -22,8 +24,16 @@ export function OAuthCallbackPage() {
 
   useEffect(() => {
     const code = searchParams.get('code');
-    if (code && provider) {
-      setOAuthTokenMutation.mutate({ provider, code });
+    const finalProvider = (provider || '').toUpperCase();
+    const validProviders = ['STRAVA'];
+    if (code && provider && validProviders.includes(finalProvider)) {
+      setOAuthTokenMutation.mutate({
+        provider: finalProvider as ConnectorProvider,
+        code,
+      });
+    } else {
+      nav(getPath(['dashboard', 'settings']));
+      toast.error('Invalid provider');
     }
   }, [provider, searchParams]);
 
