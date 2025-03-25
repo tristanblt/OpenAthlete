@@ -19,6 +19,10 @@ export const routes = {
     create: '/event',
     getMyEvents: '/event',
   },
+  connector: {
+    getOAuthUri: (provider: string) => `/connector/${provider}/uri`,
+    setOAuthToken: (provider: string) => `/connector/${provider}/token`,
+  },
 } as const;
 
 const client = axios.create({
