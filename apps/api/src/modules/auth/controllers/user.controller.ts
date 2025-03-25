@@ -3,7 +3,6 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { user } from '@openathlete/database';
 import { CreateAccountDto, createAccountDtoSchema } from '@openathlete/shared';
 
 import { JwtUser } from '../decorators';

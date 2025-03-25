@@ -92,6 +92,9 @@ export class UserService {
           first_name: firstName,
           last_name: lastName,
           roles: [user_role.ATHLETE, user_role.COACH],
+          athlete: {
+            create: {},
+          },
         },
         select: {
           user_id: true,
