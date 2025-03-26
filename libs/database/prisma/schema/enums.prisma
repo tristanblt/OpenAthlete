@@ -7,6 +7,7 @@ enum event_type {
   TRAINING
   COMPETITION
   NOTE
+  ACTIVITY
 }
 
 enum connector_provider {
