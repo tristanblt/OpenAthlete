@@ -6,7 +6,6 @@
   "license": "MPL-2.0",
   "scripts": {
     "build": "nest build",
-    "build:onrender": "npm install -g pnpm@9 && nest build",
     "start": "nest start -e \"node -r dotenv/config\"",
     "dev": "nest start -b swc --watch -e \"node -r dotenv/config\"",
     "start:debug": "nest start --debug --watch -e \"node -r dotenv/config\"",

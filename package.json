@@ -20,7 +20,7 @@
     "lint": "pnpm --parallel --aggregate-output lint",
     "tsc:check": "pnpm --parallel --aggregate-output tsc:check",
     "list:repos": "pnpm m ls --json | jq -r \".[] | {name, path, version}\"",
-    "api:build:render": "npm install -g pnpm@9 &&  && pnpm --filter \"@openathlete/api\" build"
+    "api:build:render": "npm install -g pnpm@9 && pnpm --filter \"@openathlete/api\" build"
   },
   "pnpm": {
     "overrides": {
