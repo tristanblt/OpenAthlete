@@ -1,9 +1,8 @@
-import e from 'express';
-
 import { Injectable } from '@nestjs/common';
 
 import {
   event,
+  event_activity,
   event_competition,
   event_note,
   event_training,
@@ -23,15 +22,17 @@ export class EventService {
       competition: event_competition | null;
       training: event_training | null;
       note: event_note | null;
+      activity: event_activity | null;
     },
   ) {
-    const { competition, training, note, ...rest } = event;
+    const { competition, training, note, activity, ...rest } = event;
 
     return {
       ...rest,
       competition: competition ? { ...competition } : undefined,
       training: training ? { ...training } : undefined,
       note: note ? { ...note } : undefined,
+      activity: activity ? { ...activity } : undefined,
     };
   }
 
@@ -54,7 +55,12 @@ export class EventService {
   async getEventsOfAthlete(athleteId: number) {
     return this.prisma.event.findMany({
       where: { athlete_id: athleteId },
-      include: { training: true, competition: true, note: true },
+      include: {
+        training: true,
+        competition: true,
+        note: true,
+        activity: true,
+      },
     });
   }
 

@@ -4,20 +4,20 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtUser, UserTypeGuard } from 'src/modules/auth';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 
-import { ConnectorService } from '../services/connector.service';
+import { StravaConnectorService } from '../services/connector/strava.service';
 
 @Controller('connector')
 export class ConnectorController {
-  constructor(private connectorService: ConnectorService) {}
+  constructor(private stravaConnectorService: StravaConnectorService) {}
 
   @Get('strava/uri')
   getStravaUri() {
-    return this.connectorService.getStravaUri();
+    return this.stravaConnectorService.getStravaUri();
   }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)
   @Post('strava/token')
   setStravaToken(@JwtUser() user: AuthUser, @Body('code') code: string) {
-    return this.connectorService.setStravaToken(user, code);
+    return this.stravaConnectorService.setStravaToken(user, code);
   }
 }
