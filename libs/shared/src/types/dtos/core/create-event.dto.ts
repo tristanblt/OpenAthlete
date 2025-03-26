@@ -21,10 +21,15 @@ const noteEventSchema = baseEventSchema.extend({
   type: z.literal(EVENT_TYPE.NOTE),
 });
 
+const activityEventSchema = baseEventSchema.extend({
+  type: z.literal(EVENT_TYPE.ACTIVITY),
+});
+
 export const createEventDtoSchema = z.discriminatedUnion('type', [
   trainingEventSchema,
   competitionEventSchema,
   noteEventSchema,
+  activityEventSchema,
 ]);
 
 export type CreateEventDto = z.infer<typeof createEventDtoSchema>;
