@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import {
   event,
@@ -13,6 +13,33 @@ import { CreateEventDto, keysToCamel } from '@openathlete/shared';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
+const EVENT_INCLUDES = {
+  training: true,
+  competition: true,
+  note: true,
+  activity: {
+    // select all fields except stream
+    select: {
+      event_activity_id: true,
+      event_id: true,
+      distance: true,
+      elevation_gain: true,
+      moving_time: true,
+      average_speed: true,
+      max_speed: true,
+      average_cadence: true,
+      average_watts: true,
+      max_watts: true,
+      weighted_average_watts: true,
+      average_heartrate: true,
+      max_heartrate: true,
+      kilojoules: true,
+      external_id: true,
+      sport: true,
+      provider: true,
+    },
+  },
+};
 @Injectable()
 export class EventService {
   constructor(private prisma: PrismaService) {}
@@ -52,36 +79,33 @@ export class EventService {
     }
   }
 
+  async getEventById(user: AuthUser, eventId: event['event_id']) {
+    const userEntity = await this.prisma.user.findUnique({
+      where: { user_id: user.user_id },
+      include: { athlete: true },
+    });
+
+    if (
+      userEntity?.roles.includes(user_role.ATHLETE) &&
+      userEntity.athlete?.athlete_id
+    ) {
+      const event = await this.prisma.event.findUnique({
+        where: { event_id: eventId },
+        include: EVENT_INCLUDES,
+      });
+
+      if (!event) {
+        throw new NotFoundException('Event not found');
+      }
+
+      return keysToCamel(this.prismaEventToEvent(event));
+    }
+  }
+
   async getEventsOfAthlete(athleteId: number) {
     return this.prisma.event.findMany({
       where: { athlete_id: athleteId },
-      include: {
-        training: true,
-        competition: true,
-        note: true,
-        activity: {
-          // select all fields except stream
-          select: {
-            event_activity_id: true,
-            event_id: true,
-            distance: true,
-            elevation_gain: true,
-            moving_time: true,
-            average_speed: true,
-            max_speed: true,
-            average_cadence: true,
-            average_watts: true,
-            max_watts: true,
-            weighted_average_watts: true,
-            average_heartrate: true,
-            max_heartrate: true,
-            kilojoules: true,
-            external_id: true,
-            sport: true,
-            provider: true,
-          },
-        },
-      },
+      include: EVENT_INCLUDES,
     });
   }
 

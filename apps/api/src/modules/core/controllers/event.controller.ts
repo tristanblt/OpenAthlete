@@ -1,8 +1,17 @@
 import { ZodValidationPipe } from 'nestjs-zod';
 
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+import { event } from '@openathlete/database';
 import { CreateEventDto, createEventDtoSchema } from '@openathlete/shared';
 
 import { JwtUser, UserTypeGuard } from 'src/modules/auth';
@@ -18,6 +27,15 @@ export class EventController {
   @Get()
   getMyEvents(@JwtUser() user: AuthUser) {
     return this.eventService.getMyEvents(user);
+  }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Get(':eventId')
+  getEvent(
+    @JwtUser() user: AuthUser,
+    @Param('eventId', ParseIntPipe) eventId: event['event_id'],
+  ) {
+    return this.eventService.getEventById(user, eventId);
   }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)
