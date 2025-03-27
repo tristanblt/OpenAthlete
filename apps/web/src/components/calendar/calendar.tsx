@@ -5,6 +5,7 @@ import { EVENT_TYPE, Event } from '@openathlete/shared';
 
 import { CreateEventDialog } from '../create-event-dialog/create-event.dialog';
 import { CalendarBody } from './calendar-body';
+import { CalendarEventDetails } from './calendar-event-details';
 import { CalendarHeader } from './calendar-header';
 import { CalendarContext } from './contexts/calendar-context';
 import { CalendarContextType } from './types/calendar-context';
@@ -15,6 +16,9 @@ interface P {
 
 export function Calendar({ events }: P) {
   const calendarData = useCalendarData({ events });
+  const [eventDetailsOpened, setEventDetailsOpened] = useState<
+    Event['eventId'] | null
+  >(null);
   const [createEventDialog, setCreateEventDialog] = useState<{
     date: Date;
     type: EVENT_TYPE;
@@ -26,6 +30,8 @@ export function Calendar({ events }: P) {
       createEvent: (date, type) => {
         setCreateEventDialog({ date, type });
       },
+      openEventDetails: setEventDetailsOpened,
+      eventDetailsOpened,
     }),
     [calendarData.displayedMonth, calendarData.events],
   );
@@ -41,6 +47,11 @@ export function Calendar({ events }: P) {
           onClose={() => setCreateEventDialog(null)}
           date={createEventDialog?.date}
           type={createEventDialog?.type}
+        />
+        <CalendarEventDetails
+          open={eventDetailsOpened !== null}
+          onClose={() => setEventDetailsOpened(null)}
+          event={events?.find((e) => e.eventId === eventDetailsOpened)}
         />
       </CalendarContext.Provider>
     </div>

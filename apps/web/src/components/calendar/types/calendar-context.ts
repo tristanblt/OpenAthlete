@@ -7,4 +7,6 @@ export type CalendarContextType = {
   displayedWeeks: Date[][];
   createEvent: (date: Date, type: EVENT_TYPE) => void;
   events: Event[];
+  openEventDetails: (eventId: Event['eventId']) => void;
+  eventDetailsOpened: Event['eventId'] | null;
 };
