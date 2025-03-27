@@ -2,6 +2,7 @@ import { useGetEventStreamQuery } from '@/services/event';
 
 import { ActivityEvent, getActivityDuration } from '@openathlete/shared';
 
+import { HeartrateChart } from '../charts/heartrate-chart';
 import { Map } from '../map/map';
 import {
   DistanceStat,
@@ -61,8 +62,18 @@ export function ActivityDetails({ event }: P) {
       {stream?.latlng && (
         <Map
           className="col-span-1 rounded-xl shadow-sm border"
-          polyline={stream?.latlng}
+          polyline={stream.latlng}
         />
+      )}
+      {stream?.heartrate && (
+        <Card className="col-span-2">
+          <CardHeader>
+            <CardTitle>Heart Rate</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <HeartrateChart heartrateStream={stream.heartrate || []} />
+          </CardContent>
+        </Card>
       )}
     </div>
   );
