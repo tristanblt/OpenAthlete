@@ -22,17 +22,17 @@ export class EventService {
       competition: event_competition | null;
       training: event_training | null;
       note: event_note | null;
-      activity: event_activity | null;
+      activity: Omit<event_activity, 'stream'> | null;
     },
   ) {
     const { competition, training, note, activity, ...rest } = event;
 
     return {
       ...rest,
-      competition: competition ? { ...competition } : undefined,
-      training: training ? { ...training } : undefined,
-      note: note ? { ...note } : undefined,
-      activity: activity ? { ...activity } : undefined,
+      ...(training ? { ...training } : {}),
+      ...(competition ? { ...competition } : {}),
+      ...(note ? { ...note } : {}),
+      ...(activity ? { ...activity } : {}),
     };
   }
 
@@ -59,7 +59,28 @@ export class EventService {
         training: true,
         competition: true,
         note: true,
-        activity: true,
+        activity: {
+          // select all fields except stream
+          select: {
+            event_activity_id: true,
+            event_id: true,
+            distance: true,
+            elevation_gain: true,
+            moving_time: true,
+            average_speed: true,
+            max_speed: true,
+            average_cadence: true,
+            average_watts: true,
+            max_watts: true,
+            weighted_average_watts: true,
+            average_heartrate: true,
+            max_heartrate: true,
+            kilojoules: true,
+            external_id: true,
+            sport: true,
+            provider: true,
+          },
+        },
       },
     });
   }
