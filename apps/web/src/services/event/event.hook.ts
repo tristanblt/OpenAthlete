@@ -34,3 +34,13 @@ export const useGetMyEventsQuery = (
     queryFn: EventService.getMyEvents,
     queryKey: ['EventService.getMyEvents'],
   });
+
+export const useGetEventQuery = (
+  eventId: number,
+  opt?: QueryOptions<Awaited<ReturnType<typeof EventService.getEvent>>>,
+) =>
+  useQuery({
+    ...opt,
+    queryFn: () => EventService.getEvent(eventId),
+    queryKey: ['EventService.getEvent', eventId],
+  });

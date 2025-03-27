@@ -21,4 +21,9 @@ export class EventService {
     const data = res.data as Event[];
     return data.map((event) => mapEvent(event));
   }
+
+  static async getEvent(eventId: Event['eventId']): Promise<Event> {
+    const res = await client.get(routes.event.getEvent(eventId));
+    return mapEvent(res.data);
+  }
 }
