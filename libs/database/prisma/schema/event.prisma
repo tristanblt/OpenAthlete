@@ -58,9 +58,8 @@ model event_activity {
   // primary key
   event_activity_id Int @id @default(autoincrement())
 
-  provider connector_provider?
-
   // fields
+  provider               connector_provider?
   distance               Float // in meters
   elevation_gain         Float // in meters
   moving_time            Int // in seconds
