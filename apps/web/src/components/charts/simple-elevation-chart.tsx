@@ -1,7 +1,12 @@
 import { useMemo } from 'react';
 import { Area, AreaChart } from 'recharts';
 
-import { ChartConfig, ChartContainer } from '../ui/chart';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '../ui/chart';
 
 interface P {
   altitudeStream: number[];
@@ -31,6 +36,7 @@ export function SimpleElevationChart({ altitudeStream }: P) {
           stroke={chartConfig.altitude.color}
           fill={chartConfig.altitude.color}
         />
+        <ChartTooltip content={<ChartTooltipContent />} />
       </AreaChart>
     </ChartContainer>
   );
