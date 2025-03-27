@@ -25,7 +25,7 @@ export function Map({ className, polyline }: P) {
       {polyline && (
         <Polyline
           positions={convertedPolyline}
-          pathOptions={{ color: 'blue' }}
+          pathOptions={{ color: 'var(--primary)' }}
         />
       )}
     </MapContainer>
