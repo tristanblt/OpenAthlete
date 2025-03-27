@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
+import e from 'express';
 
 import {
   ConflictException,
@@ -7,11 +8,19 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { connector, connector_provider } from '@openathlete/database';
+import {
+  connector,
+  connector_provider,
+  event,
+  event_activity,
+} from '@openathlete/database';
 import { ApiEnvSchemaType } from '@openathlete/shared';
 
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
+
+import { mapStravaSportType } from '../../helpers/strava';
+import { StravaSummaryActivity } from '../../types/connector';
 
 @Injectable()
 export class StravaConnectorService {
@@ -29,54 +38,42 @@ export class StravaConnectorService {
   }
 
   async setStravaToken(user: AuthUser, code: string) {
-    const existingConnector = await this.prisma.connector.findFirst({
-      where: {
-        athlete: {
-          user_id: user.user_id,
+    try {
+      const { data } = await axios.post(
+        'https://www.strava.com/oauth/token',
+        {
+          client_id: this.configService.get('STRAVA_CLIENT_ID'),
+          client_secret: this.configService.get('STRAVA_CLIENT_SECRET'),
+          code,
+          grant_type: 'authorization_code',
         },
-        provider: connector_provider.STRAVA,
-      },
-    });
-
-    if (existingConnector) {
-      throw new ConflictException('Strava connector already exists');
-    }
-
-    const { data } = await axios.post(
-      'https://www.strava.com/oauth/token',
-      {
-        client_id: this.configService.get('STRAVA_CLIENT_ID'),
-        client_secret: this.configService.get('STRAVA_CLIENT_SECRET'),
-        code,
-        grant_type: 'authorization_code',
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-
-    if (data.errors) {
-      throw new InternalServerErrorException('Failed to connect to Strava');
-    }
-
-    const connector = await this.prisma.connector.create({
-      data: {
-        provider: connector_provider.STRAVA,
-        token: data.refresh_token,
-        athlete: {
-          connect: {
-            user_id: user.user_id,
+        {
+          headers: {
+            'Content-Type': 'application/json',
           },
         },
-      },
-      include: {
-        athlete: true,
-      },
-    });
+      );
 
-    await this.fetchInitialStravaData(connector);
+      const connector = await this.prisma.connector.create({
+        data: {
+          provider: connector_provider.STRAVA,
+          token: data.refresh_token,
+          athlete: {
+            connect: {
+              user_id: user.user_id,
+            },
+          },
+        },
+        include: {
+          athlete: true,
+        },
+      });
+
+      await this.fetchInitialStravaData(connector);
+    } catch (error) {
+      if (isAxiosError(error)) console.log(error.response?.data);
+      throw new InternalServerErrorException();
+    }
   }
 
   async getStravaAccessToken(refreshToken: string) {
@@ -95,11 +92,61 @@ export class StravaConnectorService {
       },
     );
 
-    if (data.errors) {
-      throw new InternalServerErrorException('Failed to refresh Strava token');
+    return data.access_token;
+  }
+
+  async fetchStravaActivityData(
+    accessToken: string,
+    event: event,
+    activity: StravaSummaryActivity,
+  ): Promise<event_activity> {
+    const { data } = await axios.get(
+      `https://www.strava.com/api/v3/activities/${activity.id}/streams`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          keys: 'time,distance,latlng,altitude,velocity_smooth,heartrate,cadence,watts,temp,moving,grade_smooth',
+        },
+      },
+    );
+
+    const mergedData: Record<string, (number | number[] | boolean)[]>[] = [];
+
+    for (const stream of data) {
+      const streamData: Record<string, (number | number[] | boolean)[]> = {};
+
+      streamData[stream.type] = stream.data;
+
+      mergedData.push(streamData);
     }
 
-    return data.access_token;
+    return this.prisma.event_activity.create({
+      data: {
+        provider: connector_provider.STRAVA,
+        distance: activity.distance,
+        elevation_gain: activity.total_elevation_gain,
+        moving_time: activity.moving_time,
+        average_speed: activity.average_speed,
+        max_speed: activity.max_speed,
+        average_cadence: activity.average_cadence,
+        average_watts: activity.average_watts,
+        max_watts: activity.max_watts,
+        weighted_average_watts: activity.weighted_average_watts,
+        average_heartrate: activity.average_heartrate,
+        max_heartrate: activity.max_heartrate,
+        kilojoules: activity.kilojoules,
+        sport: mapStravaSportType(activity.sport_type),
+        stream: mergedData,
+        external_id: activity.id.toString(),
+        event: {
+          connect: {
+            event_id: event.event_id,
+          },
+        },
+      },
+    });
   }
 
   async fetchInitialStravaData(
@@ -110,7 +157,7 @@ export class StravaConnectorService {
     let hasMoreData = true;
 
     while (hasMoreData) {
-      const { data } = await axios.get(
+      const { data } = await axios.get<StravaSummaryActivity[]>(
         `https://www.strava.com/api/v3/athlete/activities?page=${page}`,
         {
           headers: {
@@ -118,9 +165,6 @@ export class StravaConnectorService {
           },
         },
       );
-      if (data.errors) {
-        throw new InternalServerErrorException('Failed to fetch Strava data');
-      }
 
       if (data.length === 0) {
         hasMoreData = false;
@@ -130,7 +174,18 @@ export class StravaConnectorService {
       for (const activity of data) {
         const endDate = new Date(activity.start_date);
         endDate.setSeconds(endDate.getSeconds() + activity.elapsed_time);
-        await this.prisma.event.create({
+
+        const existingActivity = await this.prisma.event_activity.findFirst({
+          where: {
+            external_id: activity.id.toString(),
+          },
+        });
+
+        if (existingActivity) {
+          continue;
+        }
+
+        const event = await this.prisma.event.create({
           data: {
             athlete: {
               connect: {
@@ -141,18 +196,17 @@ export class StravaConnectorService {
             type: 'ACTIVITY',
             start_date: new Date(activity.start_date),
             end_date: endDate,
-            activity: {
-              create: {
-                distance: activity.distance,
-                elevation_gain: activity.total_elevation_gain,
-                external_id: String(activity.id),
-              },
-            },
           },
         });
+
+        await this.fetchStravaActivityData(accessToken, event, activity);
+
+        break; // TODO: Remove this break
       }
 
       page++;
+
+      break; // TODO: Remove this break
     }
   }
 }
