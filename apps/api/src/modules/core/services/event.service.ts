@@ -13,6 +13,8 @@ import { CreateEventDto, keysToCamel } from '@openathlete/shared';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
+import { compressActivityStream } from '../helpers/activity-stream';
+
 const EVENT_INCLUDES = {
   training: true,
   competition: true,
@@ -84,20 +86,19 @@ export class EventService {
       where: { user_id: user.user_id },
       include: { athlete: true },
     });
+    const event = await this.prisma.event.findUnique({
+      where: { event_id: eventId },
+      include: EVENT_INCLUDES,
+    });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
 
     if (
       userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id
+      userEntity.athlete?.athlete_id === event.athlete_id
     ) {
-      const event = await this.prisma.event.findUnique({
-        where: { event_id: eventId },
-        include: EVENT_INCLUDES,
-      });
-
-      if (!event) {
-        throw new NotFoundException('Event not found');
-      }
-
       return keysToCamel(this.prismaEventToEvent(event));
     }
   }
@@ -137,5 +138,59 @@ export class EventService {
         },
       }),
     );
+  }
+
+  async getEventStream(
+    user: AuthUser,
+    eventId: event['event_id'],
+    compression: number,
+    keys?: string[],
+  ) {
+    const userEntity = await this.prisma.user.findUnique({
+      where: { user_id: user.user_id },
+      include: { athlete: true },
+    });
+    const event = await this.prisma.event.findUnique({
+      where: { event_id: eventId },
+      include: { activity: true },
+    });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    if (
+      userEntity?.roles.includes(user_role.ATHLETE) &&
+      userEntity.athlete?.athlete_id === event.athlete_id
+    ) {
+      const activity = await this.prisma.event_activity.findUnique({
+        where: { event_id: eventId },
+        select: { stream: true },
+      });
+
+      if (!activity) {
+        throw new NotFoundException('Activity not found');
+      }
+
+      const stream = activity.stream;
+
+      if (!stream) {
+        throw new NotFoundException('Stream not found');
+      }
+
+      const selectedStreams = keys ? keys : Object.keys(stream);
+
+      const compressedStreams: Record<string, (number | number[] | boolean)[]> =
+        {};
+
+      for (const key of selectedStreams) {
+        compressedStreams[key] = compressActivityStream(
+          stream[key],
+          compression,
+        );
+      }
+
+      return compressedStreams;
+    }
   }
 }

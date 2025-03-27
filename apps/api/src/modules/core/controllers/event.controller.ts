@@ -1,12 +1,15 @@
 import { ZodValidationPipe } from 'nestjs-zod';
 
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   Param,
+  ParseArrayPipe,
   ParseIntPipe,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -45,5 +48,16 @@ export class EventController {
     @Body(new ZodValidationPipe(createEventDtoSchema)) body: CreateEventDto,
   ) {
     return this.eventService.createEvent(user, body);
+  }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Get(':eventId/stream')
+  getEventStream(
+    @JwtUser() user: AuthUser,
+    @Param('eventId', ParseIntPipe) eventId: event['event_id'],
+    @Query('compression', ParseIntPipe) compression: number,
+    @Query('keys', ParseArrayPipe) keys?: string[],
+  ) {
+    return this.eventService.getEventStream(user, eventId, compression, keys);
   }
 }

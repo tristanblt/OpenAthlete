@@ -112,14 +112,10 @@ export class StravaConnectorService {
       },
     );
 
-    const mergedData: Record<string, (number | number[] | boolean)[]>[] = [];
+    const mergedData: Record<string, (number | number[] | boolean)[]> = {};
 
     for (const stream of data) {
-      const streamData: Record<string, (number | number[] | boolean)[]> = {};
-
-      streamData[stream.type] = stream.data;
-
-      mergedData.push(streamData);
+      mergedData[stream.type] = stream.data;
     }
 
     return this.prisma.event_activity.create({
