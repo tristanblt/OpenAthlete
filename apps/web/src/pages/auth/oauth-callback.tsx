@@ -37,5 +37,5 @@ export function OAuthCallbackPage() {
     }
   }, [provider, searchParams]);
 
-  return <LoadingScreen />;
+  return <LoadingScreen message={`Importing data from ${provider}`} />;
 }
