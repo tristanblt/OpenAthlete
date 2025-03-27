@@ -26,4 +26,15 @@ export class EventService {
     const res = await client.get(routes.event.getEvent(eventId));
     return mapEvent(res.data);
   }
+
+  static async getEventStream(
+    eventId: Event['eventId'],
+    compression: number,
+    keys?: string[],
+  ) {
+    const res = await client.get(routes.event.getEventStream(eventId), {
+      params: { compression, keys: keys?.join(',') },
+    });
+    return res.data;
+  }
 }
