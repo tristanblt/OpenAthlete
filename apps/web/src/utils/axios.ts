@@ -21,6 +21,7 @@ export const routes = {
     create: '/event',
     getMyEvents: '/event',
     getEvent: (eventId: Event['eventId']) => `/event/${eventId}`,
+    getEventStream: (eventId: Event['eventId']) => `/event/${eventId}/stream`,
   },
   connector: {
     getOAuthUri: (provider: ConnectorProvider) =>
