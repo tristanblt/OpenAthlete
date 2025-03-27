@@ -2,6 +2,7 @@ import { useGetEventStreamQuery } from '@/services/event';
 
 import { ActivityEvent, getActivityDuration } from '@openathlete/shared';
 
+import { Map } from '../map/map';
 import {
   DistanceStat,
   DurationStat,
@@ -18,6 +19,8 @@ interface P {
 export function ActivityDetails({ event }: P) {
   const { data: stream } = useGetEventStreamQuery(event.eventId, 10, [
     'altitude',
+    'latlng',
+    'heartrate',
   ]);
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -55,6 +58,12 @@ export function ActivityDetails({ event }: P) {
           </div>
         </CardContent>
       </Card>
+      {stream?.latlng && (
+        <Map
+          className="col-span-1 rounded-xl shadow-sm border"
+          polyline={stream?.latlng}
+        />
+      )}
     </div>
   );
 }
