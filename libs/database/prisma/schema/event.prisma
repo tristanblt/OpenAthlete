@@ -58,10 +58,24 @@ model event_activity {
   // primary key
   event_activity_id Int @id @default(autoincrement())
 
+  provider connector_provider?
+
   // fields
-  distance       Float
-  elevation_gain Float
-  external_id    String
+  distance               Float // in meters
+  elevation_gain         Float // in meters
+  moving_time            Int // in seconds
+  average_speed          Float // in m/s
+  max_speed              Float // in m/s
+  average_cadence        Float? // in rpm
+  average_watts          Float? // in watts
+  max_watts              Float? // in watts
+  weighted_average_watts Float? // in watts
+  average_heartrate      Float? // in bpm
+  max_heartrate          Float? // in bpm
+  kilojoules             Float? // in kJ
+  external_id            String
+  sport                  sport_type
+  stream                 Json?
 
   // relationships
   event    event @relation(fields: [event_id], references: [event_id])

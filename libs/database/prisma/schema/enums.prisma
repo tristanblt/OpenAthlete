@@ -16,3 +16,13 @@ enum connector_provider {
   FITBIT
   APPLE_HEALTH
 }
+
+enum sport_type {
+  RUNNING
+  TRAIL_RUNNING
+  CYCLING
+  SWIMMING
+  ROCK_CLIMBING
+  HIKING
+  OTHER
+}
