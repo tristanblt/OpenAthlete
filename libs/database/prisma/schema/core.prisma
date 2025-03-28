@@ -18,41 +18,6 @@ model user {
   updated_at DateTime @updatedAt
 }
 
-model athlete {
-  // primary key
-  athlete_id Int @id @default(autoincrement())
-
-  // fields
-
-  // relationships
-  user           user            @relation(fields: [user_id], references: [user_id])
-  user_id        Int             @unique
-  coach_athletes coach_athlete[]
-  events         event[]
-  connectors     connector[]
-
-  // timestamps
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model coach_athlete {
-  // primary key
-  coach_athlete_id Int @id @default(autoincrement())
-
-  // fields
-
-  // relationships
-  user       user    @relation(fields: [user_id], references: [user_id])
-  user_id    Int
-  athlete    athlete @relation(fields: [athlete_id], references: [athlete_id])
-  athlete_id Int
-
-  // timestamps
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
 model connector {
   // primary key
   connector_id Int @id @default(autoincrement())

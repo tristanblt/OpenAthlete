@@ -1,0 +1,74 @@
+model athlete {
+  // primary key
+  athlete_id Int @id @default(autoincrement())
+
+  // fields
+
+  // relationships
+  user           user            @relation(fields: [user_id], references: [user_id])
+  user_id        Int             @unique
+  coach_athletes coach_athlete[]
+  events         event[]
+  connectors     connector[]
+  training_zones training_zone[]
+
+  // timestamps
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model coach_athlete {
+  // primary key
+  coach_athlete_id Int @id @default(autoincrement())
+
+  // fields
+
+  // relationships
+  user       user    @relation(fields: [user_id], references: [user_id])
+  user_id    Int
+  athlete    athlete @relation(fields: [athlete_id], references: [athlete_id])
+  athlete_id Int
+
+  // timestamps
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model training_zone {
+  // primary key
+  training_zone_id Int @id @default(autoincrement())
+
+  // fields
+  name        String
+  description String
+  index       Int
+  type        training_zone_type
+  color       String
+
+  // relationships
+  athlete    athlete               @relation(fields: [athlete_id], references: [athlete_id])
+  athlete_id Int
+  values     training_zone_value[]
+
+  // timestamps
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model training_zone_value {
+  // primary key
+  training_zone_value_id Int @id @default(autoincrement())
+
+  // fields
+  min    Float
+  max    Float
+  sports sport_type[]
+
+  // relationships
+  training_zone    training_zone @relation(fields: [training_zone_id], references: [training_zone_id])
+  training_zone_id Int
+
+  // timestamps
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}

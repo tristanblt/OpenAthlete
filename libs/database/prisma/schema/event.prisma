@@ -26,10 +26,13 @@ model event_training {
   event_training_id Int @id @default(autoincrement())
 
   // fields
+  sport sport_type
 
   // relationships
-  event    event @relation(fields: [event_id], references: [event_id])
-  event_id Int   @unique
+  event               event           @relation(fields: [event_id], references: [event_id])
+  event_id            Int             @unique
+  related_activity    event_activity? @relation(fields: [related_activity_id], references: [event_activity_id])
+  related_activity_id Int?            @unique
 }
 
 model event_competition {
@@ -37,10 +40,13 @@ model event_competition {
   event_competition_id Int @id @default(autoincrement())
 
   // fields
+  sport sport_type
 
   // relationships
-  event    event @relation(fields: [event_id], references: [event_id])
-  event_id Int   @unique
+  event               event           @relation(fields: [event_id], references: [event_id])
+  event_id            Int             @unique
+  related_activity    event_activity? @relation(fields: [related_activity_id], references: [event_activity_id])
+  related_activity_id Int?            @unique
 }
 
 model event_note {
@@ -77,6 +83,8 @@ model event_activity {
   stream                 Json?
 
   // relationships
-  event    event @relation(fields: [event_id], references: [event_id])
-  event_id Int   @unique
+  event               event              @relation(fields: [event_id], references: [event_id])
+  event_id            Int                @unique
+  related_training    event_training?
+  related_competition event_competition?
 }

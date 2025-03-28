@@ -26,3 +26,9 @@ enum sport_type {
   HIKING
   OTHER
 }
+
+enum training_zone_type {
+  HEARTRATE
+  POWER
+  PACE
+}
