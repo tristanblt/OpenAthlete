@@ -3,11 +3,57 @@ import { useMemo } from 'react';
 
 import { SPORT_TYPE, TRAINING_ZONE_TYPE } from '@openathlete/shared';
 
+const DEFAULT_TRAINING_ZONES = [
+  {
+    type: TRAINING_ZONE_TYPE.HEARTRATE,
+    values: [
+      {
+        name: 'Zone 1',
+        description: 'Recovery',
+        min: 0,
+        max: 140,
+        color: 'grey',
+      },
+      {
+        name: 'Zone 2',
+        description: 'Endurance',
+        min: 141,
+        max: 160,
+        color: 'green',
+      },
+      {
+        name: 'Zone 3',
+        description: 'Tempo',
+        min: 161,
+        max: 180,
+        color: 'yellow',
+      },
+      {
+        name: 'Zone 4',
+        description: 'Threshold',
+        min: 181,
+        max: 200,
+        color: 'orange',
+      },
+      {
+        name: 'Zone 5',
+        description: 'VO2 Max',
+        min: 201,
+        max: 220,
+        color: 'red',
+      },
+    ],
+  },
+];
+
 export function useTrainingZones(type: TRAINING_ZONE_TYPE, sport?: SPORT_TYPE) {
   const { data: athlete } = useGetMyAthleteQuery();
 
   const trainingZones = useMemo(
-    () => athlete?.trainingZones.filter((zone) => zone.type === type),
+    () =>
+      athlete?.trainingZones
+        .filter((zone) => zone.type === type)
+        .sort((a, b) => a.index - b.index),
     [athlete, type],
   );
 
@@ -34,5 +80,13 @@ export function useTrainingZones(type: TRAINING_ZONE_TYPE, sport?: SPORT_TYPE) {
     });
   }, [trainingZones]);
 
-  return finalTrainingZones?.filter((zone) => zone !== null);
+  const filteredTrainingZones = finalTrainingZones?.filter(
+    (zone) => zone !== null,
+  );
+
+  if (!filteredTrainingZones || filteredTrainingZones.length === 0) {
+    return DEFAULT_TRAINING_ZONES.find((zone) => zone.type === type)?.values!;
+  }
+
+  return filteredTrainingZones;
 }
