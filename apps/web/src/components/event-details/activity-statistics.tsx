@@ -15,7 +15,10 @@ import {
 
 interface P {
   event: ActivityEvent;
-  stream?: Pick<ActivityStream, 'altitude' | 'heartrate' | 'latlng'>;
+  stream?: Pick<
+    ActivityStream,
+    'altitude' | 'heartrate' | 'latlng' | 'distance'
+  >;
 }
 
 export function ActivityStatistics({ event, stream }: P) {
@@ -37,6 +40,7 @@ export function ActivityStatistics({ event, stream }: P) {
           label="Elevation Gain"
           elevation={event.elevationGain}
           altitudeStream={stream?.altitude}
+          distanceStream={stream?.distance}
         />
         {event.averageHeartrate && (
           <HeartrateStat

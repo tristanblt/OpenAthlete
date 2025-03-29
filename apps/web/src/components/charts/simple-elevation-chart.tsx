@@ -12,6 +12,7 @@ import {
 
 interface P {
   altitudeStream: Exclude<ActivityStream['altitude'], undefined>;
+  distanceStream: Exclude<ActivityStream['distance'], undefined>;
 }
 
 const chartConfig = {
@@ -21,11 +22,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function SimpleElevationChart({ altitudeStream }: P) {
+export function SimpleElevationChart({ altitudeStream, distanceStream }: P) {
   const chartData = useMemo(() => {
     return altitudeStream.map((altitude, i) => ({
       altitude,
-      time: i,
+      time: distanceStream[i],
     }));
   }, [altitudeStream]);
 

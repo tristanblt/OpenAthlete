@@ -7,9 +7,15 @@ interface P {
   label: string;
   elevation: number;
   altitudeStream?: ActivityStream['altitude'];
+  distanceStream?: ActivityStream['distance'];
 }
 
-export function ElevationStat({ label, elevation, altitudeStream }: P) {
+export function ElevationStat({
+  label,
+  elevation,
+  altitudeStream,
+  distanceStream,
+}: P) {
   return (
     <Popover>
       <PopoverTrigger className="text-left">
@@ -18,9 +24,12 @@ export function ElevationStat({ label, elevation, altitudeStream }: P) {
           {elevation} <span className="text-gray-500 text-sm">m</span>
         </div>
       </PopoverTrigger>
-      {altitudeStream && (
+      {altitudeStream && distanceStream && (
         <PopoverContent>
-          <SimpleElevationChart altitudeStream={altitudeStream} />
+          <SimpleElevationChart
+            altitudeStream={altitudeStream}
+            distanceStream={distanceStream}
+          />
         </PopoverContent>
       )}
     </Popover>
