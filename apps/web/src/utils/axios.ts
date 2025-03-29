@@ -29,6 +29,9 @@ export const routes = {
     setOAuthToken: (provider: ConnectorProvider) =>
       `/connector/${provider.toLowerCase()}/token`,
   },
+  athlete: {
+    getMyAthlete: '/athlete/me',
+  },
 } as const;
 
 const client = axios.create({
