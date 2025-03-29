@@ -41,7 +41,10 @@ export function ActivityDetails({ event }: P) {
             <CardTitle>Heart Rate</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <HeartrateChart heartrateStream={stream.heartrate || []} />
+            <HeartrateChart
+              heartrateStream={stream.heartrate || []}
+              sport={event.sport}
+            />
           </CardContent>
         </Card>
       )}
