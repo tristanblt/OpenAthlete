@@ -1,5 +1,6 @@
 import {
   ActivityEvent,
+  ActivityStream,
   SPORT_TYPE,
   getActivityDuration,
 } from '@openathlete/shared';
@@ -14,11 +15,7 @@ import {
 
 interface P {
   event: ActivityEvent;
-  stream?: {
-    altitude?: number[];
-    latlng?: number[][];
-    heartrate?: number[];
-  };
+  stream?: Pick<ActivityStream, 'altitude' | 'heartrate' | 'latlng'>;
 }
 
 export function ActivityStatistics({ event, stream }: P) {

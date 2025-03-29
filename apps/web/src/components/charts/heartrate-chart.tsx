@@ -2,12 +2,16 @@ import { useTrainingZones } from '@/hooks/use-training-zones';
 import { useMemo } from 'react';
 import { Line, LineChart, YAxis } from 'recharts';
 
-import { SPORT_TYPE, TRAINING_ZONE_TYPE } from '@openathlete/shared';
+import {
+  ActivityStream,
+  SPORT_TYPE,
+  TRAINING_ZONE_TYPE,
+} from '@openathlete/shared';
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../ui/chart';
 
 interface P {
-  heartrateStream: number[];
+  heartrateStream: Exclude<ActivityStream['heartrate'], undefined>;
   sport?: SPORT_TYPE;
 }
 

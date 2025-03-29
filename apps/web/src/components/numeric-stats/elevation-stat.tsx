@@ -1,10 +1,12 @@
+import { ActivityStream } from '@openathlete/shared';
+
 import { SimpleElevationChart } from '../charts/simple-elevation-chart';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 interface P {
   label: string;
   elevation: number;
-  altitudeStream?: number[];
+  altitudeStream?: ActivityStream['altitude'];
 }
 
 export function ElevationStat({ label, elevation, altitudeStream }: P) {

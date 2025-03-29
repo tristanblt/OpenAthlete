@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { Pie, PieChart } from 'recharts';
 
 import {
+  ActivityStream,
   SPORT_TYPE,
   TRAINING_ZONE_TYPE,
   formatDuration,
@@ -11,7 +12,7 @@ import {
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../ui/chart';
 
 interface P {
-  heartrateStream: number[];
+  heartrateStream: Exclude<ActivityStream['heartrate'], undefined>;
   duration?: number;
   sport?: SPORT_TYPE;
 }

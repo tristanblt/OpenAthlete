@@ -13,7 +13,7 @@ interface P {
 }
 
 export function ActivityDetails({ event }: P) {
-  const { data: stream } = useGetEventStreamQuery(event.eventId, 10, [
+  const { data: stream } = useGetEventStreamQuery(event.eventId, 3000, [
     'altitude',
     'latlng',
     'heartrate',
@@ -44,7 +44,7 @@ export function ActivityDetails({ event }: P) {
             </CardHeader>
             <CardContent className="p-0">
               <HeartrateChart
-                heartrateStream={stream.heartrate || []}
+                heartrateStream={stream.heartrate}
                 sport={event.sport}
               />
             </CardContent>
@@ -55,7 +55,7 @@ export function ActivityDetails({ event }: P) {
             </CardHeader>
             <CardContent className="p-0">
               <HeartrateDistributionChart
-                heartrateStream={stream.heartrate || []}
+                heartrateStream={stream.heartrate}
                 sport={event.sport}
                 duration={getActivityDuration(event)}
               />

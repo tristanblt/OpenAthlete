@@ -47,12 +47,12 @@ export const useGetEventQuery = (
 
 export const useGetEventStreamQuery = (
   eventId: number,
-  compression: number,
+  resolution: number,
   keys?: string[],
   opt?: QueryOptions<Awaited<ReturnType<typeof EventService.getEventStream>>>,
 ) =>
   useQuery({
     ...opt,
-    queryFn: () => EventService.getEventStream(eventId, compression, keys),
-    queryKey: ['EventService.getEventStream', eventId, compression, keys],
+    queryFn: () => EventService.getEventStream(eventId, resolution, keys),
+    queryKey: ['EventService.getEventStream', eventId, resolution, keys],
   });

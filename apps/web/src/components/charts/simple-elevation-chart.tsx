@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import { Area, AreaChart } from 'recharts';
 
+import { ActivityStream } from '@openathlete/shared';
+
 import {
   ChartConfig,
   ChartContainer,
@@ -9,7 +11,7 @@ import {
 } from '../ui/chart';
 
 interface P {
-  altitudeStream: number[];
+  altitudeStream: Exclude<ActivityStream['altitude'], undefined>;
 }
 
 const chartConfig = {
