@@ -14,7 +14,7 @@ import {
   event,
   event_activity,
 } from '@openathlete/database';
-import { ApiEnvSchemaType } from '@openathlete/shared';
+import { ActivityStream, ApiEnvSchemaType } from '@openathlete/shared';
 
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
@@ -107,12 +107,12 @@ export class StravaConnectorService {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          keys: 'time,distance,latlng,altitude,velocity_smooth,heartrate,cadence,watts,temp,moving,grade_smooth',
+          keys: 'time,distance,latlng,altitude,heartrate,cadence,watts,temp',
         },
       },
     );
 
-    const mergedData: Record<string, (number | number[] | boolean)[]> = {};
+    const mergedData: ActivityStream = {};
 
     for (const stream of data) {
       mergedData[stream.type] = stream.data;
@@ -134,7 +134,7 @@ export class StravaConnectorService {
         max_heartrate: activity.max_heartrate,
         kilojoules: activity.kilojoules,
         sport: mapStravaSportType(activity.sport_type),
-        stream: mergedData,
+        stream: mergedData as object,
         external_id: activity.id.toString(),
         event: {
           connect: {

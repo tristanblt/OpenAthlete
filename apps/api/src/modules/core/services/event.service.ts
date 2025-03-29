@@ -8,12 +8,16 @@ import {
   event_training,
   user_role,
 } from '@openathlete/database';
-import { CreateEventDto, keysToCamel } from '@openathlete/shared';
+import {
+  ActivityStream,
+  CreateEventDto,
+  keysToCamel,
+} from '@openathlete/shared';
 
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
-import { compressActivityStream } from '../helpers/activity-stream';
+import { reductActivityStreamToResolution } from '../helpers/activity-stream';
 
 const EVENT_INCLUDES = {
   training: true,
@@ -143,8 +147,8 @@ export class EventService {
   async getEventStream(
     user: AuthUser,
     eventId: event['event_id'],
-    compression: number,
-    keys?: string[],
+    resolution: number,
+    keys?: (keyof ActivityStream)[],
   ) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
@@ -172,7 +176,7 @@ export class EventService {
         throw new NotFoundException('Activity not found');
       }
 
-      const stream = activity.stream;
+      const stream = activity.stream as ActivityStream;
 
       if (!stream) {
         throw new NotFoundException('Stream not found');
@@ -180,13 +184,12 @@ export class EventService {
 
       const selectedStreams = keys ? keys : Object.keys(stream);
 
-      const compressedStreams: Record<string, (number | number[] | boolean)[]> =
-        {};
+      const compressedStreams: ActivityStream = {};
 
       for (const key of selectedStreams) {
-        compressedStreams[key] = compressActivityStream(
+        compressedStreams[key] = reductActivityStreamToResolution(
           stream[key],
-          compression,
+          resolution,
         );
       }
 

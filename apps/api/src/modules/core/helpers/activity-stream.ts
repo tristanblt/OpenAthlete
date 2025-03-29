@@ -1,15 +1,17 @@
-export const compressActivityStream = (
+export const reductActivityStreamToResolution = (
   stream: (number | number[] | boolean)[],
-  compression: number,
+  resolution: number,
 ) => {
-  if (compression <= 1) {
+  if (resolution >= stream.length) {
     return stream;
   }
+
+  const compression = stream.length / resolution;
 
   const compressedStream: (number | number[] | boolean)[] = [];
 
   for (let i = 0; i < stream.length; i += compression) {
-    compressedStream.push(stream[i]);
+    compressedStream.push(stream[Math.floor(i)]);
   }
 
   return compressedStream;

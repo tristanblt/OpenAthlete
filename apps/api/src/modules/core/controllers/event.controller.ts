@@ -15,7 +15,11 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { event } from '@openathlete/database';
-import { CreateEventDto, createEventDtoSchema } from '@openathlete/shared';
+import {
+  ActivityStream,
+  CreateEventDto,
+  createEventDtoSchema,
+} from '@openathlete/shared';
 
 import { JwtUser, UserTypeGuard } from 'src/modules/auth';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
@@ -55,9 +59,9 @@ export class EventController {
   getEventStream(
     @JwtUser() user: AuthUser,
     @Param('eventId', ParseIntPipe) eventId: event['event_id'],
-    @Query('compression', ParseIntPipe) compression: number,
-    @Query('keys', ParseArrayPipe) keys?: string[],
+    @Query('resolution', ParseIntPipe) resolution: number,
+    @Query('keys', ParseArrayPipe) keys?: (keyof ActivityStream)[],
   ) {
-    return this.eventService.getEventStream(user, eventId, compression, keys);
+    return this.eventService.getEventStream(user, eventId, resolution, keys);
   }
 }
