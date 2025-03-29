@@ -13,6 +13,7 @@ interface P {
 
 export function HeartrateChart({ heartrateStream, sport }: P) {
   const trainingZones = useTrainingZones(TRAINING_ZONE_TYPE.HEARTRATE, sport);
+
   const chartData = useMemo(() => {
     return heartrateStream.map((heartrate, i) => ({
       heartrate,
@@ -54,26 +55,20 @@ export function HeartrateChart({ heartrateStream, sport }: P) {
     >
       <LineChart data={chartData}>
         <YAxis type="number" domain={[minHeartrate, maxHeartrate]} hide />
-        {percentagesHeartrate && (
-          <defs>
-            <linearGradient id="colorUv" y1="0%" x1="0" y2="100%" x2="0">
-              {percentagesHeartrate.map((zone, i) => (
-                <>
-                  <stop key={i} offset={zone.max} stopColor={zone.color} />
-                  <stop
-                    key={i + 100}
-                    offset={zone.min}
-                    stopColor={zone.color}
-                  />
-                </>
-              ))}
-            </linearGradient>
-          </defs>
-        )}
+        <defs>
+          <linearGradient id="colorUv" y1="0%" x1="0" y2="100%" x2="0">
+            {percentagesHeartrate.map((zone, i) => (
+              <>
+                <stop key={i} offset={zone.max} stopColor={zone.color} />
+                <stop key={i + 100} offset={zone.min} stopColor={zone.color} />
+              </>
+            ))}
+          </linearGradient>
+        </defs>
         <Line
           type="monotone"
           dataKey="heartrate"
-          stroke={percentagesHeartrate ? 'url(#colorUv)' : 'blue'}
+          stroke="url(#colorUv)"
           dot={false}
           strokeWidth={1}
         />
