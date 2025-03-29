@@ -13,7 +13,7 @@ interface P {
 export function CalendarEventDetails({ open, onClose, event }: P) {
   return (
     <Dialog onOpenChange={(o) => !o && onClose()} open={open}>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="sm:max-w-4xl overflow-y-auto max-h-screen">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {event?.name} <Badge>{event?.type}</Badge>
