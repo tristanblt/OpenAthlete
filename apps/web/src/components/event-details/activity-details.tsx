@@ -1,8 +1,9 @@
 import { useGetEventStreamQuery } from '@/services/event';
 
-import { ActivityEvent } from '@openathlete/shared';
+import { ActivityEvent, getActivityDuration } from '@openathlete/shared';
 
 import { HeartrateChart } from '../charts/heartrate-chart';
+import { HeartrateDistributionChart } from '../charts/heartrate-distribution-chart';
 import { Map } from '../map/map';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { ActivityStatistics } from './activity-statistics';
@@ -36,17 +37,31 @@ export function ActivityDetails({ event }: P) {
         />
       )}
       {stream?.heartrate && (
-        <Card className="col-span-2">
-          <CardHeader>
-            <CardTitle>Heart Rate</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <HeartrateChart
-              heartrateStream={stream.heartrate || []}
-              sport={event.sport}
-            />
-          </CardContent>
-        </Card>
+        <>
+          <Card className="col-span-2">
+            <CardHeader>
+              <CardTitle>Heart Rate</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <HeartrateChart
+                heartrateStream={stream.heartrate || []}
+                sport={event.sport}
+              />
+            </CardContent>
+          </Card>
+          <Card className="col-span-1">
+            <CardHeader>
+              <CardTitle>Heart Rate Distribution</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <HeartrateDistributionChart
+                heartrateStream={stream.heartrate || []}
+                sport={event.sport}
+                duration={getActivityDuration(event)}
+              />
+            </CardContent>
+          </Card>
+        </>
       )}
     </div>
   );
