@@ -1,0 +1,5 @@
+export enum TRAINING_ZONE_TYPE {
+  HEARTRATE = 'HEARTRATE',
+  POWER = 'POWER',
+  PACE = 'PACE',
+}
