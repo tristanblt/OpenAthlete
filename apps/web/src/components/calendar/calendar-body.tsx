@@ -9,12 +9,12 @@ export function CalendarBody({}: P) {
   return (
     <div className="w-full border-1 rounded-lg">
       <div className="grid grid-cols-7 border-b-1">
-        {Array.from({ length: 7 }).map((_, i) => (
+        {displayedWeeks[0].map((day, i) => (
           <div
             key={i}
             className="h-8 flex justify-center items-center text-sm font-semibold [&:not(:last-child)]:border-r-1"
           >
-            {new Date(0, 0, i).toLocaleString('en-US', { weekday: 'short' })}
+            {new Date(day).toLocaleString('en-US', { weekday: 'short' })}
           </div>
         ))}
       </div>

@@ -39,7 +39,7 @@ export function useCalendarData({ defaultMonth, events }: CalendarData) {
       0,
     );
     const daysInMonth = lastDay.getDate();
-    const firstDayWeek = firstDay.getDay();
+    const firstDayWeek = (firstDay.getDay() + 6) % 7; // Adjust to make Monday the first day
     const lastDayPrevMonth = new Date(
       displayedMonth.getFullYear(),
       displayedMonth.getMonth(),
