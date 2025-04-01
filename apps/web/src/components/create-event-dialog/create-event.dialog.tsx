@@ -5,11 +5,21 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { EVENT_TYPE, createEventDtoSchema } from '@openathlete/shared';
+import {
+  EVENT_TYPE,
+  SPORT_TYPE,
+  createEventDtoSchema,
+} from '@openathlete/shared';
 
-import { FormProvider, RHFDateTimePicker, RHFTextField } from '../hook-form';
+import {
+  FormProvider,
+  RHFDateTimePicker,
+  RHFSelect,
+  RHFTextField,
+} from '../hook-form';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
+import { SelectItem } from '../ui/select';
 
 interface P {
   open: boolean;
@@ -46,7 +56,7 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
     },
   });
   const methods = useForm<z.infer<typeof createEventDtoSchema>>({
-    resolver: zodResolver(createEventDtoSchema),
+    resolver: zodResolver(createEventDtoSchema, undefined),
     defaultValues: {
       type,
       name: '',
@@ -57,9 +67,9 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
 
   const { handleSubmit } = methods;
 
-  const onSubmit = handleSubmit(async (data) =>
-    createEventMutation.mutate(data),
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    createEventMutation.mutate(data);
+  });
 
   if (!date || !type) {
     return null;
@@ -84,6 +94,20 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
           />
           <RHFDateTimePicker name="startDate" label="Start Date" required />
           <RHFDateTimePicker name="endDate" label="End Date" required />
+          {type === EVENT_TYPE.TRAINING || type === EVENT_TYPE.COMPETITION ? (
+            <RHFSelect
+              name="sport"
+              label="Sport"
+              required
+              placeholder="Select a sport"
+            >
+              {Object.values(SPORT_TYPE).map((sport) => (
+                <SelectItem key={sport} value={sport}>
+                  {sport}
+                </SelectItem>
+              ))}
+            </RHFSelect>
+          ) : null}
           <Button type="submit" className="w-full" onClick={onSubmit}>
             Create a {type.toLowerCase()}
           </Button>
