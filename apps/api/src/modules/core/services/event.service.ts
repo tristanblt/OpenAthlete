@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import {
   event,
@@ -146,6 +150,42 @@ export class EventService {
         },
       }),
     );
+  }
+
+  async deleteEvent(user: AuthUser, eventId: event['event_id']) {
+    const userEntity = await this.prisma.user.findUnique({
+      where: { user_id: user.user_id },
+      include: { athlete: true },
+    });
+    const event = await this.prisma.event.findUnique({
+      where: { event_id: eventId },
+      include: { activity: true },
+    });
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+    if (
+      userEntity?.roles.includes(user_role.ATHLETE) &&
+      userEntity.athlete?.athlete_id === event.athlete_id
+    ) {
+      await this.prisma.event_training.deleteMany({
+        where: { event_id: eventId },
+      });
+      await this.prisma.event_competition.deleteMany({
+        where: { event_id: eventId },
+      });
+      await this.prisma.event_note.deleteMany({
+        where: { event_id: eventId },
+      });
+      await this.prisma.event_activity.deleteMany({
+        where: { event_id: eventId },
+      });
+
+      return this.prisma.event.delete({
+        where: { event_id: eventId },
+      });
+    }
+    throw new ForbiddenException('You are not allowed to delete this event');
   }
 
   async getEventStream(

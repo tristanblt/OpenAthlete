@@ -1,9 +1,9 @@
 import { ZodValidationPipe } from 'nestjs-zod';
 
 import {
-  BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseArrayPipe,
@@ -63,5 +63,14 @@ export class EventController {
     @Query('keys', ParseArrayPipe) keys?: (keyof ActivityStream)[],
   ) {
     return this.eventService.getEventStream(user, eventId, resolution, keys);
+  }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Delete(':eventId')
+  deleteEvent(
+    @JwtUser() user: AuthUser,
+    @Param('eventId', ParseIntPipe) eventId: event['event_id'],
+  ) {
+    return this.eventService.deleteEvent(user, eventId);
   }
 }
