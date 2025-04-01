@@ -37,4 +37,8 @@ export class EventService {
     });
     return res.data;
   }
+
+  static async deleteEvent(eventId: Event['eventId']): Promise<void> {
+    await client.delete(routes.event.deleteEvent(eventId));
+  }
 }

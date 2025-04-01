@@ -56,3 +56,21 @@ export const useGetEventStreamQuery = (
     queryFn: () => EventService.getEventStream(eventId, resolution, keys),
     queryKey: ['EventService.getEventStream', eventId, resolution, keys],
   });
+
+export const useDeleteEventMutation = (
+  opt?: MutationOptions<
+    Awaited<ReturnType<typeof EventService.deleteEvent>>,
+    Error,
+    Parameters<typeof EventService.deleteEvent>[0]
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...opt,
+    mutationFn: EventService.deleteEvent,
+    onSuccess: (data, variables, context) => {
+      if (opt?.onSuccess) opt.onSuccess(data, variables, context);
+      queryClient.invalidateQueries({ queryKey: ['EventService.getMyEvents'] });
+    },
+  });
+};
