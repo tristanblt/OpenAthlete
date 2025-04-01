@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { EVENT_TYPE } from '../../misc';
+import { EVENT_TYPE, SPORT_TYPE } from '../../misc';
 
 const baseEventSchema = z.object({
   startDate: z.coerce.date(),
@@ -11,10 +11,12 @@ const baseEventSchema = z.object({
 
 const trainingEventSchema = baseEventSchema.extend({
   type: z.literal(EVENT_TYPE.TRAINING),
+  sport: z.nativeEnum(SPORT_TYPE),
 });
 
 const competitionEventSchema = baseEventSchema.extend({
   type: z.literal(EVENT_TYPE.COMPETITION),
+  sport: z.nativeEnum(SPORT_TYPE),
 });
 
 const noteEventSchema = baseEventSchema.extend({
