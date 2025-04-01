@@ -19,6 +19,11 @@ import { ActivityStream, ApiEnvSchemaType } from '@openathlete/shared';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
+import {
+  compareActivityStream,
+  compressActivityStream,
+  uncompressActivityStream,
+} from '../../helpers/activity-stream';
 import { mapStravaSportType } from '../../helpers/strava';
 import { StravaSummaryActivity } from '../../types/connector';
 
@@ -118,6 +123,8 @@ export class StravaConnectorService {
       mergedData[stream.type] = stream.data;
     }
 
+    const compressedActivityStream = compressActivityStream(mergedData);
+
     return this.prisma.event_activity.create({
       data: {
         provider: connector_provider.STRAVA,
@@ -134,7 +141,7 @@ export class StravaConnectorService {
         max_heartrate: activity.max_heartrate,
         kilojoules: activity.kilojoules,
         sport: mapStravaSportType(activity.sport_type),
-        stream: mergedData as object,
+        stream: compressedActivityStream as object,
         external_id: activity.id.toString(),
         event: {
           connect: {
@@ -197,7 +204,7 @@ export class StravaConnectorService {
 
         await this.fetchStravaActivityData(accessToken, event, activity);
 
-        break; // TODO: Remove this break
+        // break; // TODO: Remove this break
       }
 
       page++;

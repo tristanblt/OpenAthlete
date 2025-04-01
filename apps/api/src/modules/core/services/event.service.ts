@@ -10,6 +10,7 @@ import {
 } from '@openathlete/database';
 import {
   ActivityStream,
+  CompressedActivityStream,
   CreateEventDto,
   keysToCamel,
 } from '@openathlete/shared';
@@ -17,7 +18,10 @@ import {
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
-import { reductActivityStreamToResolution } from '../helpers/activity-stream';
+import {
+  reductActivityStreamToResolution,
+  uncompressActivityStream,
+} from '../helpers/activity-stream';
 
 const EVENT_INCLUDES = {
   training: true,
@@ -176,7 +180,8 @@ export class EventService {
         throw new NotFoundException('Activity not found');
       }
 
-      const stream = activity.stream as ActivityStream;
+      const compressedStream = activity.stream as CompressedActivityStream;
+      const stream = uncompressActivityStream(compressedStream);
 
       if (!stream) {
         throw new NotFoundException('Stream not found');
