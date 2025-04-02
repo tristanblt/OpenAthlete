@@ -96,12 +96,20 @@ export function useCalendarData({ defaultMonth, events }: CalendarData) {
       events?.filter((event) => {
         const start = new Date(event.startDate);
         const end = new Date(event.startDate);
-        return (
-          start.getFullYear() === displayedMonth.getFullYear() &&
-          start.getMonth() === displayedMonth.getMonth() &&
-          end.getFullYear() === displayedMonth.getFullYear() &&
-          end.getMonth() === displayedMonth.getMonth()
+
+        const startDate = new Date(
+          displayedMonth.getFullYear(),
+          displayedMonth.getMonth(),
+          1,
         );
+        const endDate = new Date(
+          displayedMonth.getFullYear(),
+          displayedMonth.getMonth() + 1,
+          0,
+        );
+        startDate.setDate(startDate.getDate() - 7);
+        endDate.setDate(endDate.getDate() + 7);
+        return start >= startDate && end <= endDate;
       }) || [],
   };
 }
