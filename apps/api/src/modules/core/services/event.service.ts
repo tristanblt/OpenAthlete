@@ -232,6 +232,10 @@ export class EventService {
       const compressedStreams: ActivityStream = {};
 
       for (const key of selectedStreams) {
+        if (!stream[key]) {
+          continue;
+        }
+
         compressedStreams[key] = reductActivityStreamToResolution(
           stream[key],
           resolution,
