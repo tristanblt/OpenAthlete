@@ -19,6 +19,7 @@ import {
   RHFSelect,
   RHFTextField,
 } from '../hook-form';
+import { RHFTextarea } from '../hook-form/rhf-textarea';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { SelectItem } from '../ui/select';
@@ -62,6 +63,7 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
     defaultValues: {
       type,
       name: '',
+      description: '',
       startDate,
       endDate,
     },
@@ -78,14 +80,14 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
   }
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>Plan a {eventTypeLabelMap[type]}</DialogTitle>
         </DialogHeader>
         <FormProvider
           methods={methods}
           onSubmit={onSubmit}
-          className="flex flex-col gap-6 pt-3"
+          className="grid grid-cols-2 gap-6 pt-3"
         >
           <RHFTextField
             name="name"
@@ -94,8 +96,6 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
             label="Event Name"
             required
           />
-          <RHFDateTimePicker name="startDate" label="Start Date" required />
-          <RHFDateTimePicker name="endDate" label="End Date" required />
           {type === EVENT_TYPE.TRAINING || type === EVENT_TYPE.COMPETITION ? (
             <RHFSelect
               name="sport"
@@ -109,9 +109,24 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
                 </SelectItem>
               ))}
             </RHFSelect>
-          ) : null}
-          <Button type="submit" className="w-full" onClick={onSubmit}>
-            Create a {type.toLowerCase()}
+          ) : (
+            <div />
+          )}
+          <RHFDateTimePicker name="startDate" label="Start Date" required />
+          <RHFDateTimePicker name="endDate" label="End Date" required />
+          <div className="col-span-2">
+            <RHFTextarea
+              name="description"
+              label="Description"
+              className="h-24"
+            />
+          </div>
+          <Button
+            type="submit"
+            className="w-full col-span-2"
+            onClick={onSubmit}
+          >
+            Create the {eventTypeLabelMap[type]}
           </Button>
         </FormProvider>
       </DialogContent>
