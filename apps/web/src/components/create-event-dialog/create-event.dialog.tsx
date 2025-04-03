@@ -9,6 +9,8 @@ import {
   EVENT_TYPE,
   SPORT_TYPE,
   createEventDtoSchema,
+  eventTypeLabelMap,
+  sportTypeLabelMap,
 } from '@openathlete/shared';
 
 import {
@@ -78,7 +80,7 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Plan a {type.toLowerCase()}</DialogTitle>
+          <DialogTitle>Plan a {eventTypeLabelMap[type]}</DialogTitle>
         </DialogHeader>
         <FormProvider
           methods={methods}
@@ -103,7 +105,7 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
             >
               {Object.values(SPORT_TYPE).map((sport) => (
                 <SelectItem key={sport} value={sport}>
-                  {sport}
+                  {sportTypeLabelMap[sport]}
                 </SelectItem>
               ))}
             </RHFSelect>

@@ -1,4 +1,4 @@
-import { Event } from '@openathlete/shared';
+import { Event, eventTypeLabelMap } from '@openathlete/shared';
 
 import { EventDetails } from '../event-details/event-details';
 import { Badge } from '../ui/badge';
@@ -16,7 +16,8 @@ export function CalendarEventDetails({ open, onClose, event }: P) {
       <DialogContent className="sm:max-w-4xl overflow-y-auto max-h-screen">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            {event?.name} <Badge>{event?.type}</Badge>
+            {event?.name}{' '}
+            {event && <Badge>{eventTypeLabelMap[event.type]}</Badge>}
           </DialogTitle>
         </DialogHeader>
         {event && <EventDetails eventId={event.eventId} />}
