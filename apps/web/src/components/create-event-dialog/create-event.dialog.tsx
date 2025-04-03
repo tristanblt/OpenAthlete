@@ -119,6 +119,7 @@ export function CreateEventDialog({ open, onClose, date, type }: P) {
               name="description"
               label="Description"
               className="h-24"
+              required={type === EVENT_TYPE.NOTE}
             />
           </div>
           <Button
