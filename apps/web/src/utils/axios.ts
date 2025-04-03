@@ -23,6 +23,12 @@ export const routes = {
     getEvent: (eventId: Event['eventId']) => `/event/${eventId}`,
     getEventStream: (eventId: Event['eventId']) => `/event/${eventId}/stream`,
     deleteEvent: (eventId: Event['eventId']) => `/event/${eventId}`,
+    setRelatedActivity: (
+      eventId: Event['eventId'],
+      activityId: Event['eventId'],
+    ) => `/event/${eventId}/related-activity/${activityId}`,
+    unsetRelatedActivity: (eventId: Event['eventId']) =>
+      `/event/${eventId}/related-activity`,
   },
   connector: {
     getOAuthUri: (provider: ConnectorProvider) =>

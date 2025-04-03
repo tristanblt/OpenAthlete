@@ -41,4 +41,18 @@ export class EventService {
   static async deleteEvent(eventId: Event['eventId']): Promise<void> {
     await client.delete(routes.event.deleteEvent(eventId));
   }
+
+  static async setRelatedActivity({
+    eventId,
+    activityId,
+  }: {
+    eventId: Event['eventId'];
+    activityId: Event['eventId'];
+  }): Promise<void> {
+    await client.post(routes.event.setRelatedActivity(eventId, activityId));
+  }
+
+  static async unsetRelatedActivity(eventId: Event['eventId']): Promise<void> {
+    await client.delete(routes.event.unsetRelatedActivity(eventId));
+  }
 }

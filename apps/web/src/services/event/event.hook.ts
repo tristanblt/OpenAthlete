@@ -74,3 +74,43 @@ export const useDeleteEventMutation = (
     },
   });
 };
+
+export const useSetRelatedActivityMutation = (
+  opt?: MutationOptions<
+    Awaited<ReturnType<typeof EventService.setRelatedActivity>>,
+    Error,
+    Parameters<typeof EventService.setRelatedActivity>[0]
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...opt,
+    mutationFn: EventService.setRelatedActivity,
+    onSuccess: (data, variables, context) => {
+      if (opt?.onSuccess) opt.onSuccess(data, variables, context);
+      queryClient.invalidateQueries({
+        queryKey: ['EventService.getEvent', variables.eventId],
+      });
+    },
+  });
+};
+
+export const useUnsetRelatedActivityMutation = (
+  opt?: MutationOptions<
+    Awaited<ReturnType<typeof EventService.unsetRelatedActivity>>,
+    Error,
+    Parameters<typeof EventService.unsetRelatedActivity>[0]
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...opt,
+    mutationFn: EventService.unsetRelatedActivity,
+    onSuccess: (data, variables, context) => {
+      if (opt?.onSuccess) opt.onSuccess(data, variables, context);
+      queryClient.invalidateQueries({
+        queryKey: ['EventService.getEvent', variables],
+      });
+    },
+  });
+};
