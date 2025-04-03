@@ -26,7 +26,8 @@ model event_training {
   event_training_id Int @id @default(autoincrement())
 
   // fields
-  sport sport_type
+  sport       sport_type
+  description String     @default("")
 
   // relationships
   event               event           @relation(fields: [event_id], references: [event_id])
@@ -40,7 +41,8 @@ model event_competition {
   event_competition_id Int @id @default(autoincrement())
 
   // fields
-  sport sport_type
+  sport       sport_type
+  description String     @default("")
 
   // relationships
   event               event           @relation(fields: [event_id], references: [event_id])
@@ -54,6 +56,7 @@ model event_note {
   event_note_id Int @id @default(autoincrement())
 
   // fields
+  description String @default("")
 
   // relationships
   event    event @relation(fields: [event_id], references: [event_id])
