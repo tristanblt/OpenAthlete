@@ -5,7 +5,7 @@ import { EVENT_TYPE, SPORT_TYPE } from '../../misc';
 const baseEventSchema = z.object({
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
-  name: z.string(),
+  name: z.string().min(1).max(100),
   athleteId: z.number().optional(),
 });
 

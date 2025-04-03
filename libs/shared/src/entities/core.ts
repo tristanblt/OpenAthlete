@@ -36,12 +36,14 @@ export interface TrainingEvent
   extends ConvertKeysToCamelCase<event_training & event> {
   type: EVENT_TYPE.TRAINING;
   sport: SPORT_TYPE;
+  relatedActivity?: ActivityEvent;
 }
 
 export interface CompetitionEvent
   extends ConvertKeysToCamelCase<event & event_competition> {
   type: EVENT_TYPE.COMPETITION;
   sport: SPORT_TYPE;
+  relatedActivity?: ActivityEvent;
 }
 
 export interface NoteEvent extends ConvertKeysToCamelCase<event_note & event> {
