@@ -41,7 +41,7 @@ export function CalendarDay({ day, events }: P) {
           >
             <span>{dayOfMonth}</span>
           </div>
-          <div className="flex-1 p-1 pt-0 grid gap-1 grid-rows-2">
+          <div className="flex-1 p-1 pt-0 flex flex-col gap-1">
             {events.map((event) => (
               <CalendarEvent key={event.eventId} event={event} />
             ))}
