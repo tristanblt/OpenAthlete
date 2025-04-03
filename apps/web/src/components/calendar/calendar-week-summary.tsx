@@ -1,3 +1,5 @@
+import { CheckCircle2 } from 'lucide-react';
+
 import { EVENT_TYPE, Event, getActivityDuration } from '@openathlete/shared';
 
 import { DistanceStat, DurationStat, ElevationStat } from '../numeric-stats';
@@ -20,9 +22,27 @@ export function CalendarWeekSummary({ events }: P) {
   const totalElevation = activities.reduce((acc, event) => {
     return acc + (event.elevationGain || 0);
   }, 0);
+  const trainingCompetitions = events.filter(
+    (event) =>
+      event.type === EVENT_TYPE.TRAINING ||
+      event.type === EVENT_TYPE.COMPETITION,
+  );
+  const doneTrainingCompetitions = trainingCompetitions.filter(
+    (event) => event.relatedActivityId,
+  );
 
   return (
     <div className="h-32 flex flex-col [&:not(:last-child)]:border-r-1 p-2">
+      {!!trainingCompetitions.length && (
+        <div className="flex gap-1 items-center">
+          <span>
+            {doneTrainingCompetitions.length} / {trainingCompetitions.length}
+          </span>
+          {doneTrainingCompetitions.length === trainingCompetitions.length && (
+            <CheckCircle2 size={14} />
+          )}
+        </div>
+      )}
       <DurationStat duration={totalDuration} />
       <DistanceStat distance={totalDistance} />
       <ElevationStat elevation={totalElevation} />
