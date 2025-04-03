@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -10,6 +11,7 @@ import {
   event_competition,
   event_note,
   event_training,
+  event_type,
   user_role,
 } from '@openathlete/database';
 import {
@@ -28,8 +30,16 @@ import {
 } from '../helpers/activity-stream';
 
 const EVENT_INCLUDES = {
-  training: true,
-  competition: true,
+  training: {
+    include: {
+      related_activity: true,
+    },
+  },
+  competition: {
+    include: {
+      related_activity: true,
+    },
+  },
   note: true,
   activity: {
     // select all fields except stream
@@ -243,6 +253,92 @@ export class EventService {
       }
 
       return compressedStreams;
+    }
+  }
+
+  async setRelatedActivity(
+    user: AuthUser,
+    eventId: event['event_id'],
+    activityId: event['event_id'],
+  ): Promise<void> {
+    const userEntity = await this.prisma.user.findUnique({
+      where: { user_id: user.user_id },
+      include: { athlete: true },
+    });
+    const event = await this.prisma.event.findUnique({
+      where: { event_id: eventId },
+    });
+    const activity = await this.prisma.event.findUnique({
+      where: { event_id: activityId },
+    });
+
+    if (!userEntity || !event || !activity) {
+      throw new NotFoundException();
+    }
+
+    if (
+      event.type !== event_type.TRAINING &&
+      event.type !== event_type.COMPETITION
+    ) {
+      throw new BadRequestException(
+        'eventId must refer to a training or a competition',
+      );
+    }
+
+    if (activity.type !== event_type.ACTIVITY) {
+      throw new BadRequestException('activityId must refer to an activity');
+    }
+
+    if (
+      userEntity?.roles.includes(user_role.ATHLETE) &&
+      userEntity.athlete?.athlete_id === event.athlete_id &&
+      userEntity.athlete?.athlete_id === activity.athlete_id
+    ) {
+      if (event.type === 'COMPETITION') {
+        await this.prisma.event_competition.update({
+          where: { event_id: eventId },
+          data: { related_activity: { connect: { event_id: activityId } } },
+        });
+      } else if (event.type === 'TRAINING') {
+        await this.prisma.event_training.update({
+          where: { event_id: eventId },
+          data: { related_activity: { connect: { event_id: activityId } } },
+        });
+      }
+    }
+  }
+
+  async unsetRelatedActivity(
+    user: AuthUser,
+    eventId: event['event_id'],
+  ): Promise<void> {
+    const userEntity = await this.prisma.user.findUnique({
+      where: { user_id: user.user_id },
+      include: { athlete: true },
+    });
+    const event = await this.prisma.event.findUnique({
+      where: { event_id: eventId },
+    });
+
+    if (!userEntity || !event) {
+      throw new NotFoundException();
+    }
+
+    if (
+      userEntity?.roles.includes(user_role.ATHLETE) &&
+      userEntity.athlete?.athlete_id === event.athlete_id
+    ) {
+      if (event.type === 'COMPETITION') {
+        await this.prisma.event_competition.update({
+          where: { event_id: eventId },
+          data: { related_activity: { disconnect: true } },
+        });
+      } else if (event.type === 'TRAINING') {
+        await this.prisma.event_training.update({
+          where: { event_id: eventId },
+          data: { related_activity: { disconnect: true } },
+        });
+      }
     }
   }
 }

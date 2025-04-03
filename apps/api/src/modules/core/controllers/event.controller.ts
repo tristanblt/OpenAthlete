@@ -73,4 +73,23 @@ export class EventController {
   ) {
     return this.eventService.deleteEvent(user, eventId);
   }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Post(':eventId/related-activity/:activityId')
+  setRelatedActivity(
+    @JwtUser() user: AuthUser,
+    @Param('eventId', ParseIntPipe) eventId: event['event_id'],
+    @Param('activityId', ParseIntPipe) activityId: event['event_id'],
+  ) {
+    return this.eventService.setRelatedActivity(user, eventId, activityId);
+  }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Delete(':eventId/related-activity')
+  unsetRelatedActivity(
+    @JwtUser() user: AuthUser,
+    @Param('eventId', ParseIntPipe) eventId: event['event_id'],
+  ) {
+    return this.eventService.unsetRelatedActivity(user, eventId);
+  }
 }
