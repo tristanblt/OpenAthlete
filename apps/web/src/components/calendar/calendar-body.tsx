@@ -1,3 +1,5 @@
+import { endOfDay, startOfDay } from '@openathlete/shared';
+
 import { CalendarDay } from './calendar-day';
 import { CalendarWeekSummary } from './calendar-week-summary';
 import { useCalendarContext } from './hooks/use-calendar-context';
@@ -40,8 +42,8 @@ export function CalendarBody({}: P) {
           <CalendarWeekSummary
             events={events.filter(
               (event) =>
-                event.startDate.getTime() >= week[0].getTime() &&
-                event.startDate.getTime() <= week[6].getTime(),
+                event.startDate.getTime() >= startOfDay(week[0]).getTime() &&
+                event.startDate.getTime() <= endOfDay(week[6]).getTime(),
             )}
           />
         </div>
