@@ -165,6 +165,25 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
               required={type === EVENT_TYPE.NOTE}
             />
           </div>
+          <RHFTextField
+            name="goalDistance"
+            label="Goal Distance"
+            required
+            type="number"
+          />
+          <RHFTextField
+            name="goalDuration"
+            label="Goal Duration"
+            required
+            type="number"
+          />
+          <RHFTextField
+            name="goalElevationGain"
+            label="Goal Elevation Gain"
+            required
+            type="number"
+          />
+
           <Button
             type="submit"
             className="w-full col-span-2"
