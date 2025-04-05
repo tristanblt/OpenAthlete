@@ -19,6 +19,7 @@ import {
   CompressedActivityStream,
   CreateEventDto,
   keysToCamel,
+  keysToSnake,
 } from '@openathlete/shared';
 
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
@@ -138,9 +139,10 @@ export class EventService {
       include: { athlete: true },
     });
 
-    const { type, endDate, startDate, name, athleteId, ...rest } = data;
+    const { type, end_date, start_date, name, athlete_id, ...rest } =
+      keysToSnake(data);
 
-    const finalAthleteId = athleteId || userEntity?.athlete?.athlete_id;
+    const finalAthleteId = athlete_id || userEntity?.athlete?.athlete_id;
 
     if (!finalAthleteId) {
       throw new Error('Athlete ID is required');
@@ -150,8 +152,8 @@ export class EventService {
       this.prisma.event.create({
         data: {
           athlete_id: finalAthleteId,
-          start_date: startDate,
-          end_date: endDate,
+          start_date,
+          end_date,
           name,
           type,
           [type.toLocaleLowerCase()]: {
@@ -180,7 +182,8 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
 
-    const { type, endDate, startDate, name, athleteId, ...rest } = data;
+    const { type, end_date, start_date, name, athlete_id, ...rest } =
+      keysToSnake(data);
 
     if (
       userEntity?.roles.includes(user_role.ATHLETE) &&
@@ -189,8 +192,8 @@ export class EventService {
       return this.prisma.event.update({
         where: { event_id: eventId },
         data: {
-          start_date: startDate,
-          end_date: endDate,
+          start_date,
+          end_date,
           name,
           type,
           [type.toLocaleLowerCase()]: {
