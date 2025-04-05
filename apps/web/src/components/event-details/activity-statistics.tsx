@@ -56,6 +56,67 @@ export function ActivityStatistics({ event, stream }: P) {
         )}
       </>
     );
+  } else if (event.sport === SPORT_TYPE.CYCLING) {
+    return (
+      <>
+        <DistanceStat label="Distance" distance={event.distance} />
+        <SpeedStat label="Average Speed" speed={event.averageSpeed} />
+        <DurationStat
+          label="Duration"
+          duration={getActivityDuration(event)}
+          movingDuration={event.movingTime}
+        />
+        <SpeedStat label="Max Speed" speed={event.maxSpeed} />
+        <ElevationStat
+          label="Elevation Gain"
+          elevation={event.elevationGain}
+          altitudeStream={stream?.altitude}
+          distanceStream={stream?.distance}
+        />
+        {event.averageHeartrate && (
+          <HeartrateStat
+            label="Average Heart Rate"
+            heartrate={event.averageHeartrate}
+          />
+        )}
+        {event.maxHeartrate && (
+          <HeartrateStat
+            label="Max Heart Rate"
+            heartrate={event.maxHeartrate}
+          />
+        )}
+      </>
+    );
+  } else if (event.sport === SPORT_TYPE.HIKING) {
+    return (
+      <>
+        <DistanceStat label="Distance" distance={event.distance} />
+        <SpeedStat label="Average Speed" speed={event.averageSpeed} />
+        <DurationStat
+          label="Duration"
+          duration={getActivityDuration(event)}
+          movingDuration={event.movingTime}
+        />
+        <ElevationStat
+          label="Elevation Gain"
+          elevation={event.elevationGain}
+          altitudeStream={stream?.altitude}
+          distanceStream={stream?.distance}
+        />
+        {event.averageHeartrate && (
+          <HeartrateStat
+            label="Average Heart Rate"
+            heartrate={event.averageHeartrate}
+          />
+        )}
+        {event.maxHeartrate && (
+          <HeartrateStat
+            label="Max Heart Rate"
+            heartrate={event.maxHeartrate}
+          />
+        )}
+      </>
+    );
   } else {
     return (
       <>
