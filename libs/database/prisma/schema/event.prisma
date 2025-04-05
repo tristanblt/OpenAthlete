@@ -26,8 +26,11 @@ model event_training {
   event_training_id Int @id @default(autoincrement())
 
   // fields
-  sport       sport_type
-  description String     @default("")
+  sport               sport_type
+  description         String     @default("")
+  goal_distance       Float? // in meters
+  goal_elevation_gain Float? // in meters
+  goal_duration       Int? // in seconds
 
   // relationships
   event               event           @relation(fields: [event_id], references: [event_id])
@@ -41,8 +44,11 @@ model event_competition {
   event_competition_id Int @id @default(autoincrement())
 
   // fields
-  sport       sport_type
-  description String     @default("")
+  sport               sport_type
+  description         String     @default("")
+  goal_distance       Float? // in meters
+  goal_elevation_gain Float? // in meters
+  goal_duration       Int? // in seconds
 
   // relationships
   event               event           @relation(fields: [event_id], references: [event_id])
