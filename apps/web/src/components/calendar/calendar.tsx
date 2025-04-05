@@ -23,6 +23,9 @@ export function Calendar({ events }: P) {
     date: Date;
     type: EVENT_TYPE;
   } | null>(null);
+  const [editEventDialog, setEditEventDialog] = useState<
+    Event['eventId'] | null
+  >(null);
 
   const memoizedValue = useMemo<CalendarContextType>(
     () => ({
@@ -32,6 +35,7 @@ export function Calendar({ events }: P) {
       },
       openEventDetails: setEventDetailsOpened,
       eventDetailsOpened,
+      editEvent: (eventId) => setEditEventDialog(eventId),
     }),
     [calendarData.displayedMonth, calendarData.events],
   );
@@ -47,6 +51,12 @@ export function Calendar({ events }: P) {
           onClose={() => setCreateEventDialog(null)}
           date={createEventDialog?.date}
           type={createEventDialog?.type}
+        />
+        <CreateEventDialog
+          key={editEventDialog}
+          open={editEventDialog !== null}
+          onClose={() => setEditEventDialog(null)}
+          event={events?.find((event) => event.eventId === editEventDialog)}
         />
         <CalendarEventDetails
           open={eventDetailsOpened !== null}

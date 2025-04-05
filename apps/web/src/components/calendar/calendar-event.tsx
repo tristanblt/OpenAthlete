@@ -1,6 +1,6 @@
 import { useDeleteEventMutation } from '@/services/event';
 import { cn } from '@/utils/shadcn';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   Event,
@@ -10,6 +10,7 @@ import {
   getActivityDuration,
 } from '@openathlete/shared';
 
+import { ConfirmAction } from '../confirm-action';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -55,7 +56,8 @@ function EventSecondLine({ event }: { event: Event }) {
 }
 
 export function CalendarEvent({ event }: P) {
-  const { openEventDetails } = useCalendarContext();
+  const { openEventDetails, editEvent } = useCalendarContext();
+  const [deleteEventDialog, setDeleteEventDialog] = useState<boolean>(false);
   const deleteEventMutation = useDeleteEventMutation();
 
   const eventColor = useMemo(() => {
@@ -72,42 +74,56 @@ export function CalendarEvent({ event }: P) {
   }, [event.type]);
 
   return (
-    <ContextMenu>
-      <button
-        className={cn(
-          'rounded-sm cursor-pointer text-left flex flex-col items-start justify-center py-0.5 px-2 overflow-hidden w-full',
-          eventColor,
-        )}
-        onClick={(e) => {
-          openEventDetails(event.eventId);
-          e.stopPropagation();
+    <>
+      <ContextMenu>
+        <button
+          className={cn(
+            'rounded-sm cursor-pointer text-left flex flex-col items-start justify-center py-0.5 px-2 overflow-hidden w-full',
+            eventColor,
+          )}
+          onClick={(e) => {
+            openEventDetails(event.eventId);
+            e.stopPropagation();
+          }}
+        >
+          <ContextMenuTrigger className="flex-1 w-full">
+            <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+              {event.name}
+            </div>
+            <EventSecondLine event={event} />
+          </ContextMenuTrigger>
+          <ContextMenuContent>
+            <ContextMenuItem
+              onClick={(e) => {
+                // deleteEventMutation.mutate(event.eventId);
+                setDeleteEventDialog(true);
+                e.stopPropagation();
+              }}
+            >
+              Delete<ContextMenuShortcut>⌘D</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={(e) => {
+                editEvent(event.eventId);
+                e.stopPropagation();
+              }}
+            >
+              Edit<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+            </ContextMenuItem>
+          </ContextMenuContent>
+        </button>
+      </ContextMenu>
+      <ConfirmAction
+        open={deleteEventDialog}
+        onClose={() => setDeleteEventDialog(false)}
+        onConfirm={() => {
+          deleteEventMutation.mutate(event.eventId);
+          setDeleteEventDialog(false);
         }}
-      >
-        <ContextMenuTrigger className="flex-1 w-full">
-          <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-            {event.name}
-          </div>
-          <EventSecondLine event={event} />
-        </ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem
-            onClick={(e) => {
-              deleteEventMutation.mutate(event.eventId);
-              e.stopPropagation();
-            }}
-          >
-            Delete<ContextMenuShortcut>⌘D</ContextMenuShortcut>
-          </ContextMenuItem>
-          {/* <ContextMenuItem
-                onClick={() => createEvent(day, EVENT_TYPE.COMPETITION)}
-              >
-                Plan a competition<ContextMenuShortcut>⌘R</ContextMenuShortcut>
-              </ContextMenuItem>
-              <ContextMenuItem onClick={() => createEvent(day, EVENT_TYPE.NOTE)}>
-                Plan a note<ContextMenuShortcut>⌘E</ContextMenuShortcut>
-              </ContextMenuItem> */}
-        </ContextMenuContent>
-      </button>
-    </ContextMenu>
+        title="Delete Event"
+        message="Are you sure you want to delete this event?"
+        isLoading={deleteEventMutation.isPending}
+      />
+    </>
   );
 }
