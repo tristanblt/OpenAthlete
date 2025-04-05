@@ -17,6 +17,7 @@ export function ConnectorsTab({}: P) {
         onClick={() => getStravaUriMutation.mutate('STRAVA')}
         className="mt-4"
         variant="outline"
+        isLoading={getStravaUriMutation.isPending}
       >
         <StravaIcon />
         Connect with Strava

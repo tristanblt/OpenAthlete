@@ -65,17 +65,37 @@ export function TrainingCompetitionDetails({ event }: P) {
                 </div>
               )}
             />
-            <Button
-              disabled={!event.relatedActivity?.eventId}
-              onClick={() => {
-                unsetRelatedActivityMutation.mutate(event.eventId);
-              }}
-            >
-              Remove
-            </Button>
+            {!!event.relatedActivity?.eventId && (
+              <Button
+                onClick={() => {
+                  unsetRelatedActivityMutation.mutate(event.eventId);
+                }}
+                isLoading={
+                  unsetRelatedActivityMutation.isPending ||
+                  setRelatedActivityMutation.isPending
+                }
+              >
+                Remove
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
+      {event.description && (
+        <Card className="col-span-2">
+          <CardHeader>
+            <CardTitle>Description</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {event.description.split('\n').map((part) => (
+              <>
+                {part}
+                <br />
+              </>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

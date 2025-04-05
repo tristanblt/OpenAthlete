@@ -85,7 +85,12 @@ export function CreateAccountView({ className }: React.ComponentProps<'form'>) {
           </div>
           <RHFTextField name="password" type="password" required />
         </div>
-        <Button type="submit" className="w-full" onClick={onSubmit}>
+        <Button
+          type="submit"
+          className="w-full"
+          onClick={onSubmit}
+          isLoading={createAccountMutation.isPending}
+        >
           Create Account
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
