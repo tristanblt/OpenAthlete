@@ -8,6 +8,7 @@ import {
   Param,
   ParseArrayPipe,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -52,6 +53,16 @@ export class EventController {
     @Body(new ZodValidationPipe(createEventDtoSchema)) body: CreateEventDto,
   ) {
     return this.eventService.createEvent(user, body);
+  }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Patch(':eventId')
+  updateEvent(
+    @JwtUser() user: AuthUser,
+    @Param('eventId', ParseIntPipe) eventId: event['event_id'],
+    @Body(new ZodValidationPipe(createEventDtoSchema)) body: CreateEventDto,
+  ) {
+    return this.eventService.updateEvent(user, eventId, body);
   }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)

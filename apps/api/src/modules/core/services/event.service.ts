@@ -162,6 +162,45 @@ export class EventService {
     );
   }
 
+  async updateEvent(
+    user: AuthUser,
+    eventId: event['event_id'],
+    data: CreateEventDto,
+  ) {
+    const userEntity = await this.prisma.user.findUnique({
+      where: { user_id: user.user_id },
+      include: { athlete: true },
+    });
+    const event = await this.prisma.event.findUnique({
+      where: { event_id: eventId },
+      include: EVENT_INCLUDES,
+    });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const { type, endDate, startDate, name, athleteId, ...rest } = data;
+
+    if (
+      userEntity?.roles.includes(user_role.ATHLETE) &&
+      userEntity.athlete?.athlete_id === event.athlete_id
+    ) {
+      return this.prisma.event.update({
+        where: { event_id: eventId },
+        data: {
+          start_date: startDate,
+          end_date: endDate,
+          name,
+          type,
+          [type.toLocaleLowerCase()]: {
+            update: rest,
+          },
+        },
+      });
+    }
+  }
+
   async deleteEvent(user: AuthUser, eventId: event['event_id']) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
