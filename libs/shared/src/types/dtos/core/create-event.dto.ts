@@ -13,12 +13,18 @@ const trainingEventSchema = baseEventSchema.extend({
   type: z.literal(EVENT_TYPE.TRAINING),
   sport: z.nativeEnum(SPORT_TYPE),
   description: z.string(),
+  goalDistance: z.number().optional().nullable(),
+  goalDuration: z.number().optional().nullable(),
+  goalElevationGain: z.number().optional().nullable(),
 });
 
 const competitionEventSchema = baseEventSchema.extend({
   type: z.literal(EVENT_TYPE.COMPETITION),
   sport: z.nativeEnum(SPORT_TYPE),
   description: z.string(),
+  goalDistance: z.number().optional().nullable(),
+  goalDuration: z.number().optional().nullable(),
+  goalElevationGain: z.number().optional().nullable(),
 });
 
 const noteEventSchema = baseEventSchema.extend({
