@@ -26,6 +26,29 @@ export const useCreateEventMutation = (
   });
 };
 
+export const useUpdateEventMutation = (
+  opt?: MutationOptions<
+    Awaited<ReturnType<typeof EventService.updateEvent>>,
+    Error,
+    Parameters<typeof EventService.updateEvent>[0]
+  >,
+) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    ...opt,
+    mutationFn: EventService.updateEvent,
+    onSuccess: (data, variables, context) => {
+      if (opt?.onSuccess) opt.onSuccess(data, variables, context);
+      queryClient.invalidateQueries({
+        queryKey: ['EventService.getEvent', variables.eventId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['EventService.getMyEvents'],
+      });
+    },
+  });
+};
+
 export const useGetMyEventsQuery = (
   opt?: QueryOptions<Awaited<ReturnType<typeof EventService.getMyEvents>>>,
 ) =>
@@ -91,6 +114,9 @@ export const useSetRelatedActivityMutation = (
       queryClient.invalidateQueries({
         queryKey: ['EventService.getEvent', variables.eventId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['EventService.getMyEvents'],
+      });
     },
   });
 };
@@ -110,6 +136,9 @@ export const useUnsetRelatedActivityMutation = (
       if (opt?.onSuccess) opt.onSuccess(data, variables, context);
       queryClient.invalidateQueries({
         queryKey: ['EventService.getEvent', variables],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['EventService.getMyEvents'],
       });
     },
   });

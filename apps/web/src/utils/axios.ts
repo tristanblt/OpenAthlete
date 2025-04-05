@@ -19,6 +19,7 @@ export const routes = {
   },
   event: {
     create: '/event',
+    update: (eventId: Event['eventId']) => `/event/${eventId}`,
     getMyEvents: '/event',
     getEvent: (eventId: Event['eventId']) => `/event/${eventId}`,
     getEventStream: (eventId: Event['eventId']) => `/event/${eventId}/stream`,

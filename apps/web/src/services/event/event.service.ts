@@ -16,6 +16,17 @@ export class EventService {
     return mapEvent(res.data);
   }
 
+  static async updateEvent({
+    eventId,
+    body,
+  }: {
+    eventId: Event['eventId'];
+    body: CreateEventDto;
+  }): Promise<Event> {
+    const res = await client.patch(routes.event.update(eventId), body);
+    return mapEvent(res.data);
+  }
+
   static async getMyEvents(): Promise<Event[]> {
     const res = await client.get(routes.event.getMyEvents);
     const data = res.data as Event[];
