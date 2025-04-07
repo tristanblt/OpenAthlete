@@ -80,9 +80,9 @@ export function useTrainingZones(type: TRAINING_ZONE_TYPE, sport?: SPORT_TYPE) {
     });
   }, [trainingZones]);
 
-  const filteredTrainingZones = finalTrainingZones?.filter(
-    (zone) => zone !== null,
-  );
+  const filteredTrainingZones = finalTrainingZones
+    ?.filter((zone) => zone !== null)
+    .map((zone) => zone as Exclude<typeof zone, null>);
 
   if (!filteredTrainingZones || filteredTrainingZones.length === 0) {
     return DEFAULT_TRAINING_ZONES.find((zone) => zone.type === type)?.values!;
