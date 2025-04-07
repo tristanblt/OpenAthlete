@@ -42,9 +42,12 @@ export function CalendarDay({ day, events }: P) {
             <span>{dayOfMonth}</span>
           </div>
           <div className="flex-1 p-1 pt-0 flex flex-col gap-1">
-            {events.map((event) => (
-              <CalendarEvent key={event.eventId} event={event} />
-            ))}
+            {events
+              .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+              .slice(0, 2)
+              .map((event) => (
+                <CalendarEvent key={event.eventId} event={event} />
+              ))}
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64">
