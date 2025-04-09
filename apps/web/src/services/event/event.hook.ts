@@ -143,3 +143,14 @@ export const useUnsetRelatedActivityMutation = (
     },
   });
 };
+
+export const useGetMyIcalCalendarSecretQuery = (
+  opt?: QueryOptions<
+    Awaited<ReturnType<typeof EventService.getMyIcalCalendarSecret>>
+  >,
+) =>
+  useQuery({
+    ...opt,
+    queryFn: EventService.getMyIcalCalendarSecret,
+    queryKey: ['EventService.getMyIcalCalendarSecret'],
+  });

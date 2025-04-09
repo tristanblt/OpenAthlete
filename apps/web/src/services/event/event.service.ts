@@ -66,4 +66,9 @@ export class EventService {
   static async unsetRelatedActivity(eventId: Event['eventId']): Promise<void> {
     await client.delete(routes.event.unsetRelatedActivity(eventId));
   }
+
+  static async getMyIcalCalendarSecret(): Promise<string> {
+    const res = await client.get(routes.event.getMyIcalCalendarSecret);
+    return res.data;
+  }
 }

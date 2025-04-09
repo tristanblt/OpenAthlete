@@ -30,6 +30,7 @@ export const routes = {
     ) => `/event/${eventId}/related-activity/${activityId}`,
     unsetRelatedActivity: (eventId: Event['eventId']) =>
       `/event/${eventId}/related-activity`,
+    getMyIcalCalendarSecret: '/event/ical/secret',
   },
   connector: {
     getOAuthUri: (provider: ConnectorProvider) =>
