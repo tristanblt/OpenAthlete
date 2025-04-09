@@ -14,12 +14,15 @@ import {
   SPORT_TYPE,
   createEventDtoSchema,
   eventTypeLabelMap,
+  formatSpeed,
+  getPace,
   sportTypeLabelMap,
 } from '@openathlete/shared';
 
 import {
   FormProvider,
   RHFDateTimePicker,
+  RHFDistance,
   RHFDuration,
   RHFSelect,
   RHFTextField,
@@ -114,6 +117,8 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
 
   const startDateValue = watch('startDate');
   const endDateValue = watch('endDate');
+  const goalDistanceValue = watch('goalDistance');
+  const goalDurationValue = watch('goalDuration');
 
   useEffect(() => {
     // on startDate change, set endDate to startDate + 1 hour
@@ -200,12 +205,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           {(type === EVENT_TYPE.TRAINING ||
             type === EVENT_TYPE.COMPETITION) && (
             <>
-              <RHFTextField
-                name="goalDistance"
-                label="Goal Distance"
-                required
-                type="number"
-              />
+              <RHFDistance name="goalDistance" label="Goal Distance" required />
               <RHFDuration name="goalDuration" label="Goal Duration" required />
               <RHFTextField
                 name="goalElevationGain"
@@ -213,6 +213,13 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
                 required
                 type="number"
               />
+              {!!goalDistanceValue && !!goalDurationValue && (
+                <div className="text-sm text-gray-500 h-full flex items-center">
+                  Pace:{' '}
+                  {formatSpeed(goalDistanceValue / goalDurationValue, 'min/km')}{' '}
+                  /km
+                </div>
+              )}
             </>
           )}
 
