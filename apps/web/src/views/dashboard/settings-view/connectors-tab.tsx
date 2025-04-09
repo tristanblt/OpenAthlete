@@ -1,6 +1,5 @@
 import { StravaIcon } from '@/assets/icons';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/input';
 import { API_BASE_URL } from '@/config';
 import { useGetOAuthUriMutation } from '@/services/connector';
 import { useGetMyIcalCalendarSecretQuery } from '@/services/event';
@@ -29,9 +28,9 @@ export function ConnectorsTab({}: P) {
       <div className="text-sm font-semibold">
         ICalendar URL (for syncing with other calendars):
       </div>
-      <Textarea disabled className="break-all h-13">
+      <div className="text-sm text-muted-foreground font-mono p-2 border-1 break-all rounded-sm">
         {`${API_BASE_URL}/event/ical?calendar=${icalSecret}`}
-      </Textarea>
+      </div>
     </div>
   );
 }
