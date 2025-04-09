@@ -95,20 +95,19 @@ export function CalendarEvent({ event }: P) {
           <ContextMenuContent>
             <ContextMenuItem
               onClick={(e) => {
-                // deleteEventMutation.mutate(event.eventId);
-                setDeleteEventDialog(true);
-                e.stopPropagation();
-              }}
-            >
-              Delete<ContextMenuShortcut>⌘D</ContextMenuShortcut>
-            </ContextMenuItem>
-            <ContextMenuItem
-              onClick={(e) => {
                 editEvent(event.eventId);
                 e.stopPropagation();
               }}
             >
               Edit<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={(e) => {
+                setDeleteEventDialog(true);
+                e.stopPropagation();
+              }}
+            >
+              Delete<ContextMenuShortcut>⌘D</ContextMenuShortcut>
             </ContextMenuItem>
           </ContextMenuContent>
         </button>
