@@ -1,9 +1,14 @@
+import * as argon2 from 'argon2';
+import ical, { ICalCalendarMethod } from 'ical-generator';
+
 import {
   BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import {
   event,
@@ -16,6 +21,7 @@ import {
 } from '@openathlete/database';
 import {
   ActivityStream,
+  ApiEnvSchemaType,
   CompressedActivityStream,
   CreateEventDto,
   keysToCamel,
@@ -67,7 +73,16 @@ const EVENT_INCLUDES = {
 };
 @Injectable()
 export class EventService {
-  constructor(private prisma: PrismaService) {}
+  HASH_PEPPER: Buffer | undefined;
+
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService<ApiEnvSchemaType, true>,
+  ) {
+    this.HASH_PEPPER = this.configService.get('HASH_PEPPER')
+      ? Buffer.from(this.configService.get('HASH_PEPPER'))
+      : undefined;
+  }
 
   private prismaEventToEvent(
     event: event & {
@@ -382,5 +397,72 @@ export class EventService {
         });
       }
     }
+  }
+
+  async getIcalCalendar(base64Secret: string): Promise<string> {
+    const secret = Buffer.from(base64Secret, 'base64').toString('utf-8');
+    const users = await this.prisma.user.findMany({
+      select: { user_id: true, athlete: { select: { athlete_id: true } } },
+    });
+    const user = await Promise.all(
+      users.map(async (user) => {
+        const isValid = await argon2.verify(secret, user.user_id.toString(), {
+          secret: this.HASH_PEPPER,
+        });
+        return isValid ? user : null;
+      }),
+    ).then((results) => results.find((user) => user !== null));
+
+    console.log('user', user);
+
+    if (!user || !user.athlete?.athlete_id) {
+      throw new UnauthorizedException();
+    }
+
+    const events = await this.prisma.event.findMany({
+      where: {
+        athlete_id: user.athlete.athlete_id,
+        type: {
+          not: event_type.ACTIVITY,
+        },
+      },
+    });
+    console.log('events', events);
+    const calendar = ical({
+      name: 'OpenAthlete',
+      timezone: 'UTC',
+      method: ICalCalendarMethod.PUBLISH,
+    });
+    events.forEach((event) => {
+      const { start_date, end_date, name, type } = event;
+      const eventType = type.toLowerCase();
+      const eventData = {
+        start: start_date,
+        end: end_date,
+        summary: name,
+        description: `Type: ${eventType}`,
+        uid: event.event_id,
+      };
+      calendar.createEvent(eventData);
+    });
+
+    return calendar.toString();
+  }
+
+  async getMyIcalCalendarSecret(user: AuthUser): Promise<string> {
+    const userEntity = await this.prisma.user.findUnique({
+      where: { user_id: user.user_id },
+      include: { athlete: true },
+    });
+
+    if (!userEntity?.athlete?.athlete_id) {
+      throw new NotFoundException('Athlete not found');
+    }
+
+    const hash = await argon2.hash(userEntity.user_id.toString(), {
+      secret: this.HASH_PEPPER,
+    });
+
+    return Buffer.from(hash).toString('base64');
   }
 }

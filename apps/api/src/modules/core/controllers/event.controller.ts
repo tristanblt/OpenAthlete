@@ -11,6 +11,7 @@ import {
   Patch,
   Post,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -30,6 +31,20 @@ import { EventService } from '../services';
 @Controller('event')
 export class EventController {
   constructor(private eventService: EventService) {}
+
+  @Get('ical')
+  async getIcalCalendar(@Res() res, @Query('calendar') calendar: string) {
+    res.setHeader('Content-Type', 'text/calendar; charset=utf-8');
+    res.setHeader('Content-Disposition', 'attachment; filename="calendar.ics"');
+    const ical = await this.eventService.getIcalCalendar(calendar);
+    res.send(ical);
+  }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Get('ical/secret')
+  async getMyIcalCalendarSecret(@JwtUser() user: AuthUser) {
+    return this.eventService.getMyIcalCalendarSecret(user);
+  }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)
   @Get()
