@@ -3,7 +3,7 @@ import {
   useUpdateEventMutation,
 } from '@/services/event';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -20,6 +20,7 @@ import {
 import {
   FormProvider,
   RHFDateTimePicker,
+  RHFDuration,
   RHFSelect,
   RHFTextField,
 } from '../hook-form';
@@ -103,13 +104,40 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
         : {},
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, setValue, watch } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     if (create) createEventMutation.mutate(data);
     if (edit && rest.event)
       updateEventMutation.mutate({ eventId: rest.event.eventId, body: data });
   });
+
+  const startDateValue = watch('startDate');
+  const endDateValue = watch('endDate');
+
+  useEffect(() => {
+    // on startDate change, set endDate to startDate + 1 hour
+    if (startDateValue) {
+      const start = new Date(startDateValue);
+      const end = new Date(start);
+      end.setHours(start.getHours() + 1);
+      end.setMinutes(start.getMinutes() + 0);
+      end.setSeconds(0);
+      setValue('endDate', end);
+    }
+  }, [startDateValue, setValue]);
+
+  useEffect(() => {
+    // on endDate change, set duration to endDate - startDate
+    if (endDateValue) {
+      const end = new Date(endDateValue);
+      const start = new Date(startDateValue);
+
+      const duration = end.getTime() - start.getTime();
+      const durationInSeconds = Math.floor(duration / 1000);
+      setValue('goalDuration', durationInSeconds);
+    }
+  }, [endDateValue, setValue]);
 
   if ((create && (!rest.date || !rest.type)) || (edit && !rest.event)) {
     return null;
@@ -155,16 +183,20 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           ) : (
             <div />
           )}
-          <RHFDateTimePicker name="startDate" label="Start Date" required />
-          <RHFDateTimePicker name="endDate" label="End Date" required />
-          <div className="col-span-2">
-            <RHFTextarea
-              name="description"
-              label="Description"
-              className="h-24"
-              required={type === EVENT_TYPE.NOTE}
-            />
-          </div>
+          {type !== EVENT_TYPE.ACTIVITY && (
+            <>
+              <RHFDateTimePicker name="startDate" label="Start Date" required />
+              <RHFDateTimePicker name="endDate" label="End Date" required />
+              <div className="col-span-2">
+                <RHFTextarea
+                  name="description"
+                  label="Description"
+                  className="h-24"
+                  required={type === EVENT_TYPE.NOTE}
+                />
+              </div>
+            </>
+          )}
           {(type === EVENT_TYPE.TRAINING ||
             type === EVENT_TYPE.COMPETITION) && (
             <>
@@ -174,12 +206,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
                 required
                 type="number"
               />
-              <RHFTextField
-                name="goalDuration"
-                label="Goal Duration"
-                required
-                type="number"
-              />
+              <RHFDuration name="goalDuration" label="Goal Duration" required />
               <RHFTextField
                 name="goalElevationGain"
                 label="Goal Elevation Gain"
