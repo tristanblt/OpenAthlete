@@ -413,8 +413,6 @@ export class EventService {
       }),
     ).then((results) => results.find((user) => user !== null));
 
-    console.log('user', user);
-
     if (!user || !user.athlete?.athlete_id) {
       throw new UnauthorizedException();
     }
@@ -427,7 +425,6 @@ export class EventService {
         },
       },
     });
-    console.log('events', events);
     const calendar = ical({
       name: 'OpenAthlete',
       timezone: 'UTC',
