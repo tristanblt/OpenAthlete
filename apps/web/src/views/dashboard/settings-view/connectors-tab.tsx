@@ -25,12 +25,16 @@ export function ConnectorsTab({}: P) {
         <StravaIcon />
         Connect with Strava
       </Button>
-      <div className="text-sm font-semibold">
-        ICalendar URL (for syncing with other calendars):
-      </div>
-      <div className="text-sm text-muted-foreground font-mono p-2 border-1 break-all rounded-sm">
-        {`${API_BASE_URL}/event/ical?calendar=${icalSecret}`}
-      </div>
+      {icalSecret && (
+        <>
+          <div className="text-sm font-semibold">
+            ICalendar URL (for syncing with other calendars):
+          </div>
+          <div className="text-sm text-muted-foreground font-mono p-2 border-1 break-all rounded-sm">
+            {`${API_BASE_URL}/event/ical?calendar=${icalSecret}`}
+          </div>
+        </>
+      )}
     </div>
   );
 }
