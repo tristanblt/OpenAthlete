@@ -5,6 +5,9 @@
   "author": "Tristan Bouillot <tristan@tblt.fr>",
   "license": "MPL-2.0",
   "main": "./generated/client/index.js",
+  "prisma": {
+    "schema": "./prisma/schema"
+  },
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
