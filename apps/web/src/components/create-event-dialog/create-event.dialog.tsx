@@ -15,7 +15,6 @@ import {
   createEventDtoSchema,
   eventTypeLabelMap,
   formatSpeed,
-  getPace,
   sportTypeLabelMap,
 } from '@openathlete/shared';
 
