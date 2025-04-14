@@ -1,4 +1,5 @@
 import { cn } from '@/utils/shadcn';
+import { useDroppable } from '@dnd-kit/core';
 
 import { EVENT_TYPE, Event } from '@openathlete/shared';
 
@@ -22,11 +23,18 @@ export function CalendarDay({ day, events }: P) {
   const dayOfMonth = day.getDate();
   const isToday = day.toDateString() === new Date().toDateString();
   const isCurrentMonth = day.getMonth() === displayedMonth.getMonth();
+  const { isOver, setNodeRef } = useDroppable({
+    id: day.toISOString(),
+  });
 
   return (
     <div
-      className="min-h-32 flex flex-col [&:not(:last-child)]:border-r-1 cursor-pointer hover:bg-gray-50"
+      className={cn(
+        'min-h-32 flex flex-col [&:not(:last-child)]:border-r-1 cursor-pointer hover:bg-gray-50',
+        isOver ? 'bg-gray-100' : '',
+      )}
       onClick={() => console.log(day)}
+      ref={setNodeRef}
     >
       <ContextMenu>
         <ContextMenuTrigger className="flex-1">

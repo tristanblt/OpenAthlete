@@ -6,6 +6,8 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
+import { Event } from '@openathlete/shared';
+
 import { EventService } from './event.service';
 
 export const useCreateEventMutation = (
@@ -45,6 +47,19 @@ export const useUpdateEventMutation = (
       queryClient.invalidateQueries({
         queryKey: ['EventService.getMyEvents'],
       });
+    },
+    onMutate: (variables) => {
+      const events = queryClient.getQueryData([
+        'EventService.getMyEvents',
+      ]) as Event[];
+      const updateIndex = events.findIndex(
+        (e) => e.eventId === variables.eventId,
+      );
+      (events[updateIndex] as any) = {
+        ...events[updateIndex],
+        ...variables.body,
+      };
+      queryClient.setQueryData(['EventService.getMyEvents'], events);
     },
   });
 };

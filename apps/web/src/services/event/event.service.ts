@@ -21,7 +21,7 @@ export class EventService {
     body,
   }: {
     eventId: Event['eventId'];
-    body: CreateEventDto;
+    body: Partial<CreateEventDto>;
   }): Promise<Event> {
     const res = await client.patch(routes.event.update(eventId), body);
     return mapEvent(res.data);

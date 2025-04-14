@@ -1,4 +1,6 @@
 import { useCalendarData } from '@/components/calendar/hooks/use-calendar-data';
+import { useUpdateEventMutation } from '@/services/event';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { useMemo, useState } from 'react';
 
 import { EVENT_TYPE, Event } from '@openathlete/shared';
@@ -27,6 +29,7 @@ export function Calendar({ events }: P) {
     Event['eventId'] | null
   >(null);
   const [summaryType, setSummaryType] = useState<SummaryType>('planned');
+  const updateEventMutation = useUpdateEventMutation();
 
   const memoizedValue = useMemo<CalendarContextType>(
     () => ({
@@ -43,11 +46,37 @@ export function Calendar({ events }: P) {
     [calendarData.displayedMonth, calendarData.events],
   );
 
+  const dndOnDragEnd = (e: DragEndEvent) => {
+    if (!e.over?.id) return;
+    const day = new Date(e.over?.id);
+    const eventId = Number(e.active.id);
+    const event = events?.find((evt) => evt.eventId === eventId);
+    if (!event) return;
+    const startDate = event.startDate;
+    const endDate = event.endDate;
+    startDate.setDate(day.getDate());
+    startDate.setMonth(day.getMonth());
+    startDate.setFullYear(day.getFullYear());
+    endDate.setDate(day.getDate());
+    endDate.setMonth(day.getMonth());
+    endDate.setFullYear(day.getFullYear());
+    updateEventMutation.mutate({
+      eventId: event.eventId,
+      body: {
+        ...event,
+        startDate,
+        endDate,
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <CalendarContext.Provider value={memoizedValue}>
         <CalendarHeader />
-        <CalendarBody />
+        <DndContext onDragEnd={dndOnDragEnd}>
+          <CalendarBody />
+        </DndContext>
         <CreateEventDialog
           key={createEventDialog?.date?.toDateString()}
           open={createEventDialog !== null}
