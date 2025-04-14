@@ -45,6 +45,21 @@ export const formatSpeed = (
   }
 };
 
+export const formatSpeedUnit = (unit: SpeedUnit): string => {
+  switch (unit) {
+    case 'm/s':
+      return `m/s`;
+    case 'km/h':
+      return `km/h`;
+    case 'mph':
+      return `m / h`;
+    case 'min/km':
+      return 'min/km';
+    case 'min/mi':
+      return 'min/mi';
+  }
+};
+
 /**
  * Formats a distance value to a human readable format.
  *
