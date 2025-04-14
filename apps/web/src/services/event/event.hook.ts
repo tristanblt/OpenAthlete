@@ -181,9 +181,7 @@ export const useDuplicateEventMutation = (
   return useMutation({
     ...opt,
     mutationFn: async (variables) => {
-      console.log(variables);
       const event = await EventService.getEvent(variables);
-      console.log(event);
       return EventService.createEvent(event);
     },
     onSuccess: (data, variables, context) => {
