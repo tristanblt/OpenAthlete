@@ -1,11 +1,7 @@
 import axios, { isAxiosError } from 'axios';
-import e from 'express';
+import { Request, Response } from 'express';
 
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import {
@@ -13,17 +9,14 @@ import {
   connector_provider,
   event,
   event_activity,
+  event_type,
 } from '@openathlete/database';
 import { ActivityStream, ApiEnvSchemaType } from '@openathlete/shared';
 
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
-import {
-  compareActivityStream,
-  compressActivityStream,
-  uncompressActivityStream,
-} from '../../helpers/activity-stream';
+import { compressActivityStream } from '../../helpers/activity-stream';
 import { mapStravaSportType } from '../../helpers/strava';
 import { StravaSummaryActivity } from '../../types/connector';
 
@@ -59,24 +52,42 @@ export class StravaConnectorService {
         },
       );
 
-      const connector = await this.prisma.connector.create({
-        data: {
-          provider: connector_provider.STRAVA,
-          token: data.refresh_token,
+      const exist = await this.prisma.connector.findFirst({
+        where: {
           athlete: {
-            connect: {
-              user_id: user.user_id,
-            },
+            user: { user_id: user.user_id },
           },
-        },
-        include: {
-          athlete: true,
+          provider: connector_provider.STRAVA,
         },
       });
 
-      await this.fetchInitialStravaData(connector);
+      if (!exist) {
+        const connector = await this.prisma.connector.create({
+          data: {
+            provider: connector_provider.STRAVA,
+            token: data.refresh_token,
+            external_user_id: Number(data.athlete.id).toString(),
+            athlete: {
+              connect: {
+                user_id: user.user_id,
+              },
+            },
+          },
+          include: {
+            athlete: true,
+          },
+        });
+        await this.fetchInitialStravaData(connector);
+      } else {
+        await this.prisma.connector.update({
+          where: { connector_id: exist.connector_id },
+          data: {
+            external_user_id: Number(data.athlete.id).toString(),
+          },
+        });
+      }
     } catch (error) {
-      if (isAxiosError(error)) console.log(error.response?.data);
+      if (isAxiosError(error)) console.error(error.response?.data);
       throw new InternalServerErrorException();
     }
   }
@@ -196,7 +207,7 @@ export class StravaConnectorService {
               },
             },
             name: activity.name,
-            type: 'ACTIVITY',
+            type: event_type.ACTIVITY,
             start_date: new Date(activity.start_date),
             end_date: endDate,
           },
@@ -210,6 +221,41 @@ export class StravaConnectorService {
       page++;
 
       break; // TODO: Remove this break
+    }
+  }
+
+  async stravaWebhookGet(req: Request, res: Response) {
+    let mode = req.query['hub.mode'];
+    let token = req.query['hub.verify_token'];
+    let challenge = req.query['hub.challenge'];
+    if (mode && token) {
+      if (
+        mode === 'subscribe' &&
+        token === this.configService.get('STRAVA_WEBHOOK_TOKEN')
+      ) {
+        res.json({ 'hub.challenge': challenge });
+      } else {
+        res.sendStatus(403);
+      }
+    }
+  }
+
+  async stravaWebhookPost(body: {
+    object_id: number;
+    owner_id: number;
+    aspect_type: 'create' | 'delete';
+  }) {
+    if (body.aspect_type === 'create' && body.object_id && body.owner_id) {
+      const connector = await this.prisma.connector.findFirst({
+        where: {
+          external_user_id: body.owner_id.toString(),
+        },
+        include: {
+          athlete: true,
+        },
+      });
+
+      if (connector) await this.fetchInitialStravaData(connector);
     }
   }
 }

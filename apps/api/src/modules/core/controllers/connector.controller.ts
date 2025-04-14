@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Request, Response } from 'express';
+
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { JwtUser, UserTypeGuard } from 'src/modules/auth';
@@ -19,5 +29,15 @@ export class ConnectorController {
   @Post('strava/token')
   setStravaToken(@JwtUser() user: AuthUser, @Body('code') code: string) {
     return this.stravaConnectorService.setStravaToken(user, code);
+  }
+
+  @Get('strava/webhook')
+  stravaWebhookGet(@Req() request: Request, @Res() response: Response) {
+    return this.stravaConnectorService.stravaWebhookGet(request, response);
+  }
+
+  @Post('strava/webhook')
+  stravaWebhookPost(@Body() body) {
+    return this.stravaConnectorService.stravaWebhookPost(body);
   }
 }
