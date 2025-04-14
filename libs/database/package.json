@@ -6,12 +6,14 @@
   "license": "MPL-2.0",
   "main": "./generated/client/index.js",
   "prisma": {
-    "schema": "./prisma/schema"
+    "schema": "./prisma/schema",
+    "migrateOutput": "./prisma/migrations/"
   },
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:deploy": "prisma migrate deploy"
+    "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset"
   },
   "devDependencies": {
     "@types/node": "^22.10.7",
