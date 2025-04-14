@@ -25,14 +25,14 @@ export function CalendarDay({ day, events }: P) {
 
   return (
     <div
-      className="h-32 flex flex-col [&:not(:last-child)]:border-r-1 cursor-pointer hover:bg-gray-50"
+      className="min-h-32 flex flex-col [&:not(:last-child)]:border-r-1 cursor-pointer hover:bg-gray-50"
       onClick={() => console.log(day)}
     >
       <ContextMenu>
         <ContextMenuTrigger className="flex-1">
           <div
             className={cn(
-              'flex justify-center px-2 py-2 text-sm font-medium text-gray-600',
+              'flex justify-center p-2 text-sm font-medium text-gray-600',
               {
                 'text-red-500 font-bold': isToday,
                 'text-gray-400': !isCurrentMonth,
@@ -41,10 +41,9 @@ export function CalendarDay({ day, events }: P) {
           >
             <span>{dayOfMonth}</span>
           </div>
-          <div className="flex-1 p-1 pt-0 flex flex-col gap-1">
+          <div className="flex-1 p-1 pb-2 pt-0 flex flex-col gap-1">
             {events
               .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-              .slice(0, 2)
               .map((event) => (
                 <CalendarEvent key={event.eventId} event={event} />
               ))}
