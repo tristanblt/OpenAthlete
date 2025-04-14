@@ -1,4 +1,7 @@
-import { useDeleteEventMutation } from '@/services/event';
+import {
+  useDeleteEventMutation,
+  useDuplicateEventMutation,
+} from '@/services/event';
 import { cn } from '@/utils/shadcn';
 import { useDraggable } from '@dnd-kit/core';
 import { useMemo, useState } from 'react';
@@ -65,6 +68,7 @@ export function CalendarEvent({ event }: P) {
   const { openEventDetails, editEvent } = useCalendarContext();
   const [deleteEventDialog, setDeleteEventDialog] = useState<boolean>(false);
   const deleteEventMutation = useDeleteEventMutation();
+  const duplicateEventMutation = useDuplicateEventMutation();
 
   const eventColor = useMemo(() => {
     switch (event.type) {
@@ -84,50 +88,60 @@ export function CalendarEvent({ event }: P) {
   return (
     <>
       <ContextMenu>
-        <button
-          className={cn(
-            'rounded-sm cursor-pointer text-left flex flex-col items-start justify-center py-0.5 px-2 overflow-hidden w-full',
-            eventColor,
-            isDragging ? 'z-50' : '',
-          )}
-          style={{
-            transform: draggable
-              ? `translate3d(${transform?.x || 0}px, ${transform?.y || 0}px, 0)`
-              : '',
-          }}
-          onClick={(e) => {
-            openEventDetails(event.eventId);
-            e.stopPropagation();
-          }}
-          ref={draggable ? setNodeRef : undefined}
-          {...listeners}
-          {...attributes}
-        >
-          <ContextMenuTrigger className="flex-1 w-full">
+        <ContextMenuTrigger className="flex-1 w-full">
+          <button
+            className={cn(
+              'rounded-sm cursor-pointer text-left flex flex-col items-start justify-center py-0.5 px-2 overflow-hidden w-full',
+              eventColor,
+              isDragging ? 'z-50' : '',
+            )}
+            style={{
+              transform: draggable
+                ? `translate3d(${transform?.x || 0}px, ${transform?.y || 0}px, 0)`
+                : '',
+            }}
+            {...listeners}
+            {...attributes}
+            onClick={(e) => {
+              openEventDetails(event.eventId);
+              e.stopPropagation();
+            }}
+            ref={draggable ? setNodeRef : undefined}
+          >
             <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
               {event.name}
             </div>
             <EventSecondLine event={event} />
-          </ContextMenuTrigger>
-          <ContextMenuContent>
+          </button>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem
+            onClick={(e) => {
+              editEvent(event.eventId);
+              e.stopPropagation();
+            }}
+          >
+            Edit<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+          </ContextMenuItem>
+          {event.type !== EVENT_TYPE.ACTIVITY && (
             <ContextMenuItem
               onClick={(e) => {
-                editEvent(event.eventId);
+                duplicateEventMutation.mutate(event.eventId);
                 e.stopPropagation();
               }}
             >
-              Edit<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+              Duplicate<ContextMenuShortcut>⌘D</ContextMenuShortcut>
             </ContextMenuItem>
-            <ContextMenuItem
-              onClick={(e) => {
-                setDeleteEventDialog(true);
-                e.stopPropagation();
-              }}
-            >
-              Delete<ContextMenuShortcut>⌘D</ContextMenuShortcut>
-            </ContextMenuItem>
-          </ContextMenuContent>
-        </button>
+          )}
+          <ContextMenuItem
+            onClick={(e) => {
+              setDeleteEventDialog(true);
+              e.stopPropagation();
+            }}
+          >
+            Delete<ContextMenuShortcut>⌘X</ContextMenuShortcut>
+          </ContextMenuItem>
+        </ContextMenuContent>
       </ContextMenu>
       <ConfirmAction
         open={deleteEventDialog}
