@@ -182,7 +182,7 @@ export class EventService {
   async updateEvent(
     user: AuthUser,
     eventId: event['event_id'],
-    data: CreateEventDto,
+    data: Partial<CreateEventDto>,
   ) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
@@ -211,9 +211,13 @@ export class EventService {
           end_date,
           name,
           type,
-          [type.toLocaleLowerCase()]: {
-            update: rest,
-          },
+          ...(type
+            ? {
+                [type.toLocaleLowerCase()]: {
+                  update: rest,
+                },
+              }
+            : {}),
         },
       });
     }
