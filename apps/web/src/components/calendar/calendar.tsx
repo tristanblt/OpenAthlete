@@ -8,7 +8,7 @@ import { CalendarBody } from './calendar-body';
 import { CalendarEventDetails } from './calendar-event-details';
 import { CalendarHeader } from './calendar-header';
 import { CalendarContext } from './contexts/calendar-context';
-import { CalendarContextType } from './types/calendar-context';
+import { CalendarContextType, SummaryType } from './types/calendar-context';
 
 interface P {
   events?: Event[];
@@ -26,6 +26,7 @@ export function Calendar({ events }: P) {
   const [editEventDialog, setEditEventDialog] = useState<
     Event['eventId'] | null
   >(null);
+  const [summaryType, setSummaryType] = useState<SummaryType>('planned');
 
   const memoizedValue = useMemo<CalendarContextType>(
     () => ({
@@ -36,6 +37,8 @@ export function Calendar({ events }: P) {
       openEventDetails: setEventDetailsOpened,
       eventDetailsOpened,
       editEvent: (eventId) => setEditEventDialog(eventId),
+      summaryType,
+      setSummaryType,
     }),
     [calendarData.displayedMonth, calendarData.events],
   );

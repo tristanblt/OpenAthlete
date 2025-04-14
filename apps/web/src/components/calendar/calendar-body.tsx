@@ -1,5 +1,12 @@
 import { endOfDay, startOfDay } from '@openathlete/shared';
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 import { CalendarDay } from './calendar-day';
 import { CalendarWeekSummary } from './calendar-week-summary';
 import { useCalendarContext } from './hooks/use-calendar-context';
@@ -7,7 +14,8 @@ import { useCalendarContext } from './hooks/use-calendar-context';
 interface P {}
 
 export function CalendarBody({}: P) {
-  const { displayedWeeks, events } = useCalendarContext();
+  const { displayedWeeks, events, summaryType, setSummaryType } =
+    useCalendarContext();
 
   return (
     <div className="w-full border-1 rounded-lg">
@@ -20,8 +28,19 @@ export function CalendarBody({}: P) {
             {new Date(day).toLocaleString('en-US', { weekday: 'short' })}
           </div>
         ))}
-        <div className="h-8 flex justify-center items-center text-sm font-semibold [&:not(:last-child)]:border-r-1">
-          Summary
+        <div className="h-8 [&:not(:last-child)]:border-r-1">
+          <Select value={summaryType} onValueChange={setSummaryType}>
+            <SelectTrigger
+              className="border-0 shadow-none py-0 w-full"
+              style={{ height: '100%' }}
+            >
+              <SelectValue className="font-bold" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="planned">Planned</SelectItem>
+              <SelectItem value="done">Done</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       {displayedWeeks.map((week, i) => (

@@ -10,12 +10,13 @@ import {
 } from '@openathlete/shared';
 
 import { DistanceStat, DurationStat, ElevationStat } from '../numeric-stats';
+import { useCalendarContext } from './hooks/use-calendar-context';
 
 interface P {
   events: Event[];
 }
 
-export function CalendarWeekSummary({ events }: P) {
+export function DoneSummary({ events }: P) {
   const activities = events.filter(
     (event) => event.type === EVENT_TYPE.ACTIVITY,
   ) as ActivityEvent[];
@@ -55,4 +56,40 @@ export function CalendarWeekSummary({ events }: P) {
       <ElevationStat elevation={totalElevation} />
     </div>
   );
+}
+
+export function PlannedSummary({ events }: P) {
+  const trainings = events.filter(
+    (event) =>
+      event.type === EVENT_TYPE.TRAINING ||
+      event.type === EVENT_TYPE.COMPETITION,
+  ) as (TrainingEvent | CompetitionEvent)[];
+  const totalDuration = trainings.reduce((acc, event) => {
+    const duration = event.goalDuration || 0;
+    return acc + duration;
+  }, 0);
+  const totalDistance = trainings.reduce((acc, event) => {
+    return acc + (event.goalDistance || 0);
+  }, 0);
+  const totalElevation = trainings.reduce((acc, event) => {
+    return acc + (event.goalElevationGain || 0);
+  }, 0);
+
+  return (
+    <div className="h-32 flex flex-col [&:not(:last-child)]:border-r-1 p-2">
+      <DurationStat duration={totalDuration} />
+      <DistanceStat distance={totalDistance} />
+      <ElevationStat elevation={totalElevation} />
+    </div>
+  );
+}
+
+export function CalendarWeekSummary({ events }: P) {
+  const { summaryType } = useCalendarContext();
+
+  if (summaryType === 'done') {
+    return <DoneSummary events={events} />;
+  } else if (summaryType === 'planned') {
+    return <PlannedSummary events={events} />;
+  }
 }

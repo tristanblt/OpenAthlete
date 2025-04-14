@@ -1,5 +1,7 @@
 import { EVENT_TYPE, Event } from '@openathlete/shared';
 
+export type SummaryType = 'planned' | 'done';
+
 export type CalendarContextType = {
   displayedMonth: Date;
   nextMonth: () => void;
@@ -10,4 +12,6 @@ export type CalendarContextType = {
   events: Event[];
   openEventDetails: (eventId: Event['eventId']) => void;
   eventDetailsOpened: Event['eventId'] | null;
+  summaryType: SummaryType;
+  setSummaryType: (type: SummaryType) => void;
 };
