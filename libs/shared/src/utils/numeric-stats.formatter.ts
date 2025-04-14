@@ -1,4 +1,4 @@
-import { DistanceUnit } from '../types';
+import { DistanceUnit, SpeedUnit } from '../types';
 
 /**
  * Formats a duration value to a human readable format.
@@ -27,7 +27,7 @@ export const formatDuration = (duration: number): string => {
  */
 export const formatSpeed = (
   speed: number,
-  unit: 'm/s' | 'km/h' | 'mph' | 'min/km' | 'min/mi' = 'min/km',
+  unit: SpeedUnit = 'min/km',
 ): string => {
   switch (unit) {
     case 'm/s':

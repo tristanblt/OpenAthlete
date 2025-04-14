@@ -1,3 +1,5 @@
+import { SpeedUnit } from '../types';
+
 /**
  * Computes the pace in different units based on the distance and duration.
  *
@@ -9,7 +11,7 @@
 export const convertSpeed = (
   distance: number,
   duration: number,
-  unit: 'm/s' | 'km/h' | 'mph' | 'min/km' | 'min/mi' = 'min/km',
+  unit: SpeedUnit = 'min/km',
 ): number => {
   if (distance === 0 || duration === 0) return 0;
 
