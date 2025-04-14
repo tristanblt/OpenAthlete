@@ -1,6 +1,12 @@
 import { useCalendarData } from '@/components/calendar/hooks/use-calendar-data';
 import { useUpdateEventMutation } from '@/services/event';
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { useMemo, useState } from 'react';
 
 import { EVENT_TYPE, Event } from '@openathlete/shared';
@@ -70,11 +76,19 @@ export function Calendar({ events }: P) {
     });
   };
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+  );
+
   return (
     <div className="flex flex-col gap-3">
       <CalendarContext.Provider value={memoizedValue}>
         <CalendarHeader />
-        <DndContext onDragEnd={dndOnDragEnd}>
+        <DndContext onDragEnd={dndOnDragEnd} sensors={sensors}>
           <CalendarBody />
         </DndContext>
         <CreateEventDialog
