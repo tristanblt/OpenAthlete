@@ -14,6 +14,7 @@ export const ApiEnvSchema = z.object({
   STRAVA_CLIENT_ID: z.string().nonempty(),
   STRAVA_CLIENT_SECRET: z.string().nonempty(),
   STRAVA_REDIRECT_URI: z.string().nonempty(),
+  STRAVA_WEBHOOK_TOKEN: z.string().nonempty(),
 });
 
 export type ApiEnvSchemaType = z.infer<typeof ApiEnvSchema>;
