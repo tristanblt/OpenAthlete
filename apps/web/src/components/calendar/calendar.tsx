@@ -65,6 +65,10 @@ export function Calendar({ events }: P) {
           open={eventDetailsOpened !== null}
           onClose={() => setEventDetailsOpened(null)}
           event={events?.find((e) => e.eventId === eventDetailsOpened)}
+          onEditEvent={() => {
+            setEditEventDialog(eventDetailsOpened);
+            setEventDetailsOpened(null);
+          }}
         />
       </CalendarContext.Provider>
     </div>
