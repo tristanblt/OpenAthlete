@@ -39,12 +39,20 @@ import {
 const EVENT_INCLUDES = {
   training: {
     include: {
-      related_activity: true,
+      related_activity: {
+        select: {
+          event_id: true,
+        },
+      },
     },
   },
   competition: {
     include: {
-      related_activity: true,
+      related_activity: {
+        select: {
+          event_id: true,
+        },
+      },
     },
   },
   note: true,
