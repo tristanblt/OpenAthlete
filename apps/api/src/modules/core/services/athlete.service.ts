@@ -12,6 +12,14 @@ const ATHLETE_INCLUDES = {
       values: true,
     },
   },
+  user: {
+    select: {
+      user_id: true,
+      first_name: true,
+      last_name: true,
+      email: true,
+    },
+  },
 };
 
 @Injectable()
@@ -42,5 +50,14 @@ export class AthleteService {
     }
 
     return keysToCamel(athlete);
+  }
+
+  async getMyCoachedAthletes(userId: AuthUser['user_id']) {
+    const athletes = await this.prisma.athlete.findMany({
+      where: { coach_athletes: { some: { user_id: userId } } },
+      include: ATHLETE_INCLUDES,
+    });
+
+    return athletes.map((athlete) => keysToCamel(athlete));
   }
 }

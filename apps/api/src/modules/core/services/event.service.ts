@@ -111,16 +111,40 @@ export class EventService {
     };
   }
 
-  async getMyEvents(user: AuthUser) {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true },
-    });
+  async getMyEvents(user: AuthUser, isCoach: boolean, athleteId?: number) {
+    if (isCoach) {
+      const userEntity = await this.prisma.user.findUnique({
+        where: { user_id: user.user_id },
+        include: {
+          coach_athletes: athleteId
+            ? {
+                where: { athlete_id: athleteId },
+              }
+            : true,
+        },
+      });
 
-    if (
-      userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id
-    ) {
+      if (!userEntity?.coach_athletes || !userEntity.coach_athletes.length) {
+        throw new NotFoundException('No athletes found');
+      }
+
+      return Promise.all(
+        userEntity.coach_athletes.map((athlete) =>
+          this.getEventsOfAthlete(athlete.athlete_id).then((events) =>
+            events.map((e) => keysToCamel(this.prismaEventToEvent(e))),
+          ),
+        ),
+      ).then((events) => events.flat());
+    } else {
+      const userEntity = await this.prisma.user.findUnique({
+        where: { user_id: user.user_id },
+        include: { athlete: true },
+      });
+
+      if (!userEntity?.athlete?.athlete_id) {
+        throw new NotFoundException('Athlete not found');
+      }
+
       return this.getEventsOfAthlete(userEntity.athlete?.athlete_id).then(
         (events) => events.map((e) => keysToCamel(this.prismaEventToEvent(e))),
       );

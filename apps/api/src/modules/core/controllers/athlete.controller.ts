@@ -15,4 +15,10 @@ export class AthleteController {
   getMyAthlete(@JwtUser() user: AuthUser) {
     return this.athleteService.getAthleteByUserId(user.user_id);
   }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Get('coached')
+  getMyCoachedAthletes(@JwtUser() user: AuthUser) {
+    return this.athleteService.getMyCoachedAthletes(user.user_id);
+  }
 }

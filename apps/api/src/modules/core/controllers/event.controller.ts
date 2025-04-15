@@ -48,8 +48,16 @@ export class EventController {
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)
   @Get()
-  getMyEvents(@JwtUser() user: AuthUser) {
-    return this.eventService.getMyEvents(user);
+  getMyEvents(
+    @JwtUser() user: AuthUser,
+    @Query('coach') coach: string,
+    @Query('athleteId') athleteId: string,
+  ) {
+    return this.eventService.getMyEvents(
+      user,
+      coach === 'true',
+      athleteId ? Number(athleteId) : undefined,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)
