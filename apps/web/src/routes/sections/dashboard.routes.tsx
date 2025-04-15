@@ -19,6 +19,12 @@ const CalendarPage = lazy(() =>
   })),
 );
 
+const AthleteCalendarPage = lazy(() =>
+  import('@/pages/dashboard/calendar/athlete').then((module) => ({
+    default: module.AthleteCalendarPage,
+  })),
+);
+
 export const dashboardRoutes: RouteObject[] = [
   {
     path: getPath(['dashboard']),
@@ -36,6 +42,10 @@ export const dashboardRoutes: RouteObject[] = [
       {
         path: getPath(['dashboard', 'calendar']),
         element: <CalendarPage />,
+      },
+      {
+        path: getPath(['dashboard', 'calendar', 'athleteId']),
+        element: <AthleteCalendarPage />,
       },
       {
         path: getPath(['dashboard', 'settings']),
