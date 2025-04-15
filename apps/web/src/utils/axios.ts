@@ -41,6 +41,11 @@ export const routes = {
   athlete: {
     getMyAthlete: '/athlete/me',
     getCoachedAthletes: '/athlete/coached',
+    getCoaches: '/athlete/coaches',
+    inviteCoach: '/athlete/invite/coach',
+    inviteAthlete: '/athlete/invite/athlete',
+    removeAthlete: (athleteId: number) => `/athlete/${athleteId}`,
+    removeCoach: (coachId: number) => `/athlete/coach/${coachId}`,
   },
 } as const;
 
