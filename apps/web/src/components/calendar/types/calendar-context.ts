@@ -14,4 +14,6 @@ export type CalendarContextType = {
   eventDetailsOpened: Event['eventId'] | null;
   summaryType: SummaryType;
   setSummaryType: (type: SummaryType) => void;
+  athleteId?: number;
+  allowCreate: boolean;
 };

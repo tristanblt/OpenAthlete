@@ -52,9 +52,13 @@ export const useUpdateEventMutation = (
       const events = queryClient.getQueryData([
         'EventService.getMyEvents',
       ]) as Event[];
+      if (!events) return;
       const updateIndex = events.findIndex(
         (e) => e.eventId === variables.eventId,
       );
+
+      if (updateIndex === -1) return;
+
       (events[updateIndex] as any) = {
         ...events[updateIndex],
         ...variables.body,
@@ -72,7 +76,7 @@ export const useGetMyEventsQuery = (
   useQuery({
     ...opt,
     queryFn: () => EventService.getMyEvents(isCoach, athleteId),
-    queryKey: ['EventService.getMyEvents'],
+    queryKey: ['EventService.getMyEvents', isCoach, athleteId],
   });
 
 export const useGetEventQuery = (

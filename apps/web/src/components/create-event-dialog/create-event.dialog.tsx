@@ -18,6 +18,7 @@ import {
   sportTypeLabelMap,
 } from '@openathlete/shared';
 
+import { useCalendarContext } from '../calendar/hooks/use-calendar-context';
 import {
   FormProvider,
   RHFDateTimePicker,
@@ -45,6 +46,7 @@ type P =
     };
 
 export function CreateEventDialog({ open, onClose, ...rest }: P) {
+  const { athleteId } = useCalendarContext();
   const edit = 'event' in rest;
   const create = 'type' in rest && 'date' in rest;
   const startDate = useMemo(() => {
@@ -109,7 +111,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
   const { handleSubmit, setValue, watch } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    if (create) createEventMutation.mutate(data);
+    if (create) createEventMutation.mutate({ ...data, athleteId });
     if (edit && rest.event)
       updateEventMutation.mutate({ eventId: rest.event.eventId, body: data });
   });

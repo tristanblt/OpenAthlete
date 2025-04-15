@@ -13,16 +13,18 @@ import { EVENT_TYPE, Event } from '@openathlete/shared';
 
 import { CreateEventDialog } from '../create-event-dialog/create-event.dialog';
 import { CalendarBody } from './calendar-body';
-import { CalendarEventDetails } from './calendar-event-details';
+import { CalendarEventDetailsDialog } from './calendar-event-details.dialog';
 import { CalendarHeader } from './calendar-header';
 import { CalendarContext } from './contexts/calendar-context';
 import { CalendarContextType, SummaryType } from './types/calendar-context';
 
 interface P {
   events?: Event[];
+  athleteId?: number;
+  allowCreate?: boolean;
 }
 
-export function Calendar({ events }: P) {
+export function Calendar({ events, athleteId, allowCreate = true }: P) {
   const calendarData = useCalendarData({ events });
   const [eventDetailsOpened, setEventDetailsOpened] = useState<
     Event['eventId'] | null
@@ -48,6 +50,8 @@ export function Calendar({ events }: P) {
       editEvent: (eventId) => setEditEventDialog(eventId),
       summaryType,
       setSummaryType,
+      athleteId,
+      allowCreate,
     }),
     [calendarData.displayedMonth, calendarData.events],
   );
@@ -104,7 +108,7 @@ export function Calendar({ events }: P) {
           onClose={() => setEditEventDialog(null)}
           event={events?.find((event) => event.eventId === editEventDialog)}
         />
-        <CalendarEventDetails
+        <CalendarEventDetailsDialog
           open={eventDetailsOpened !== null}
           onClose={() => setEventDetailsOpened(null)}
           event={events?.find((e) => e.eventId === eventDetailsOpened)}

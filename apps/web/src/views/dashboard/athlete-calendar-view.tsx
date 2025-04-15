@@ -21,7 +21,7 @@ export function AthleteCalendarView({ athleteId }: P) {
   }
   return (
     <div className="p-8">
-      <Calendar events={data} />
+      <Calendar events={data} athleteId={athleteId} />
     </div>
   );
 }

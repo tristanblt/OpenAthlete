@@ -19,7 +19,7 @@ interface P {
 }
 
 export function CalendarDay({ day, events }: P) {
-  const { displayedMonth, createEvent } = useCalendarContext();
+  const { displayedMonth, createEvent, allowCreate } = useCalendarContext();
   const dayOfMonth = day.getDate();
   const isToday = day.toDateString() === new Date().toDateString();
   const isCurrentMonth = day.getMonth() === displayedMonth.getMonth();
@@ -57,21 +57,23 @@ export function CalendarDay({ day, events }: P) {
               ))}
           </div>
         </ContextMenuTrigger>
-        <ContextMenuContent className="w-64">
-          <ContextMenuItem
-            onClick={() => createEvent(day, EVENT_TYPE.TRAINING)}
-          >
-            Plan a training<ContextMenuShortcut>⌘T</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem
-            onClick={() => createEvent(day, EVENT_TYPE.COMPETITION)}
-          >
-            Plan a competition<ContextMenuShortcut>⌘R</ContextMenuShortcut>
-          </ContextMenuItem>
-          <ContextMenuItem onClick={() => createEvent(day, EVENT_TYPE.NOTE)}>
-            Plan a note<ContextMenuShortcut>⌘E</ContextMenuShortcut>
-          </ContextMenuItem>
-        </ContextMenuContent>
+        {allowCreate && (
+          <ContextMenuContent className="w-64">
+            <ContextMenuItem
+              onClick={() => createEvent(day, EVENT_TYPE.TRAINING)}
+            >
+              Plan a training<ContextMenuShortcut>⌘T</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={() => createEvent(day, EVENT_TYPE.COMPETITION)}
+            >
+              Plan a competition<ContextMenuShortcut>⌘R</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem onClick={() => createEvent(day, EVENT_TYPE.NOTE)}>
+              Plan a note<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+            </ContextMenuItem>
+          </ContextMenuContent>
+        )}
       </ContextMenu>
     </div>
   );

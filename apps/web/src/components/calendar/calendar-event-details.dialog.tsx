@@ -12,7 +12,12 @@ interface P {
   onEditEvent: () => void;
 }
 
-export function CalendarEventDetails({ open, onClose, event, onEditEvent }: P) {
+export function CalendarEventDetailsDialog({
+  open,
+  onClose,
+  event,
+  onEditEvent,
+}: P) {
   return (
     <Dialog onOpenChange={(o) => !o && onClose()} open={open}>
       <DialogContent className="sm:max-w-4xl overflow-y-auto max-h-screen">
