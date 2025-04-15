@@ -154,7 +154,7 @@ export class EventService {
   async getEventById(user: AuthUser, eventId: event['event_id']) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
-      include: { athlete: true },
+      include: { athlete: true, coach_athletes: true },
     });
     const event = await this.prisma.event.findUnique({
       where: { event_id: eventId },
@@ -166,11 +166,21 @@ export class EventService {
     }
 
     if (
-      userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id === event.athlete_id
+      !(
+        userEntity?.roles.includes(user_role.ATHLETE) &&
+        userEntity.athlete?.athlete_id === event.athlete_id
+      ) &&
+      !(
+        userEntity?.roles.includes(user_role.COACH) &&
+        userEntity.coach_athletes.some(
+          (athlete) => athlete.athlete_id === event.athlete_id,
+        )
+      )
     ) {
-      return keysToCamel(this.prismaEventToEvent(event));
+      throw new ForbiddenException('You are not allowed to access this event');
     }
+
+    return keysToCamel(this.prismaEventToEvent(event));
   }
 
   async getEventsOfAthlete(athleteId: number) {
@@ -183,11 +193,22 @@ export class EventService {
   async createEvent(user: AuthUser, data: CreateEventDto) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
-      include: { athlete: true },
+      include: { athlete: true, coach_athletes: true },
     });
 
     const { type, end_date, start_date, name, athlete_id, ...rest } =
       keysToSnake(data);
+
+    if (athlete_id) {
+      const athlete = userEntity?.coach_athletes.find(
+        (athlete) => athlete.athlete_id === athlete_id,
+      );
+      if (!athlete) {
+        throw new ForbiddenException(
+          'You are not allowed to create this event',
+        );
+      }
+    }
 
     const finalAthleteId = athlete_id || userEntity?.athlete?.athlete_id;
 
@@ -218,7 +239,7 @@ export class EventService {
   ) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
-      include: { athlete: true },
+      include: { athlete: true, coach_athletes: true },
     });
     const event = await this.prisma.event.findUnique({
       where: { event_id: eventId },
@@ -233,32 +254,41 @@ export class EventService {
       keysToSnake(data);
 
     if (
-      userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id === event.athlete_id
+      !(
+        userEntity?.roles.includes(user_role.ATHLETE) &&
+        userEntity.athlete?.athlete_id === event.athlete_id
+      ) &&
+      !(
+        userEntity?.roles.includes(user_role.COACH) &&
+        userEntity.coach_athletes.some(
+          (athlete) => athlete.athlete_id === event.athlete_id,
+        )
+      )
     ) {
-      return this.prisma.event.update({
-        where: { event_id: eventId },
-        data: {
-          start_date,
-          end_date,
-          name,
-          type,
-          ...(type
-            ? {
-                [type.toLocaleLowerCase()]: {
-                  update: rest,
-                },
-              }
-            : {}),
-        },
-      });
+      throw new ForbiddenException('You are not allowed to access this event');
     }
+    return this.prisma.event.update({
+      where: { event_id: eventId },
+      data: {
+        start_date,
+        end_date,
+        name,
+        type,
+        ...(type
+          ? {
+              [type.toLocaleLowerCase()]: {
+                update: rest,
+              },
+            }
+          : {}),
+      },
+    });
   }
 
   async deleteEvent(user: AuthUser, eventId: event['event_id']) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
-      include: { athlete: true },
+      include: { athlete: true, coach_athletes: true },
     });
     const event = await this.prisma.event.findUnique({
       where: { event_id: eventId },
@@ -267,28 +297,38 @@ export class EventService {
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-    if (
-      userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id === event.athlete_id
-    ) {
-      await this.prisma.event_training.deleteMany({
-        where: { event_id: eventId },
-      });
-      await this.prisma.event_competition.deleteMany({
-        where: { event_id: eventId },
-      });
-      await this.prisma.event_note.deleteMany({
-        where: { event_id: eventId },
-      });
-      await this.prisma.event_activity.deleteMany({
-        where: { event_id: eventId },
-      });
 
-      return this.prisma.event.delete({
-        where: { event_id: eventId },
-      });
+    if (
+      !(
+        userEntity?.roles.includes(user_role.ATHLETE) &&
+        userEntity.athlete?.athlete_id === event.athlete_id
+      ) &&
+      !(
+        userEntity?.roles.includes(user_role.COACH) &&
+        userEntity.coach_athletes.some(
+          (athlete) => athlete.athlete_id === event.athlete_id,
+        )
+      )
+    ) {
+      throw new ForbiddenException('You are not allowed to access this event');
     }
-    throw new ForbiddenException('You are not allowed to delete this event');
+
+    await this.prisma.event_training.deleteMany({
+      where: { event_id: eventId },
+    });
+    await this.prisma.event_competition.deleteMany({
+      where: { event_id: eventId },
+    });
+    await this.prisma.event_note.deleteMany({
+      where: { event_id: eventId },
+    });
+    await this.prisma.event_activity.deleteMany({
+      where: { event_id: eventId },
+    });
+
+    return this.prisma.event.delete({
+      where: { event_id: eventId },
+    });
   }
 
   async getEventStream(
@@ -299,7 +339,7 @@ export class EventService {
   ) {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
-      include: { athlete: true },
+      include: { athlete: true, coach_athletes: true },
     });
     const event = await this.prisma.event.findUnique({
       where: { event_id: eventId },
@@ -309,44 +349,53 @@ export class EventService {
     if (!event) {
       throw new NotFoundException('Event not found');
     }
-
     if (
-      userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id === event.athlete_id
+      !(
+        userEntity?.roles.includes(user_role.ATHLETE) &&
+        userEntity.athlete?.athlete_id === event.athlete_id
+      ) &&
+      !(
+        userEntity?.roles.includes(user_role.COACH) &&
+        userEntity.coach_athletes.some(
+          (athlete) => athlete.athlete_id === event.athlete_id,
+        )
+      )
     ) {
-      const activity = await this.prisma.event_activity.findUnique({
-        where: { event_id: eventId },
-        select: { stream: true },
-      });
-
-      if (!activity) {
-        throw new NotFoundException('Activity not found');
-      }
-
-      const compressedStream = activity.stream as CompressedActivityStream;
-      const stream = uncompressActivityStream(compressedStream);
-
-      if (!stream) {
-        throw new NotFoundException('Stream not found');
-      }
-
-      const selectedStreams = keys ? keys : Object.keys(stream);
-
-      const compressedStreams: ActivityStream = {};
-
-      for (const key of selectedStreams) {
-        if (!stream[key]) {
-          continue;
-        }
-
-        compressedStreams[key] = reductActivityStreamToResolution(
-          stream[key],
-          resolution,
-        );
-      }
-
-      return compressedStreams;
+      throw new ForbiddenException('You are not allowed to access this event');
     }
+
+    const activity = await this.prisma.event_activity.findUnique({
+      where: { event_id: eventId },
+      select: { stream: true },
+    });
+
+    if (!activity) {
+      throw new NotFoundException('Activity not found');
+    }
+
+    const compressedStream = activity.stream as CompressedActivityStream;
+    const stream = uncompressActivityStream(compressedStream);
+
+    if (!stream) {
+      throw new NotFoundException('Stream not found');
+    }
+
+    const selectedStreams = keys ? keys : Object.keys(stream);
+
+    const compressedStreams: ActivityStream = {};
+
+    for (const key of selectedStreams) {
+      if (!stream[key]) {
+        continue;
+      }
+
+      compressedStreams[key] = reductActivityStreamToResolution(
+        stream[key],
+        resolution,
+      );
+    }
+
+    return compressedStreams;
   }
 
   async setRelatedActivity(
@@ -356,7 +405,7 @@ export class EventService {
   ): Promise<void> {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
-      include: { athlete: true },
+      include: { athlete: true, coach_athletes: true },
     });
     const event = await this.prisma.event.findUnique({
       where: { event_id: eventId },
@@ -383,21 +432,34 @@ export class EventService {
     }
 
     if (
-      userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id === event.athlete_id &&
-      userEntity.athlete?.athlete_id === activity.athlete_id
+      !(
+        userEntity?.roles.includes(user_role.ATHLETE) &&
+        userEntity.athlete?.athlete_id === event.athlete_id &&
+        userEntity.athlete?.athlete_id === activity.athlete_id
+      ) &&
+      !(
+        userEntity?.roles.includes(user_role.COACH) &&
+        userEntity.coach_athletes.some(
+          (athlete) => athlete.athlete_id === event.athlete_id,
+        ) &&
+        userEntity.coach_athletes.some(
+          (athlete) => athlete.athlete_id === activity.athlete_id,
+        )
+      )
     ) {
-      if (event.type === 'COMPETITION') {
-        await this.prisma.event_competition.update({
-          where: { event_id: eventId },
-          data: { related_activity: { connect: { event_id: activityId } } },
-        });
-      } else if (event.type === 'TRAINING') {
-        await this.prisma.event_training.update({
-          where: { event_id: eventId },
-          data: { related_activity: { connect: { event_id: activityId } } },
-        });
-      }
+      throw new ForbiddenException('You are not allowed to access this event');
+    }
+
+    if (event.type === 'COMPETITION') {
+      await this.prisma.event_competition.update({
+        where: { event_id: eventId },
+        data: { related_activity: { connect: { event_id: activityId } } },
+      });
+    } else if (event.type === 'TRAINING') {
+      await this.prisma.event_training.update({
+        where: { event_id: eventId },
+        data: { related_activity: { connect: { event_id: activityId } } },
+      });
     }
   }
 
@@ -407,7 +469,7 @@ export class EventService {
   ): Promise<void> {
     const userEntity = await this.prisma.user.findUnique({
       where: { user_id: user.user_id },
-      include: { athlete: true },
+      include: { athlete: true, coach_athletes: true },
     });
     const event = await this.prisma.event.findUnique({
       where: { event_id: eventId },
@@ -418,20 +480,30 @@ export class EventService {
     }
 
     if (
-      userEntity?.roles.includes(user_role.ATHLETE) &&
-      userEntity.athlete?.athlete_id === event.athlete_id
+      !(
+        userEntity?.roles.includes(user_role.ATHLETE) &&
+        userEntity.athlete?.athlete_id === event.athlete_id
+      ) &&
+      !(
+        userEntity?.roles.includes(user_role.COACH) &&
+        userEntity.coach_athletes.some(
+          (athlete) => athlete.athlete_id === event.athlete_id,
+        )
+      )
     ) {
-      if (event.type === 'COMPETITION') {
-        await this.prisma.event_competition.update({
-          where: { event_id: eventId },
-          data: { related_activity: { disconnect: true } },
-        });
-      } else if (event.type === 'TRAINING') {
-        await this.prisma.event_training.update({
-          where: { event_id: eventId },
-          data: { related_activity: { disconnect: true } },
-        });
-      }
+      throw new ForbiddenException('You are not allowed to access this event');
+    }
+
+    if (event.type === 'COMPETITION') {
+      await this.prisma.event_competition.update({
+        where: { event_id: eventId },
+        data: { related_activity: { disconnect: true } },
+      });
+    } else if (event.type === 'TRAINING') {
+      await this.prisma.event_training.update({
+        where: { event_id: eventId },
+        data: { related_activity: { disconnect: true } },
+      });
     }
   }
 
