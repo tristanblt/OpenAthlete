@@ -3,7 +3,6 @@ import { RouterProvider } from 'react-router-dom';
 
 import { Toaster } from './components/ui/sonner';
 import { AuthConsumer, AuthProvider } from './contexts/auth';
-import { SpaceConsumer, SpaceProvider } from './contexts/space';
 import router from './routes/sections';
 
 const queryClient = new QueryClient();
@@ -11,16 +10,12 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <AuthProvider>
-      <SpaceProvider>
-        <QueryClientProvider client={queryClient}>
-          <AuthConsumer>
-            <SpaceConsumer>
-              <RouterProvider router={router} />
-            </SpaceConsumer>
-            <Toaster />
-          </AuthConsumer>
-        </QueryClientProvider>
-      </SpaceProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthConsumer>
+          <RouterProvider router={router} />
+          <Toaster />
+        </AuthConsumer>
+      </QueryClientProvider>
     </AuthProvider>
   );
 }

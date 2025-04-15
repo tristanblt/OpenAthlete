@@ -1,4 +1,5 @@
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import { SpaceConsumer, SpaceProvider } from '@/contexts/space';
 
 import { AppSidebar } from '../sidebar/app-sidebar';
 
@@ -8,9 +9,13 @@ interface P {
 
 export function DashboardLayout({ children }: P) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>{children}</SidebarInset>
-    </SidebarProvider>
+    <SpaceProvider>
+      <SidebarProvider>
+        <AppSidebar />
+        <SpaceConsumer>
+          <SidebarInset>{children}</SidebarInset>
+        </SpaceConsumer>
+      </SidebarProvider>
+    </SpaceProvider>
   );
 }

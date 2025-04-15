@@ -8,22 +8,47 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { useSpaceContext } from '@/contexts/space';
 import { getPath } from '@/routes/paths';
+import { useGetMyCoachedAthletesQuery } from '@/services/athlete';
 import { Calendar } from 'lucide-react';
-import * as React from 'react';
+import { ComponentProps, useMemo } from 'react';
 
 import { UserRole } from '@openathlete/shared';
 
-const sidebarNavigation = [
-  {
-    title: 'Calendar',
-    url: getPath(['dashboard', 'calendar']),
-    icon: Calendar,
-    spaces: ['ATHLETE', 'COACH'] as UserRole[],
-  },
-];
+export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+  const { space } = useSpaceContext();
+  const { data: athletes } = useGetMyCoachedAthletesQuery();
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const sidebarNavigation = useMemo(
+    () => [
+      space === 'COACH'
+        ? {
+            title: 'Calendar',
+            icon: Calendar,
+            spaces: ['ATHLETE', 'COACH'] as UserRole[],
+            items: [
+              {
+                title: 'My Athletes',
+                url: getPath(['dashboard', 'calendar']),
+              },
+              ...(athletes?.map((athlete) => ({
+                title: athlete.user?.firstName + ' ' + athlete.user?.lastName,
+                url:
+                  getPath(['dashboard', 'calendar']) + `/${athlete.athleteId}`,
+              })) || []),
+            ],
+          }
+        : {
+            title: 'Calendar',
+            url: getPath(['dashboard', 'calendar']),
+            icon: Calendar,
+            spaces: ['ATHLETE', 'COACH'] as UserRole[],
+          },
+    ],
+    [athletes, space],
+  );
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
