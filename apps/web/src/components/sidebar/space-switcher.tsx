@@ -13,7 +13,8 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useUserRoles } from '@/contexts/auth';
-import { AudioWaveform, ChevronsUpDown, Command } from 'lucide-react';
+import { useSpaceContext } from '@/contexts/space';
+import { ChevronsUpDown, Medal, Users } from 'lucide-react';
 import * as React from 'react';
 
 import { UserRole } from '@openathlete/shared';
@@ -21,13 +22,7 @@ import { UserRole } from '@openathlete/shared';
 export function SpaceSwitcher() {
   const roles = useUserRoles();
   const { isMobile } = useSidebar();
-  const [activeRole, setActiveRole] = React.useState<UserRole | undefined>(
-    roles?.[0],
-  );
-
-  React.useEffect(() => {
-    setActiveRole(roles?.[0]);
-  }, [roles]);
+  const { space, setSpace } = useSpaceContext();
 
   const spaces = React.useMemo<
     { role: UserRole; name: string; logo: React.ElementType }[]
@@ -39,20 +34,20 @@ export function SpaceSwitcher() {
             return {
               role: 'ATHLETE',
               name: 'Athlete',
-              logo: AudioWaveform,
+              logo: Medal,
             };
           case 'COACH':
             return {
               role: 'COACH',
               name: 'Coach',
-              logo: Command,
+              logo: Users,
             };
         }
       }) || [],
     [roles],
   );
 
-  const activeSpace = spaces.find((space) => space.role === activeRole);
+  const activeSpace = spaces.find((s) => s.role === space);
 
   if (!activeSpace) {
     return null;
@@ -88,7 +83,7 @@ export function SpaceSwitcher() {
             {spaces.map((space, index) => (
               <DropdownMenuItem
                 key={space.name}
-                onClick={() => setActiveRole(space.role)}
+                onClick={() => setSpace(space.role)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-xs border">

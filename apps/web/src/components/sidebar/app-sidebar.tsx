@@ -9,26 +9,17 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { getPath } from '@/routes/paths';
-import { Calendar, PieChart } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import * as React from 'react';
+
+import { UserRole } from '@openathlete/shared';
 
 const sidebarNavigation = [
   {
     title: 'Calendar',
     url: getPath(['dashboard', 'calendar']),
     icon: Calendar,
-  },
-  {
-    title: 'Statistics',
-    url: '#',
-    icon: PieChart,
-    isActive: true,
-    items: [
-      {
-        title: 'History',
-        url: '#',
-      },
-    ],
+    spaces: ['ATHLETE', 'COACH'] as UserRole[],
   },
 ];
 
@@ -40,7 +31,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={sidebarNavigation} />
-        {/* <NavProjects projects={data.projects} /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />
