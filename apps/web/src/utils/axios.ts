@@ -40,6 +40,7 @@ export const routes = {
   },
   athlete: {
     getMyAthlete: '/athlete/me',
+    getCoachedAthletes: '/athlete/coached',
   },
 } as const;
 

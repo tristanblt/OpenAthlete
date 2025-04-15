@@ -27,8 +27,13 @@ export class EventService {
     return mapEvent(res.data);
   }
 
-  static async getMyEvents(): Promise<Event[]> {
-    const res = await client.get(routes.event.getMyEvents);
+  static async getMyEvents(
+    isCoach?: boolean,
+    athleteId?: number,
+  ): Promise<Event[]> {
+    const res = await client.get(routes.event.getMyEvents, {
+      params: { coach: isCoach, athleteId },
+    });
     const data = res.data as Event[];
     return data.map((event) => mapEvent(event));
   }

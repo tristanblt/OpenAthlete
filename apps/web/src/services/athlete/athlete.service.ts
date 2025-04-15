@@ -13,4 +13,15 @@ export class AthleteService {
     const res = await client.get(routes.athlete.getMyAthlete);
     return res.data;
   }
+
+  static async getCoachedAthletes(): Promise<
+    (Athlete & {
+      trainingZones: (TrainingZone & {
+        values: TrainingZoneValue[];
+      })[];
+    })[]
+  > {
+    const res = await client.get(routes.athlete.getCoachedAthletes);
+    return res.data;
+  }
 }

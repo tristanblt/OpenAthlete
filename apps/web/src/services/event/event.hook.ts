@@ -65,11 +65,13 @@ export const useUpdateEventMutation = (
 };
 
 export const useGetMyEventsQuery = (
+  isCoach?: boolean,
+  athleteId?: number,
   opt?: QueryOptions<Awaited<ReturnType<typeof EventService.getMyEvents>>>,
 ) =>
   useQuery({
     ...opt,
-    queryFn: EventService.getMyEvents,
+    queryFn: () => EventService.getMyEvents(isCoach, athleteId),
     queryKey: ['EventService.getMyEvents'],
   });
 

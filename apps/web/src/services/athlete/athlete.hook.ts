@@ -10,3 +10,14 @@ export const useGetMyAthleteQuery = (
     queryFn: AthleteService.getMyAthlete,
     queryKey: ['AthleteService.getMyAthlete'],
   });
+
+export const useGetMyCoachedAthletesQuery = (
+  opt?: QueryOptions<
+    Awaited<ReturnType<typeof AthleteService.getCoachedAthletes>>
+  >,
+) =>
+  useQuery({
+    ...opt,
+    queryFn: AthleteService.getCoachedAthletes,
+    queryKey: ['AthleteService.getCoachedAthletes'],
+  });
