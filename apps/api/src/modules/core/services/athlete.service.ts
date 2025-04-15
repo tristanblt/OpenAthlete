@@ -60,4 +60,79 @@ export class AthleteService {
 
     return athletes.map((athlete) => keysToCamel(athlete));
   }
+
+  async getMyCoaches(userId: AuthUser['user_id']) {
+    const users = await this.prisma.user.findMany({
+      where: { coach_athletes: { some: { athlete_id: userId } } },
+    });
+    return users.map((user) => keysToCamel(user));
+  }
+
+  async inviteCoach(userId: AuthUser['user_id'], email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const athlete = await this.prisma.athlete.findUnique({
+      where: { user_id: userId },
+    });
+
+    if (!athlete) {
+      throw new NotFoundException('Athlete not found');
+    }
+
+    await this.prisma.coach_athlete.create({
+      data: {
+        athlete_id: athlete.athlete_id,
+        user_id: user.user_id,
+      },
+    });
+  }
+
+  async inviteAthlete(userId: AuthUser['user_id'], email: string) {
+    // TODO: implement this
+  }
+
+  async removeAthlete(
+    userId: AuthUser['user_id'],
+    athleteId: athlete['athlete_id'],
+  ) {
+    const athlete = await this.prisma.athlete.findUnique({
+      where: { athlete_id: athleteId },
+    });
+
+    if (!athlete) {
+      throw new NotFoundException('Athlete not found');
+    }
+
+    await this.prisma.coach_athlete.deleteMany({
+      where: { athlete_id: athleteId, user_id: userId },
+    });
+  }
+
+  async removeCoach(userId: AuthUser['user_id'], coachId: athlete['user_id']) {
+    const user = await this.prisma.user.findUnique({
+      where: { user_id: coachId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const athlete = await this.prisma.athlete.findUnique({
+      where: { user_id: userId },
+    });
+
+    if (!athlete) {
+      throw new NotFoundException('Athlete not found');
+    }
+
+    await this.prisma.coach_athlete.deleteMany({
+      where: { athlete_id: athlete.athlete_id, user_id: user.user_id },
+    });
+  }
 }
