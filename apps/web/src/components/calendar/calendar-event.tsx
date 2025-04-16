@@ -104,7 +104,7 @@ export function CalendarEvent({ event, wrapped }: P) {
     }
   }, [event.type]);
 
-  const draggable = event.type !== EVENT_TYPE.ACTIVITY;
+  const draggable = event.type !== EVENT_TYPE.ACTIVITY && !wrapped;
   const relatedEvents = allEvents.filter(
     (e) =>
       (e.type === EVENT_TYPE.TRAINING || e.type === EVENT_TYPE.COMPETITION) &&
