@@ -27,6 +27,7 @@ import { useCalendarContext } from './hooks/use-calendar-context';
 
 interface P {
   event: Event;
+  wrapped?: boolean;
 }
 
 function EventSecondLine({ event }: { event: Event }) {
@@ -58,14 +59,34 @@ function EventSecondLine({ event }: { event: Event }) {
       );
     }
   }
+  if (event.type === 'TRAINING' || event.type === 'COMPETITION') {
+    return (
+      <div className="flex justify-between w-full">
+        {event.goalDuration && (
+          <div className="text-xs font-medium text-gray-500">
+            {formatDuration(event.goalDuration)}
+          </div>
+        )}
+        {event.goalDistance && (
+          <div className="text-xs font-medium text-gray-500">
+            {formatDistance(event.goalDistance, 'km')} km
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
-export function CalendarEvent({ event }: P) {
+export function CalendarEvent({ event, wrapped }: P) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: event.eventId,
     });
-  const { openEventDetails, editEvent } = useCalendarContext();
+  const {
+    openEventDetails,
+    editEvent,
+    events: allEvents,
+  } = useCalendarContext();
   const [deleteEventDialog, setDeleteEventDialog] = useState<boolean>(false);
   const deleteEventMutation = useDeleteEventMutation();
   const duplicateEventMutation = useDuplicateEventMutation();
@@ -73,27 +94,32 @@ export function CalendarEvent({ event }: P) {
   const eventColor = useMemo(() => {
     switch (event.type) {
       case 'ACTIVITY':
-        return 'bg-green-50 hover:bg-green-100';
+        return 'bg-green-50 hover:bg-green-100 border-green-200';
       case 'COMPETITION':
-        return 'bg-red-50 hover:bg-red-100';
+        return 'bg-red-50 hover:bg-red-100 border-red-200';
       case 'NOTE':
-        return 'bg-yellow-50 hover:bg-yellow-100';
+        return 'bg-yellow-50 hover:bg-yellow-100 border-yellow-200';
       case 'TRAINING':
-        return 'bg-blue-50 hover:bg-blue-100';
+        return 'bg-blue-50 hover:bg-blue-100 border-blue-200';
     }
   }, [event.type]);
 
   const draggable = event.type !== EVENT_TYPE.ACTIVITY;
-
+  const relatedEvents = allEvents.filter(
+    (e) =>
+      (e.type === EVENT_TYPE.TRAINING || e.type === EVENT_TYPE.COMPETITION) &&
+      e.relatedActivity?.eventId === event.eventId,
+  );
   return (
     <>
       <ContextMenu>
         <ContextMenuTrigger className="flex-1 w-full">
           <button
             className={cn(
-              'rounded-sm cursor-pointer text-left flex flex-col items-start justify-center py-0.5 px-2 overflow-hidden w-full',
+              'rounded-sm cursor-pointer text-left flex flex-col items-start justify-center py-0.5 px-1 overflow-hidden w-full',
               eventColor,
               isDragging ? 'z-50' : '',
+              wrapped ? 'border-2' : '',
             )}
             style={{
               transform: draggable
@@ -108,10 +134,23 @@ export function CalendarEvent({ event }: P) {
             }}
             ref={draggable ? setNodeRef : undefined}
           >
-            <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+            <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis px-1">
               {event.name}
             </div>
-            <EventSecondLine event={event} />
+            <div className="px-1 w-full">
+              <EventSecondLine event={event} />
+            </div>
+            {relatedEvents.length > 0 && (
+              <div className="flex flex-col gap-1 mt-1 w-full mb-0.5">
+                {relatedEvents.map((relatedEvent) => (
+                  <CalendarEvent
+                    key={relatedEvent.eventId}
+                    event={relatedEvent}
+                    wrapped
+                  />
+                ))}
+              </div>
+            )}
           </button>
         </ContextMenuTrigger>
         <ContextMenuContent>

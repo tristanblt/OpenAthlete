@@ -1,4 +1,4 @@
-import { endOfDay, startOfDay } from '@openathlete/shared';
+import { EVENT_TYPE, endOfDay, startOfDay } from '@openathlete/shared';
 
 import {
   Select,
@@ -54,7 +54,12 @@ export function CalendarBody({}: P) {
               day={day}
               events={events.filter(
                 (event) =>
-                  event.startDate.toDateString() === day.toDateString(),
+                  event.startDate.toDateString() === day.toDateString() &&
+                  !(
+                    (event.type === EVENT_TYPE.COMPETITION ||
+                      event.type === EVENT_TYPE.TRAINING) &&
+                    event.relatedActivity
+                  ),
               )}
             />
           ))}
