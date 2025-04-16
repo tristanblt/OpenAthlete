@@ -16,6 +16,7 @@ import {
 } from '@openathlete/shared';
 
 import { ConfirmAction } from '../confirm-action';
+import { SportIcon } from '../sport-icon/sport-icon';
 import {
   ContextMenu,
   ContextMenuContent,
@@ -135,6 +136,9 @@ export function CalendarEvent({ event, wrapped }: P) {
             ref={draggable ? setNodeRef : undefined}
           >
             <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis px-1">
+              {event.type !== EVENT_TYPE.NOTE && (
+                <SportIcon sport={event.sport} className="inline-block mr-1" />
+              )}
               {event.name}
             </div>
             <div className="px-1 w-full">
