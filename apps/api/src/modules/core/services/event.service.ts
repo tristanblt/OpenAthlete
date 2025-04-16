@@ -203,7 +203,7 @@ export class EventService {
       const athlete = userEntity?.coach_athletes.find(
         (athlete) => athlete.athlete_id === athlete_id,
       );
-      if (!athlete) {
+      if (!athlete && userEntity?.athlete?.athlete_id !== athlete_id) {
         throw new ForbiddenException(
           'You are not allowed to create this event',
         );
