@@ -11,7 +11,7 @@ import {
 import { useSpaceContext } from '@/contexts/space';
 import { getPath } from '@/routes/paths';
 import { useGetMyCoachedAthletesQuery } from '@/services/athlete';
-import { Calendar } from 'lucide-react';
+import { Calendar, PieChart } from 'lucide-react';
 import { ComponentProps, useMemo } from 'react';
 
 import { UserRole } from '@openathlete/shared';
@@ -45,6 +45,12 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
             icon: Calendar,
             spaces: ['ATHLETE', 'COACH'] as UserRole[],
           },
+      {
+        title: 'Statistics',
+        url: getPath(['dashboard', 'statistics']),
+        icon: PieChart,
+        spaces: ['ATHLETE', 'COACH'] as UserRole[],
+      },
     ],
     [athletes, space],
   );
