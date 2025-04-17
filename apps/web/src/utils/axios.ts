@@ -47,6 +47,13 @@ export const routes = {
     removeAthlete: (athleteId: number) => `/athlete/${athleteId}`,
     removeCoach: (coachId: number) => `/athlete/coach/${coachId}`,
   },
+  statistics: {
+    getStatisticsForPeriod: (
+      athleteId: number,
+      startDate: string,
+      endDate: string,
+    ) => `/statistics?athleteId=${athleteId}&start=${startDate}&end=${endDate}`,
+  },
 } as const;
 
 const client = axios.create({
