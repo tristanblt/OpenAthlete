@@ -115,7 +115,7 @@ export function CalendarEvent({ event, wrapped }: P) {
     <>
       <ContextMenu>
         <ContextMenuTrigger className="flex-1 w-full">
-          <button
+          <div
             className={cn(
               'rounded-sm cursor-pointer text-left flex flex-col items-start justify-center py-0.5 px-1 overflow-hidden w-full',
               eventColor,
@@ -155,7 +155,7 @@ export function CalendarEvent({ event, wrapped }: P) {
                 ))}
               </div>
             )}
-          </button>
+          </div>
         </ContextMenuTrigger>
         <ContextMenuContent>
           <ContextMenuItem
