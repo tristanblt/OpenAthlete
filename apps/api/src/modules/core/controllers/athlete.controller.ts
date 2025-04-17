@@ -31,7 +31,7 @@ export class AthleteController {
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)
   @Get('me')
   getMyAthlete(@JwtUser() user: AuthUser) {
-    return this.athleteService.getAthleteByUserId(user.user_id);
+    return this.athleteService.getAthleteByUserId(user);
   }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)

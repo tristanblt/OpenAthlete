@@ -4,9 +4,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 
-import { user } from '@openathlete/database';
 import { ApiEnvSchemaType } from '@openathlete/shared';
 
+import { AuthUser } from '../decorators/user.decorator';
 import { AuthService } from '../services';
 
 export interface JwtPayload {
@@ -27,7 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<user> {
+  async validate(payload: JwtPayload): Promise<AuthUser> {
     const user = await this.authService.validateUser(payload);
     if (!user) {
       throw new UnauthorizedException();

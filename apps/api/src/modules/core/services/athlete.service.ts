@@ -1,8 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { subject } from '@casl/ability';
+
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { athlete } from '@openathlete/database';
 import { keysToCamel } from '@openathlete/shared';
 
+import { CaslAbilityFactory } from 'src/modules/auth';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
@@ -24,9 +31,12 @@ const ATHLETE_INCLUDES = {
 
 @Injectable()
 export class AthleteService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly abilities: CaslAbilityFactory,
+  ) {}
 
-  async getAthleteById(id: athlete['athlete_id']) {
+  async getAthleteById(id: athlete['athlete_id'], user: AuthUser) {
     const athlete = await this.prisma.athlete.findUnique({
       where: { athlete_id: id },
       include: ATHLETE_INCLUDES,
@@ -36,17 +46,27 @@ export class AthleteService {
       throw new NotFoundException('Athlete not found');
     }
 
+    const ability = await this.abilities.getFor({ user });
+    if (!ability.can('read', subject('athlete', athlete))) {
+      throw new ForbiddenException('Not allowed to access this athlete');
+    }
+
     return keysToCamel(athlete);
   }
 
-  async getAthleteByUserId(userId: AuthUser['user_id']) {
+  async getAthleteByUserId(user: AuthUser) {
     const athlete = await this.prisma.athlete.findFirst({
-      where: { user_id: userId },
+      where: { user_id: user.user_id },
       include: ATHLETE_INCLUDES,
     });
 
     if (!athlete) {
       throw new NotFoundException('Athlete not found');
+    }
+
+    const ability = await this.abilities.getFor({ user });
+    if (!ability.can('read', subject('athlete', athlete))) {
+      throw new ForbiddenException('Not allowed to access this athlete');
     }
 
     return keysToCamel(athlete);
@@ -94,7 +114,7 @@ export class AthleteService {
   }
 
   async inviteAthlete(userId: AuthUser['user_id'], email: string) {
-    // TODO: implement this
+    // TODO: implement this with a proper invitation system
   }
 
   async removeAthlete(

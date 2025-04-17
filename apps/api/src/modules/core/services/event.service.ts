@@ -1,3 +1,4 @@
+import { subject } from '@casl/ability';
 import * as argon2 from 'argon2';
 import ical, { ICalCalendarMethod } from 'ical-generator';
 
@@ -17,7 +18,6 @@ import {
   event_note,
   event_training,
   event_type,
-  user_role,
 } from '@openathlete/database';
 import {
   ActivityStream,
@@ -28,7 +28,9 @@ import {
   keysToSnake,
 } from '@openathlete/shared';
 
+import { CaslAbilityFactory } from 'src/modules/auth';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
+import { accessibleBy } from 'src/modules/auth/services/casl-prisma';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
 import {
@@ -86,6 +88,7 @@ export class EventService {
   constructor(
     private prisma: PrismaService,
     private configService: ConfigService<ApiEnvSchemaType, true>,
+    private readonly abilities: CaslAbilityFactory,
   ) {
     this.HASH_PEPPER = this.configService.get('HASH_PEPPER')
       ? Buffer.from(this.configService.get('HASH_PEPPER'))
@@ -113,51 +116,29 @@ export class EventService {
 
   async getMyEvents(user: AuthUser, isCoach: boolean, athleteId?: number) {
     if (isCoach) {
-      const userEntity = await this.prisma.user.findUnique({
-        where: { user_id: user.user_id },
-        include: {
-          coach_athletes: athleteId
-            ? {
-                where: { athlete_id: athleteId },
-              }
-            : true,
-        },
-      });
+      user.athlete = null;
 
-      if (!userEntity?.coach_athletes || !userEntity.coach_athletes.length) {
-        throw new NotFoundException('No athletes found');
+      if (athleteId) {
+        user.coach_athletes = user.coach_athletes?.filter(
+          (athlete) => athlete.athlete_id === athleteId,
+        );
       }
-
-      return Promise.all(
-        userEntity.coach_athletes.map((athlete) =>
-          this.getEventsOfAthlete(athlete.athlete_id).then((events) =>
-            events.map((e) => keysToCamel(this.prismaEventToEvent(e))),
-          ),
-        ),
-      ).then((events) => events.flat());
     } else {
-      const userEntity = await this.prisma.user.findUnique({
-        where: { user_id: user.user_id },
-        include: { athlete: true },
-      });
-
-      if (!userEntity?.athlete?.athlete_id) {
-        throw new NotFoundException('Athlete not found');
-      }
-
-      return this.getEventsOfAthlete(userEntity.athlete?.athlete_id).then(
-        (events) => events.map((e) => keysToCamel(this.prismaEventToEvent(e))),
-      );
+      user.coach_athletes = undefined;
     }
+
+    return this.getEventsOfAthlete(user).then((events) =>
+      events.map((e) => keysToCamel(this.prismaEventToEvent(e))),
+    );
   }
 
   async getEventById(user: AuthUser, eventId: event['event_id']) {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true, coach_athletes: true },
-    });
-    const event = await this.prisma.event.findUnique({
-      where: { event_id: eventId },
+    const ability = await this.abilities.getFor({ user });
+
+    const event = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: eventId }, accessibleBy(ability, 'read').event],
+      },
       include: EVENT_INCLUDES,
     });
 
@@ -165,55 +146,36 @@ export class EventService {
       throw new NotFoundException('Event not found');
     }
 
-    if (
-      !(
-        userEntity?.roles.includes(user_role.ATHLETE) &&
-        userEntity.athlete?.athlete_id === event.athlete_id
-      ) &&
-      !(
-        userEntity?.roles.includes(user_role.COACH) &&
-        userEntity.coach_athletes.some(
-          (athlete) => athlete.athlete_id === event.athlete_id,
-        )
-      )
-    ) {
-      throw new ForbiddenException('You are not allowed to access this event');
-    }
-
     return keysToCamel(this.prismaEventToEvent(event));
   }
 
-  async getEventsOfAthlete(athleteId: number) {
+  async getEventsOfAthlete(user: AuthUser) {
+    const ability = await this.abilities.getFor({ user });
     return this.prisma.event.findMany({
-      where: { athlete_id: athleteId },
+      where: accessibleBy(ability, 'read').event,
       include: EVENT_INCLUDES,
     });
   }
 
   async createEvent(user: AuthUser, data: CreateEventDto) {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true, coach_athletes: true },
-    });
+    const ability = await this.abilities.getFor({ user });
 
     const { type, end_date, start_date, name, athlete_id, ...rest } =
       keysToSnake(data);
 
-    if (athlete_id) {
-      const athlete = userEntity?.coach_athletes.find(
-        (athlete) => athlete.athlete_id === athlete_id,
-      );
-      if (!athlete && userEntity?.athlete?.athlete_id !== athlete_id) {
-        throw new ForbiddenException(
-          'You are not allowed to create this event',
-        );
-      }
-    }
-
-    const finalAthleteId = athlete_id || userEntity?.athlete?.athlete_id;
+    const finalAthleteId = athlete_id || user?.athlete?.athlete_id;
 
     if (!finalAthleteId) {
       throw new Error('Athlete ID is required');
+    }
+
+    if (
+      !ability.can(
+        'create',
+        subject('event', { athlete_id: finalAthleteId } as event),
+      )
+    ) {
+      throw new ForbiddenException('You are not allowed to create this event');
     }
 
     return keysToCamel(
@@ -237,12 +199,12 @@ export class EventService {
     eventId: event['event_id'],
     data: Partial<CreateEventDto>,
   ) {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true, coach_athletes: true },
-    });
-    const event = await this.prisma.event.findUnique({
-      where: { event_id: eventId },
+    const ability = await this.abilities.getFor({ user });
+
+    const event = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: eventId }, accessibleBy(ability, 'update').event],
+      },
       include: EVENT_INCLUDES,
     });
 
@@ -253,20 +215,6 @@ export class EventService {
     const { type, end_date, start_date, name, athlete_id, ...rest } =
       keysToSnake(data);
 
-    if (
-      !(
-        userEntity?.roles.includes(user_role.ATHLETE) &&
-        userEntity.athlete?.athlete_id === event.athlete_id
-      ) &&
-      !(
-        userEntity?.roles.includes(user_role.COACH) &&
-        userEntity.coach_athletes.some(
-          (athlete) => athlete.athlete_id === event.athlete_id,
-        )
-      )
-    ) {
-      throw new ForbiddenException('You are not allowed to access this event');
-    }
     return this.prisma.event.update({
       where: { event_id: eventId },
       data: {
@@ -286,31 +234,17 @@ export class EventService {
   }
 
   async deleteEvent(user: AuthUser, eventId: event['event_id']) {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true, coach_athletes: true },
-    });
-    const event = await this.prisma.event.findUnique({
-      where: { event_id: eventId },
+    const ability = await this.abilities.getFor({ user });
+
+    const event = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: eventId }, accessibleBy(ability, 'delete').event],
+      },
       include: { activity: true },
     });
+
     if (!event) {
       throw new NotFoundException('Event not found');
-    }
-
-    if (
-      !(
-        userEntity?.roles.includes(user_role.ATHLETE) &&
-        userEntity.athlete?.athlete_id === event.athlete_id
-      ) &&
-      !(
-        userEntity?.roles.includes(user_role.COACH) &&
-        userEntity.coach_athletes.some(
-          (athlete) => athlete.athlete_id === event.athlete_id,
-        )
-      )
-    ) {
-      throw new ForbiddenException('You are not allowed to access this event');
     }
 
     await this.prisma.event_training.deleteMany({
@@ -337,31 +271,17 @@ export class EventService {
     resolution: number,
     keys?: (keyof ActivityStream)[],
   ) {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true, coach_athletes: true },
-    });
-    const event = await this.prisma.event.findUnique({
-      where: { event_id: eventId },
+    const ability = await this.abilities.getFor({ user });
+
+    const event = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: eventId }, accessibleBy(ability, 'read').event],
+      },
       include: { activity: true },
     });
 
     if (!event) {
       throw new NotFoundException('Event not found');
-    }
-    if (
-      !(
-        userEntity?.roles.includes(user_role.ATHLETE) &&
-        userEntity.athlete?.athlete_id === event.athlete_id
-      ) &&
-      !(
-        userEntity?.roles.includes(user_role.COACH) &&
-        userEntity.coach_athletes.some(
-          (athlete) => athlete.athlete_id === event.athlete_id,
-        )
-      )
-    ) {
-      throw new ForbiddenException('You are not allowed to access this event');
     }
 
     const activity = await this.prisma.event_activity.findUnique({
@@ -403,18 +323,20 @@ export class EventService {
     eventId: event['event_id'],
     activityId: event['event_id'],
   ): Promise<void> {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true, coach_athletes: true },
+    const ability = await this.abilities.getFor({ user });
+
+    const event = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: eventId }, accessibleBy(ability, 'update').event],
+      },
     });
-    const event = await this.prisma.event.findUnique({
-      where: { event_id: eventId },
-    });
-    const activity = await this.prisma.event.findUnique({
-      where: { event_id: activityId },
+    const activity = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: activityId }, accessibleBy(ability, 'read').event],
+      },
     });
 
-    if (!userEntity || !event || !activity) {
+    if (!event || !activity) {
       throw new NotFoundException();
     }
 
@@ -429,25 +351,6 @@ export class EventService {
 
     if (activity.type !== event_type.ACTIVITY) {
       throw new BadRequestException('activityId must refer to an activity');
-    }
-
-    if (
-      !(
-        userEntity?.roles.includes(user_role.ATHLETE) &&
-        userEntity.athlete?.athlete_id === event.athlete_id &&
-        userEntity.athlete?.athlete_id === activity.athlete_id
-      ) &&
-      !(
-        userEntity?.roles.includes(user_role.COACH) &&
-        userEntity.coach_athletes.some(
-          (athlete) => athlete.athlete_id === event.athlete_id,
-        ) &&
-        userEntity.coach_athletes.some(
-          (athlete) => athlete.athlete_id === activity.athlete_id,
-        )
-      )
-    ) {
-      throw new ForbiddenException('You are not allowed to access this event');
     }
 
     if (event.type === 'COMPETITION') {
@@ -467,31 +370,16 @@ export class EventService {
     user: AuthUser,
     eventId: event['event_id'],
   ): Promise<void> {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
-      include: { athlete: true, coach_athletes: true },
-    });
-    const event = await this.prisma.event.findUnique({
-      where: { event_id: eventId },
+    const ability = await this.abilities.getFor({ user });
+
+    const event = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: eventId }, accessibleBy(ability, 'update').event],
+      },
     });
 
-    if (!userEntity || !event) {
-      throw new NotFoundException();
-    }
-
-    if (
-      !(
-        userEntity?.roles.includes(user_role.ATHLETE) &&
-        userEntity.athlete?.athlete_id === event.athlete_id
-      ) &&
-      !(
-        userEntity?.roles.includes(user_role.COACH) &&
-        userEntity.coach_athletes.some(
-          (athlete) => athlete.athlete_id === event.athlete_id,
-        )
-      )
-    ) {
-      throw new ForbiddenException('You are not allowed to access this event');
+    if (!event) {
+      throw new NotFoundException('Event not found');
     }
 
     if (event.type === 'COMPETITION') {
@@ -555,8 +443,12 @@ export class EventService {
   }
 
   async getMyIcalCalendarSecret(user: AuthUser): Promise<string> {
-    const userEntity = await this.prisma.user.findUnique({
-      where: { user_id: user.user_id },
+    const ability = await this.abilities.getFor({ user });
+
+    const userEntity = await this.prisma.user.findFirst({
+      where: {
+        AND: [{ user_id: user.user_id }, accessibleBy(ability, 'read').user],
+      },
       include: { athlete: true },
     });
 

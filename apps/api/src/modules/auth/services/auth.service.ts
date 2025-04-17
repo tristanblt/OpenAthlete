@@ -3,7 +3,6 @@ import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { user } from '@openathlete/database';
 import {
   ApiEnvSchemaType,
   AuthResponseDto,
@@ -12,6 +11,7 @@ import {
 
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
+import { AuthUser } from '../decorators/user.decorator';
 import { UserService } from './user.service';
 
 @Injectable()
@@ -89,7 +89,7 @@ export class AuthService {
     };
   }
 
-  async validateUser(payload: JwtPayload): Promise<user> {
+  async validateUser(payload: JwtPayload): Promise<AuthUser> {
     if (!payload.userId) {
       throw new UnauthorizedException();
     }
@@ -97,15 +97,29 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     try {
-      const user = (await this.prisma.user.findUnique({
+      const user = await this.prisma.user.findUnique({
         where: {
           email: payload.email,
         },
         select: {
           user_id: true,
           email: true,
+          athlete: {
+            select: {
+              athlete_id: true,
+            },
+          },
+          coach_athletes: {
+            select: {
+              athlete_id: true,
+            },
+          },
         },
-      })) as user;
+      });
+
+      if (!user) {
+        throw new Error(`User not found for email ${payload.email}`);
+      }
 
       if (user.user_id !== payload.userId) {
         throw new Error(`Invalid id for email ${user.email}`);

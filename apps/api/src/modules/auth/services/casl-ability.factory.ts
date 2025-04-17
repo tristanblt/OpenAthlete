@@ -1,39 +1,53 @@
 import { AbilityBuilder, PureAbility } from '@casl/ability';
-import { Subjects as CASLSubjects, PrismaQuery } from '@casl/prisma';
+import { Subjects as CASLSubjects } from '@casl/prisma';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
-import { user as User } from '@openathlete/database';
+import { athlete, event, user } from '@openathlete/database';
 
-import { createPrismaAbility } from './casl-prisma';
+import { AuthUser } from '../decorators/user.decorator';
+import { PrismaQuery, createPrismaAbility } from './casl-prisma';
 import { UserService } from './user.service';
 
 export type CRUD = 'manage' | 'create' | 'read' | 'update' | 'delete';
 
 export type Subjects = CASLSubjects<{
-  User: User;
+  user: user;
+  athlete: athlete;
+  event: event;
 }>;
 
 export type AppAbility = PureAbility<[CRUD, Subjects | 'all'], PrismaQuery>;
 
 @Injectable()
 export class CaslAbilityFactory {
-  private readonly logger = new Logger('CaslAbilityFactory');
   constructor(private readonly userService: UserService) {}
 
   private _userFactory(
-    params: { user: User },
+    params: {
+      user: AuthUser;
+    },
     { can, cannot }: AbilityBuilder<AppAbility>,
   ) {
     const { user } = params || {};
 
     if (!user) return;
 
-    // User can read their own profile
-    can('manage', 'User', 'user_id');
+    can('manage', 'user', { user_id: user.user_id });
+    can('manage', 'athlete', { user_id: user.user_id });
+
+    if (user.athlete) {
+      can('manage', 'event', { athlete_id: user.athlete.athlete_id });
+    }
+
+    if (user.coach_athletes) {
+      user.coach_athletes.forEach((coachAthlete) => {
+        can('manage', 'event', { athlete_id: coachAthlete.athlete_id });
+      });
+    }
   }
 
-  async getFor(params: { user: User }): Promise<AppAbility> {
+  async getFor(params: { user: AuthUser }): Promise<AppAbility> {
     const { user } = params || {};
 
     const builder = new AbilityBuilder<AppAbility>(createPrismaAbility);
