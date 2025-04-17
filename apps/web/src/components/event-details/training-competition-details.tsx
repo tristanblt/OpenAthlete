@@ -23,6 +23,7 @@ export function TrainingCompetitionDetails({ event }: P) {
   const setRelatedActivityMutation = useSetRelatedActivityMutation();
   const unsetRelatedActivityMutation = useUnsetRelatedActivityMutation();
 
+  console.log(event);
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Card className="col-span-1">
@@ -67,15 +68,22 @@ export function TrainingCompetitionDetails({ event }: P) {
                 });
               }}
               className="flex-1"
-              filter={(e) => {
+              filter={(e, events) => {
                 if (e.type !== EVENT_TYPE.ACTIVITY) return false;
                 const startFilter = new Date(event.startDate);
                 startFilter.setDate(startFilter.getDate() - 3);
                 const endFilter = new Date(event.endDate);
                 endFilter.setDate(endFilter.getDate() + 3);
+                const isInRelatedActivity = events.some(
+                  (relatedEvent) =>
+                    (relatedEvent.type === EVENT_TYPE.TRAINING ||
+                      relatedEvent.type === EVENT_TYPE.COMPETITION) &&
+                    relatedEvent.relatedActivity?.eventId === e.eventId,
+                );
                 return (
                   startFilter.getTime() < e.startDate.getTime() &&
-                  endFilter.getTime() > e.endDate.getTime()
+                  endFilter.getTime() > e.endDate.getTime() &&
+                  !isInRelatedActivity
                 );
               }}
               displayRow={(e) => (

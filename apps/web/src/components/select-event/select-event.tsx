@@ -21,7 +21,7 @@ interface P {
   onChange: (eventId: number) => void;
   value?: number;
   displayRow?: (event: Event) => ReactNode | string;
-  filter?: (event: Event) => boolean;
+  filter?: (event: Event, events: Event[]) => boolean;
 }
 
 export function SelectEvent({
@@ -34,8 +34,8 @@ export function SelectEvent({
   const { data } = useGetMyEventsQuery();
   const [open, setOpen] = useState(false);
 
-  const events = (filter ? data?.filter(filter) : data) || [];
-  const currentEvent = events.find((event) => event.eventId === value);
+  const events = (filter ? data?.filter((e) => filter(e, data)) : data) || [];
+  const currentEvent = data?.find((event) => event.eventId === value);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
