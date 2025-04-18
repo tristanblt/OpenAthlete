@@ -23,7 +23,6 @@ export function TrainingCompetitionDetails({ event }: P) {
   const setRelatedActivityMutation = useSetRelatedActivityMutation();
   const unsetRelatedActivityMutation = useUnsetRelatedActivityMutation();
 
-  console.log(event);
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Card className="col-span-1">
