@@ -92,14 +92,7 @@ export function PlannedDoneSummary({ events }: P) {
       !event.relatedActivity,
   ) as (TrainingEvent | CompetitionEvent)[];
   const doneActivities = events.filter(
-    (event) =>
-      event.type === EVENT_TYPE.ACTIVITY &&
-      events.find(
-        (e) =>
-          (e.type === EVENT_TYPE.TRAINING ||
-            e.type === EVENT_TYPE.COMPETITION) &&
-          e.relatedActivityId === event.eventId,
-      ),
+    (event) => event.type === EVENT_TYPE.ACTIVITY,
   ) as ActivityEvent[];
 
   const totalTrainingDuration = todoTrainings.reduce((acc, event) => {
