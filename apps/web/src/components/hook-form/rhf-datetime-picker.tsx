@@ -4,9 +4,10 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { DateTimePicker } from '../ui/datetime-picker';
 import { Label } from '../ui/label';
 
-type Props = ComponentProps<'input'> & {
+type Props = Omit<ComponentProps<'input'>, 'onChange'> & {
   name: string;
   label?: string;
+  onChange?: (value: Date) => void;
 };
 
 export function RHFDateTimePicker({ name, type, label, ...other }: Props) {
@@ -29,6 +30,7 @@ export function RHFDateTimePicker({ name, type, label, ...other }: Props) {
             value={field.value}
             onChange={(value) => {
               field.onChange(value);
+              other.onChange?.(value);
             }}
             className={error ? 'border-red-500' : ''}
           />

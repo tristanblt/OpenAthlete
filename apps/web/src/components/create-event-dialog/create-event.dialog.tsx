@@ -117,7 +117,6 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
   });
 
   const startDateValue = watch('startDate');
-  const endDateValue = watch('endDate');
   const goalDistanceValue = watch('goalDistance');
   const goalDurationValue = watch('goalDuration');
 
@@ -133,17 +132,17 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
     }
   }, [startDateValue, setValue]);
 
-  useEffect(() => {
-    // on endDate change, set duration to endDate - startDate
-    if (endDateValue) {
-      const end = new Date(endDateValue);
-      const start = new Date(startDateValue);
+  // useEffect(() => {
+  //   // on endDate change, set duration to endDate - startDate
+  //   if (endDateValue) {
+  //     const end = new Date(endDateValue);
+  //     const start = new Date(startDateValue);
 
-      const duration = end.getTime() - start.getTime();
-      const durationInSeconds = Math.floor(duration / 1000);
-      setValue('goalDuration', durationInSeconds);
-    }
-  }, [endDateValue, setValue]);
+  //     const duration = end.getTime() - start.getTime();
+  //     const durationInSeconds = Math.floor(duration / 1000);
+  //     setValue('goalDuration', durationInSeconds);
+  //   }
+  // }, [endDateValue, setValue]);
 
   if ((create && (!rest.date || !rest.type)) || (edit && !rest.event)) {
     return null;
@@ -192,7 +191,19 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           {type !== EVENT_TYPE.ACTIVITY && (
             <>
               <RHFDateTimePicker name="startDate" label="Start Date" required />
-              <RHFDateTimePicker name="endDate" label="End Date" required />
+              <RHFDateTimePicker
+                name="endDate"
+                label="End Date"
+                required
+                onChange={(value) => {
+                  const end = new Date(value);
+                  const start = new Date(startDateValue);
+
+                  const duration = end.getTime() - start.getTime();
+                  const durationInSeconds = Math.floor(duration / 1000);
+                  setValue('goalDuration', durationInSeconds);
+                }}
+              />
               <div className="col-span-2">
                 <RHFTextarea
                   name="description"
