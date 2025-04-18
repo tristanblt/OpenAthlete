@@ -20,6 +20,7 @@
     "format": "pnpm --parallel --aggregate-output format",
     "lint": "pnpm --parallel --aggregate-output lint",
     "tsc:check": "pnpm --parallel --aggregate-output tsc:check",
+    "dev": "pnpm --parallel --aggregate-output dev",
     "list:repos": "pnpm m ls --json | jq -r \".[] | {name, path, version}\""
   },
   "pnpm": {
