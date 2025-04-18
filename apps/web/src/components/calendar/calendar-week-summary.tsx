@@ -84,6 +84,61 @@ export function PlannedSummary({ events }: P) {
   );
 }
 
+export function PlannedDoneSummary({ events }: P) {
+  const todoTrainings = events.filter(
+    (event) =>
+      (event.type === EVENT_TYPE.TRAINING ||
+        event.type === EVENT_TYPE.COMPETITION) &&
+      !event.relatedActivity,
+  ) as (TrainingEvent | CompetitionEvent)[];
+  const doneActivities = events.filter(
+    (event) =>
+      event.type === EVENT_TYPE.ACTIVITY &&
+      events.find(
+        (e) =>
+          (e.type === EVENT_TYPE.TRAINING ||
+            e.type === EVENT_TYPE.COMPETITION) &&
+          e.relatedActivityId === event.eventId,
+      ),
+  ) as ActivityEvent[];
+
+  const totalTrainingDuration = todoTrainings.reduce((acc, event) => {
+    const duration = event.goalDuration || 0;
+    return acc + duration;
+  }, 0);
+  const totalTrainingDistance = todoTrainings.reduce((acc, event) => {
+    return acc + (event.goalDistance || 0);
+  }, 0);
+  const totalTrainingElevation = todoTrainings.reduce((acc, event) => {
+    return acc + (event.goalElevationGain || 0);
+  }, 0);
+
+  const totalActivitiesDuration = doneActivities.reduce((acc, event) => {
+    const duration = getActivityDuration(event) || 0;
+    return acc + duration;
+  }, 0);
+  const totalActivitiesDistance = doneActivities.reduce((acc, event) => {
+    return acc + (event.distance || 0);
+  }, 0);
+  const totalActivitiesElevation = doneActivities.reduce((acc, event) => {
+    return acc + (event.elevationGain || 0);
+  }, 0);
+
+  return (
+    <div className="min-h-32 flex flex-col [&:not(:last-child)]:border-r-1 p-2">
+      <DurationStat
+        duration={totalActivitiesDuration + totalTrainingDuration}
+      />
+      <DistanceStat
+        distance={totalActivitiesDistance + totalTrainingDistance}
+      />
+      <ElevationStat
+        elevation={totalActivitiesElevation + totalTrainingElevation}
+      />
+    </div>
+  );
+}
+
 export function CalendarWeekSummary({ events }: P) {
   const { summaryType } = useCalendarContext();
 
@@ -91,5 +146,7 @@ export function CalendarWeekSummary({ events }: P) {
     return <DoneSummary events={events} />;
   } else if (summaryType === 'planned') {
     return <PlannedSummary events={events} />;
+  } else if (summaryType === 'planned-done') {
+    return <PlannedDoneSummary events={events} />;
   }
 }

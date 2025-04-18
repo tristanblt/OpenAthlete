@@ -36,7 +36,7 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
   const [editEventDialog, setEditEventDialog] = useState<
     Event['eventId'] | null
   >(null);
-  const [summaryType, setSummaryType] = useState<SummaryType>('planned');
+  const [summaryType, setSummaryType] = useState<SummaryType>('planned-done');
   const updateEventMutation = useUpdateEventMutation();
 
   const memoizedValue = useMemo<CalendarContextType>(

@@ -37,6 +37,7 @@ export function CalendarBody({}: P) {
               <SelectValue className="font-bold" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="planned-done">Planned + Done</SelectItem>
               <SelectItem value="planned">Planned</SelectItem>
               <SelectItem value="done">Done</SelectItem>
             </SelectContent>

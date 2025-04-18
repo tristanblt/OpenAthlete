@@ -1,6 +1,6 @@
 import { EVENT_TYPE, Event } from '@openathlete/shared';
 
-export type SummaryType = 'planned' | 'done';
+export type SummaryType = 'planned' | 'done' | 'planned-done';
 
 export type CalendarContextType = {
   displayedMonth: Date;
