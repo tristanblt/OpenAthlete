@@ -1,9 +1,15 @@
+import { SportDistributionChart } from '@/components/charts/sport-distribution-chart';
 import { StatisticsGlobals } from '@/components/statistics-globals/statistics-globals';
 import { StatisticsPeriodSelect } from '@/components/statistics-period-select/statistics-period-select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useGetStatisticsForPeriodQuery } from '@/services/statistics';
 import { useState } from 'react';
 
-import { getWeekPeriod } from '@openathlete/shared';
+import {
+  formatDistance,
+  formatDuration,
+  getWeekPeriod,
+} from '@openathlete/shared';
 
 interface P {
   athleteId: number;
@@ -35,6 +41,56 @@ export function StatisticsView({ athleteId }: P) {
             count={statistics?.count || 0}
             className="col-span-2"
           />
+          <Card className="col-span-1">
+            <CardHeader>
+              <CardTitle>Duration for each sport</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <SportDistributionChart
+                sports={statistics.sports}
+                keyToUse="duration"
+                formatter={(value: number) => `${formatDuration(value)}`}
+              />
+            </CardContent>
+          </Card>
+          <Card className="col-span-1">
+            <CardHeader>
+              <CardTitle>Distance for each sport</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <SportDistributionChart
+                sports={statistics.sports}
+                keyToUse="distance"
+                formatter={(value: number) => `${formatDistance(value)} km`}
+              />
+            </CardContent>
+          </Card>
+          <Card className="col-span-1">
+            <CardHeader>
+              <CardTitle>Elevation for each sport</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <SportDistributionChart
+                sports={statistics.sports}
+                keyToUse="elevationGain"
+                formatter={(value: number) => `${value} d+`}
+              />
+            </CardContent>
+          </Card>
+          <Card className="col-span-1">
+            <CardHeader>
+              <CardTitle>Activities for each sport</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <SportDistributionChart
+                sports={statistics.sports}
+                keyToUse="count"
+                formatter={(value: number) =>
+                  `${value} activit${value > 1 ? 'ies' : 'y'}`
+                }
+              />
+            </CardContent>
+          </Card>
         </>
       )}
       {/* {statistics && (
