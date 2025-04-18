@@ -14,9 +14,10 @@ import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 interface P {
   onChange: (start: Date, end: Date) => void;
   period: { start: Date; end: Date };
+  className?: string;
 }
 
-export function StatisticsPeriodSelect({ onChange, period }: P) {
+export function StatisticsPeriodSelect({ onChange, period, className }: P) {
   const [type, setType] = useState<'week' | 'month' | 'year'>('week');
   const [offset, setOffset] = useState(0);
 
@@ -67,7 +68,7 @@ export function StatisticsPeriodSelect({ onChange, period }: P) {
   };
 
   return (
-    <Card className="col-span-1">
+    <Card className={className}>
       <CardContent className="flex justify-between items-center">
         <Tabs
           value={type}
