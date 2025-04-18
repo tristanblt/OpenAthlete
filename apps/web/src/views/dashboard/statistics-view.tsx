@@ -3,11 +3,7 @@ import { StatisticsPeriodSelect } from '@/components/statistics-period-select/st
 import { useGetStatisticsForPeriodQuery } from '@/services/statistics';
 import { useState } from 'react';
 
-import {
-  formatDistance,
-  formatDuration,
-  getWeekPeriod,
-} from '@openathlete/shared';
+import { getWeekPeriod } from '@openathlete/shared';
 
 interface P {
   athleteId: number;
