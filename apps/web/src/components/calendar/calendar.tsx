@@ -37,11 +37,15 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
     Event['eventId'] | null
   >(null);
   const [summaryType, setSummaryType] = useState<SummaryType>('planned-done');
+  const [filter, setFilter] = useState<(event: Event) => boolean>(
+    () => () => true,
+  );
   const updateEventMutation = useUpdateEventMutation();
 
   const memoizedValue = useMemo<CalendarContextType>(
     () => ({
       ...calendarData,
+      events: calendarData.events.filter(filter),
       createEvent: (date, type) => {
         setCreateEventDialog({ date, type });
       },
@@ -52,8 +56,10 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
       setSummaryType,
       athleteId,
       allowCreate,
+      filter,
+      setFilter,
     }),
-    [calendarData.displayedMonth, calendarData.events],
+    [calendarData.displayedMonth, calendarData.events, filter],
   );
 
   const dndOnDragEnd = (e: DragEndEvent) => {

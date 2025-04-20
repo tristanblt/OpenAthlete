@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { EVENT_TYPE, Event } from '@openathlete/shared';
 
 export type SummaryType = 'planned' | 'done' | 'planned-done';
@@ -14,6 +16,8 @@ export type CalendarContextType = {
   eventDetailsOpened: Event['eventId'] | null;
   summaryType: SummaryType;
   setSummaryType: (type: SummaryType) => void;
+  filter: (event: Event) => boolean;
+  setFilter: Dispatch<SetStateAction<(event: Event) => boolean>>;
   athleteId?: number;
   allowCreate: boolean;
 };
