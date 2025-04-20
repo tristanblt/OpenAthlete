@@ -46,12 +46,14 @@ export function ActivityStatistics({ event, stream }: P) {
           <HeartrateStat
             label="Average Heart Rate"
             heartrate={event.averageHeartrate}
+            sport={event.sport}
           />
         )}
         {event.maxHeartrate && (
           <HeartrateStat
             label="Max Heart Rate"
             heartrate={event.maxHeartrate}
+            sport={event.sport}
           />
         )}
       </>
@@ -77,12 +79,14 @@ export function ActivityStatistics({ event, stream }: P) {
           <HeartrateStat
             label="Average Heart Rate"
             heartrate={event.averageHeartrate}
+            sport={event.sport}
           />
         )}
         {event.maxHeartrate && (
           <HeartrateStat
             label="Max Heart Rate"
             heartrate={event.maxHeartrate}
+            sport={event.sport}
           />
         )}
       </>
@@ -107,12 +111,14 @@ export function ActivityStatistics({ event, stream }: P) {
           <HeartrateStat
             label="Average Heart Rate"
             heartrate={event.averageHeartrate}
+            sport={event.sport}
           />
         )}
         {event.maxHeartrate && (
           <HeartrateStat
             label="Max Heart Rate"
             heartrate={event.maxHeartrate}
+            sport={event.sport}
           />
         )}
       </>
