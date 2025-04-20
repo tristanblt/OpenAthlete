@@ -174,7 +174,9 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
             label="Event Name"
             required
           />
-          {type === EVENT_TYPE.TRAINING || type === EVENT_TYPE.COMPETITION ? (
+          {type === EVENT_TYPE.TRAINING ||
+          type === EVENT_TYPE.COMPETITION ||
+          type === EVENT_TYPE.ACTIVITY ? (
             <RHFSelect
               name="sport"
               label="Sport"
@@ -206,16 +208,16 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
                   setValue('goalDuration', durationInSeconds);
                 }}
               />
-              <div className="col-span-2">
-                <RHFTextarea
-                  name="description"
-                  label="Description"
-                  className="h-24"
-                  required={type === EVENT_TYPE.NOTE}
-                />
-              </div>
             </>
           )}
+          <div className="col-span-2">
+            <RHFTextarea
+              name="description"
+              label="Description"
+              className="h-24"
+              required={type === EVENT_TYPE.NOTE}
+            />
+          </div>
           {(type === EVENT_TYPE.TRAINING ||
             type === EVENT_TYPE.COMPETITION) && (
             <>
@@ -234,6 +236,11 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
               />
               <RHFRpe name="goalRpe" label="Goal RPE" />
             </>
+          )}
+          {type === EVENT_TYPE.ACTIVITY && (
+            <div className="col-span-2">
+              <RHFRpe name="rpe" label="RPE" />
+            </div>
           )}
 
           <Button
