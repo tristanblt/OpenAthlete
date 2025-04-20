@@ -12,7 +12,7 @@ interface P {
 
 export function SpeedChart({ latLngStream, timeStream }: P) {
   const chartData = useMemo(() => {
-    return latLngStream.map(([lat, lng], i) => {
+    const rawData = latLngStream.map(([lat, lng], i) => {
       const prevPoint = latLngStream[i - 1];
       const prevLat = prevPoint ? prevPoint[0] : lat;
       const prevLng = prevPoint ? prevPoint[1] : lng;
@@ -38,6 +38,23 @@ export function SpeedChart({ latLngStream, timeStream }: P) {
         speed,
         time: time,
       };
+    });
+
+    // Remove outliers
+    // An outlier is defined as a point that is more than 3 times the speed of the previous and next point
+    return rawData.map((data, i) => {
+      if (
+        i > 0 &&
+        i < rawData.length - 1 &&
+        data.speed > rawData[i - 1].speed * 3 &&
+        data.speed > rawData[i + 1].speed * 3
+      ) {
+        return {
+          ...data,
+          speed: (rawData[i - 1].speed + rawData[i + 1].speed) / 2,
+        };
+      }
+      return data;
     });
   }, [latLngStream, timeStream]);
 
