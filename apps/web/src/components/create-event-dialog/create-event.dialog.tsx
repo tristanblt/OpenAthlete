@@ -27,6 +27,8 @@ import {
   RHFSelect,
   RHFTextField,
 } from '../hook-form';
+import { RHFElevation } from '../hook-form/rhf-elevation';
+import { RHFRpe } from '../hook-form/rhf-rpe';
 import { RHFTextarea } from '../hook-form/rhf-textarea';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
@@ -217,21 +219,20 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           {(type === EVENT_TYPE.TRAINING ||
             type === EVENT_TYPE.COMPETITION) && (
             <>
-              <RHFDistance name="goalDistance" label="Goal Distance" required />
-              <RHFDuration name="goalDuration" label="Goal Duration" required />
-              <RHFTextField
-                name="goalElevationGain"
-                label="Goal Elevation Gain"
-                required
-                type="number"
-              />
+              <RHFDistance name="goalDistance" label="Goal Distance" />
+              <RHFDuration name="goalDuration" label="Goal Duration" />
               {!!goalDistanceValue && !!goalDurationValue && (
-                <div className="text-sm text-gray-500 h-full flex items-center">
+                <div className="text-sm text-gray-500 flex items-center col-span-2">
                   Pace:{' '}
                   {formatSpeed(goalDistanceValue / goalDurationValue, 'min/km')}{' '}
                   /km
                 </div>
               )}
+              <RHFElevation
+                name="goalElevationGain"
+                label="Goal Elevation Gain"
+              />
+              <RHFRpe name="goalRpe" label="Goal RPE" />
             </>
           )}
 
