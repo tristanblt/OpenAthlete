@@ -79,6 +79,7 @@ const EVENT_INCLUDES = {
       external_id: true,
       sport: true,
       provider: true,
+      description: true,
     },
   },
 };
