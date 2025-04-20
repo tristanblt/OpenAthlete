@@ -37,8 +37,10 @@ export const formatSpeed = (
     case 'mph':
       return `${(speed * 2.23694).toFixed(2)}`;
     case 'min/km':
+      if (speed === 0) return '0';
       return formatDuration(1 / (speed / 1000));
     case 'min/mi':
+      if (speed === 0) return '0';
       return formatDuration(1 / (speed / 1609.34));
     default:
       return `${speed.toFixed(2)}`;
