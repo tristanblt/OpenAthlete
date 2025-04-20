@@ -16,6 +16,7 @@ const trainingEventSchema = baseEventSchema.extend({
   goalDistance: z.number().optional().nullable(),
   goalDuration: z.number().optional().nullable(),
   goalElevationGain: z.number().optional().nullable(),
+  goalRpe: z.number().optional().nullable(),
 });
 
 const competitionEventSchema = baseEventSchema.extend({
@@ -25,6 +26,7 @@ const competitionEventSchema = baseEventSchema.extend({
   goalDistance: z.number().optional().nullable(),
   goalDuration: z.number().optional().nullable(),
   goalElevationGain: z.number().optional().nullable(),
+  goalRpe: z.number().optional().nullable(),
 });
 
 const noteEventSchema = baseEventSchema.extend({
@@ -34,6 +36,9 @@ const noteEventSchema = baseEventSchema.extend({
 
 const activityEventSchema = baseEventSchema.extend({
   type: z.literal(EVENT_TYPE.ACTIVITY),
+  sport: z.nativeEnum(SPORT_TYPE),
+  description: z.string().optional(),
+  rpe: z.number().optional().nullable(),
 });
 
 export const createEventDtoSchema = z.discriminatedUnion('type', [
