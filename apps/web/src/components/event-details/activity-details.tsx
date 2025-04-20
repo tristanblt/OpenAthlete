@@ -4,6 +4,8 @@ import { ActivityEvent, getActivityDuration } from '@openathlete/shared';
 
 import { HeartrateChart } from '../charts/heartrate-chart';
 import { HeartrateDistributionChart } from '../charts/heartrate-distribution-chart';
+import { PowerChart } from '../charts/power-chart';
+import { SpeedChart } from '../charts/speed-chart';
 import { Map } from '../map/map';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { ActivityStatistics } from './activity-statistics';
@@ -18,6 +20,8 @@ export function ActivityDetails({ event }: P) {
     'latlng',
     'heartrate',
     'distance',
+    'time',
+    'watts',
   ]);
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -36,6 +40,33 @@ export function ActivityDetails({ event }: P) {
           className="col-span-1 rounded-xl shadow-sm border"
           polyline={stream.latlng}
         />
+      )}
+      {stream?.latlng && stream.time && (
+        <>
+          <Card className="col-span-2">
+            <CardHeader>
+              <CardTitle>Pace</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <SpeedChart
+                latLngStream={stream.latlng}
+                timeStream={stream.time}
+              />
+            </CardContent>
+          </Card>
+        </>
+      )}
+      {stream?.watts && stream.time && (
+        <>
+          <Card className="col-span-2">
+            <CardHeader>
+              <CardTitle>Power</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <PowerChart wattsStream={stream.watts} timeStream={stream.time} />
+            </CardContent>
+          </Card>
+        </>
       )}
       {stream?.heartrate && (
         <>

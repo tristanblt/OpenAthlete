@@ -50,9 +50,7 @@ export function SportDistributionChart({ sports, keyToUse, formatter }: P) {
                     {Math.round((Number(value) / total) * 100)}
                     <span className="font-normal text-muted-foreground">%</span>
                   </div>
-                  {formatter && (
-                    <div className="">{formatter(Number(value))}</div>
-                  )}
+                  {formatter && <div>{formatter(Number(value))}</div>}
                 </div>
               )}
             />
