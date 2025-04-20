@@ -75,6 +75,7 @@ const EVENT_INCLUDES = {
       average_heartrate: true,
       max_heartrate: true,
       kilojoules: true,
+      rpe: true,
       external_id: true,
       sport: true,
       provider: true,
