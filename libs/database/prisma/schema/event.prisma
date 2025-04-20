@@ -31,6 +31,7 @@ model event_training {
   goal_distance       Float? // in meters
   goal_elevation_gain Float? // in meters
   goal_duration       Int? // in seconds
+  goal_rpe            Float? // in RPE (0-1)
 
   // relationships
   event               event           @relation(fields: [event_id], references: [event_id])
@@ -49,6 +50,7 @@ model event_competition {
   goal_distance       Float? // in meters
   goal_elevation_gain Float? // in meters
   goal_duration       Int? // in seconds
+  goal_rpe            Float? // in RPE (0-1)
 
   // relationships
   event               event           @relation(fields: [event_id], references: [event_id])
@@ -87,6 +89,7 @@ model event_activity {
   average_heartrate      Float? // in bpm
   max_heartrate          Float? // in bpm
   kilojoules             Float? // in kJ
+  rpe                    Float? // in RPE (0-1)
   external_id            String
   sport                  sport_type
   stream                 Json?
