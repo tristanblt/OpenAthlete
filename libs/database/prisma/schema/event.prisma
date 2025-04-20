@@ -93,6 +93,7 @@ model event_activity {
   external_id            String
   sport                  sport_type
   stream                 Json?
+  description            String              @default("")
 
   // relationships
   event               event              @relation(fields: [event_id], references: [event_id])
