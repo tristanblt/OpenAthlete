@@ -20,7 +20,7 @@ export function CalendarEventDetailsDialog({
 }: P) {
   return (
     <Dialog onOpenChange={(o) => !o && onClose()} open={open}>
-      <DialogContent className="sm:max-w-4xl overflow-y-auto max-h-screen">
+      <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle className="flex items-start justify-center gap-2">
             <div className="flex items-center gap-2 grow">

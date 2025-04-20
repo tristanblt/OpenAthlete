@@ -27,7 +27,7 @@ export function InviteCoachDialog({ open, onClose }: P) {
 
   return (
     <Dialog onOpenChange={(o) => !o && onClose()} open={open}>
-      <DialogContent className="sm:max-w-xl overflow-y-auto max-h-screen">
+      <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Invite a coach</DialogTitle>
         </DialogHeader>

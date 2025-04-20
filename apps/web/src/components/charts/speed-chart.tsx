@@ -41,8 +41,6 @@ export function SpeedChart({ latLngStream, timeStream }: P) {
     });
   }, [latLngStream, timeStream]);
 
-  console.log('chartData', chartData);
-
   const minSpeed = useMemo(
     () => Math.min(...chartData.map((data) => data.speed)),
     [chartData],
