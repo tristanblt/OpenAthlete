@@ -1,3 +1,4 @@
+import { getRpeColor } from '@/utils/activity';
 import { cn } from '@/utils/shadcn';
 import { ComponentProps } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -13,15 +14,6 @@ type Props = ComponentProps<'input'> & {
 
 export const RHFRpe = ({ name, label, ...other }: Props) => {
   const { control } = useFormContext();
-
-  // Function to get button color based on RPE value (1-10 scale)
-  const getRpeColor = (rpe: number) => {
-    if (rpe <= 2) return 'bg-green-500 hover:bg-green-600';
-    if (rpe <= 4) return 'bg-lime-500 hover:bg-lime-600';
-    if (rpe <= 6) return 'bg-yellow-500 hover:bg-yellow-600';
-    if (rpe <= 8) return 'bg-orange-500 hover:bg-orange-600';
-    return 'bg-red-500 hover:bg-red-600';
-  };
 
   // Convert display RPE (1-10) to stored value (0-1)
   const rpeToStoredValue = (rpe: number) => rpe / 10;
@@ -73,7 +65,7 @@ export const RHFRpe = ({ name, label, ...other }: Props) => {
                       index !== 0 ? 'border-l-0' : '',
                       // Selected button gets the RPE color
                       isSelected
-                        ? getRpeColor(rpeValue)
+                        ? getRpeColor(rpeValue / 10)
                         : 'bg-white hover:bg-gray-100 text-gray-800',
                       error && 'border-red-500',
                     )}

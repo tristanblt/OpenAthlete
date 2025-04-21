@@ -2,6 +2,7 @@ import {
   useDeleteEventMutation,
   useDuplicateEventMutation,
 } from '@/services/event';
+import { getRpeColor } from '@/utils/activity';
 import { cn } from '@/utils/shadcn';
 import { useDraggable } from '@dnd-kit/core';
 import { useMemo, useState } from 'react';
@@ -138,6 +139,14 @@ export function CalendarEvent({ event, wrapped }: P) {
             <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis px-1">
               {event.type !== EVENT_TYPE.NOTE && (
                 <SportIcon sport={event.sport} className="inline-block mr-1" />
+              )}
+              {event.type === EVENT_TYPE.ACTIVITY && event.rpe !== null && (
+                <div
+                  className={cn(
+                    'h-2 w-2 rounded-full inline-block mr-1',
+                    getRpeColor(event.rpe),
+                  )}
+                />
               )}
               {event.name}
             </div>
