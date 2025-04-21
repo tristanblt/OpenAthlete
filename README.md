@@ -60,11 +60,8 @@ pnpm shared build
 # migrate the database
 pnpm database run db:deploy
 
-# run the app in development mode
-pnpm web dev
-
-# in another terminal, run the api in development mode
-pnpm api dev
+# run front & back in development mode
+pnpm dev
 ```
 ---
 
