@@ -8,15 +8,19 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 import { Prisma, user, user_role } from '@openathlete/database';
 import {
   ApiEnvSchemaType,
   CreateAccountDto,
+  PasswordResetDto,
+  PasswordResetRequestDto,
   UpdateAccountDto,
   keysToCamel,
 } from '@openathlete/shared';
 
+import { SendEmailEvent } from 'src/events';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
 import { AuthUser } from '../decorators/user.decorator';
@@ -29,6 +33,7 @@ export class UserService {
   constructor(
     private prisma: PrismaService,
     private readonly configService: ConfigService<ApiEnvSchemaType, true>,
+    private eventEmitter: EventEmitter2,
   ) {
     this.HASH_PEPPER = this.configService.get('HASH_PEPPER')
       ? Buffer.from(this.configService.get('HASH_PEPPER'))
@@ -139,4 +144,49 @@ export class UserService {
 
     return areCredentialsValid;
   }
+
+  public passwordResetRequest = async (body: PasswordResetRequestDto) => {
+    const user = await this.findOne({ email: body.email });
+    if (!user) {
+      this.logger.log(`User with email ${body.email} not found`);
+      throw new UnauthorizedException();
+    }
+
+    this.eventEmitter.emit(
+      SendEmailEvent.SLUG,
+      new SendEmailEvent({
+        type: 'password-reset',
+        to: body.email,
+        params: {
+          url: 'https://example.com/reset-password',
+        },
+      }),
+    );
+  };
+
+  public passwordReset = async (body: PasswordResetDto) => {
+    // const user = await this.prisma.user.findFirst({
+    //   where: { password_reset_token: token },
+    // });
+    // if (!user) {
+    //   this.logger.log(`User with token ${token} not found`);
+    //   throw new UnauthorizedException();
+    // }
+    // const hashedPassword = await this.hashPassword(password);
+    // if (!hashedPassword) {
+    //   throw new BadRequestException('Failed to hash password');
+    // }
+    // return keysToCamel(
+    //   await this.prisma.user.update({
+    //     where: { user_id: user.user_id },
+    //     data: {
+    //       password: hashedPassword,
+    //       password_reset_token: null,
+    //     },
+    //     select: {
+    //       user_id: true,
+    //     },
+    //   }),
+    // );
+  };
 }

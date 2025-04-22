@@ -5,8 +5,12 @@ import { AuthGuard } from '@nestjs/passport';
 
 import {
   CreateAccountDto,
+  PasswordResetDto,
+  PasswordResetRequestDto,
   UpdateAccountDto,
   createAccountDtoSchema,
+  passwordResetRequestSchema,
+  passwordResetSchema,
   updateAccountDtoSchema,
 } from '@openathlete/shared';
 
@@ -39,5 +43,20 @@ export class UserController {
   @Get('me')
   getMe(@JwtUser() user: AuthUser) {
     return this.userService.getMe(user);
+  }
+
+  @Post('password-reset/request')
+  passwordResetRequest(
+    @Body(new ZodValidationPipe(passwordResetRequestSchema))
+    body: PasswordResetRequestDto,
+  ) {
+    return this.userService.passwordResetRequest(body);
+  }
+
+  @Post('password-reset')
+  passwordReset(
+    @Body(new ZodValidationPipe(passwordResetSchema)) body: PasswordResetDto,
+  ) {
+    return this.userService.passwordReset(body);
   }
 }
