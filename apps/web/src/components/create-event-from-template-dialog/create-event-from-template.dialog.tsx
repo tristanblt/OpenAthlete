@@ -11,9 +11,16 @@ import { Edit, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
-import { EventTemplate } from '@openathlete/shared';
+import {
+  EVENT_TYPE,
+  EventTemplate,
+  formatDistance,
+  formatDuration,
+  sportTypeLabelMap,
+} from '@openathlete/shared';
 
 import { useCalendarContext } from '../calendar/hooks/use-calendar-context';
+import { SportIcon } from '../sport-icon/sport-icon';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
@@ -76,6 +83,24 @@ export function TemplateRow({
         ) : (
           template.event?.name
         )}
+      </TableCell>
+      <TableCell>
+        {template.event.type === EVENT_TYPE.TRAINING && (
+          <div className="flex gap-2">
+            <SportIcon sport={template.event.sport} />
+            <div>{sportTypeLabelMap[template.event.sport]}</div>
+          </div>
+        )}
+      </TableCell>
+      <TableCell>
+        {template.event.type === EVENT_TYPE.TRAINING &&
+          template.event.goalDuration &&
+          formatDuration(template.event.goalDuration)}
+      </TableCell>
+      <TableCell>
+        {template.event.type === EVENT_TYPE.TRAINING &&
+          template.event.goalDistance &&
+          `${formatDistance(template.event.goalDistance)} km`}
       </TableCell>
       <TableCell className="text-right">
         <div className="flex gap-1 justify-end">
@@ -146,6 +171,9 @@ export function CreateEventFromTemplateDialog({ open, onClose, ...rest }: P) {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
+              <TableHead>Sport</TableHead>
+              <TableHead>Duration</TableHead>
+              <TableHead>Distance</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
