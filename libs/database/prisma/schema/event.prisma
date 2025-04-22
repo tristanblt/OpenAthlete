@@ -8,13 +8,14 @@ model event {
   name       String
   type       event_type
 
+  // relationships
   training    event_training?
   competition event_competition?
   note        event_note?
   activity    event_activity?
-
-  athlete    athlete @relation(fields: [athlete_id], references: [athlete_id])
-  athlete_id Int
+  athlete     athlete            @relation(fields: [athlete_id], references: [athlete_id])
+  athlete_id  Int
+  templates   event_template[]
 
   // timestamps
   created_at DateTime @default(now())
@@ -100,4 +101,21 @@ model event_activity {
   event_id            Int                @unique
   related_training    event_training?
   related_competition event_competition?
+}
+
+model event_template {
+  // primary key
+  event_template_id Int @id @default(autoincrement())
+
+  // fields
+
+  // relationships
+  event    event @relation(fields: [event_id], references: [event_id])
+  event_id Int   @unique
+  user     user  @relation(fields: [user_id], references: [user_id])
+  user_id  Int
+
+  // timestamps
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }

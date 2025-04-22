@@ -13,6 +13,7 @@ model user {
   athlete        athlete?
   coach_athletes coach_athlete[]
   tokens         token[]
+  templates      event_template[]
 
   // timestamps
   created_at DateTime @default(now())
