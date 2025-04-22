@@ -5,7 +5,7 @@ import { usePasswordResetMutation } from '@/services/user';
 import { cn } from '@/utils/shadcn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import z from 'zod';
 
@@ -13,6 +13,8 @@ import { passwordResetSchema } from '@openathlete/shared';
 
 export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
   const nav = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
   const passwordResetMutation = usePasswordResetMutation({
     onSuccess: async () => {
       nav(getPath(['auth', 'login']));
@@ -30,7 +32,10 @@ export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
   const { handleSubmit } = methods;
 
   const onSubmit = handleSubmit(async (data) =>
-    passwordResetMutation.mutate(data),
+    passwordResetMutation.mutate({
+      ...data,
+      token: token || '',
+    }),
   );
 
   return (
@@ -50,7 +55,6 @@ export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
           <RHFTextField
             name="password"
             type="password"
-            placeholder="********"
             label="New password"
             required
           />
