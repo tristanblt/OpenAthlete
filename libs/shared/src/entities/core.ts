@@ -33,10 +33,6 @@ export interface Athlete extends ConvertKeysToCamelCase<athlete> {
   user?: User;
 }
 
-export interface EventTemplate extends ConvertKeysToCamelCase<event_template> {
-  event?: Event;
-}
-
 export interface TrainingEvent
   extends ConvertKeysToCamelCase<event_training & event> {
   type: EVENT_TYPE.TRAINING;
@@ -66,3 +62,7 @@ export type Event =
   | CompetitionEvent
   | NoteEvent
   | ActivityEvent;
+
+export interface EventTemplate extends ConvertKeysToCamelCase<event_template> {
+  event?: Event;
+}
