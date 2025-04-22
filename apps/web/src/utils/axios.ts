@@ -16,6 +16,7 @@ export const routes = {
   user: {
     getMe: '/user/me',
     createAccount: '/user',
+    updateAccount: '/user',
   },
   event: {
     create: '/event',

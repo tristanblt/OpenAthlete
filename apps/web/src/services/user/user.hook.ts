@@ -20,6 +20,19 @@ export const useCreateAccountMutation = (
   });
 };
 
+export const useUpdateAccountMutation = (
+  opt?: MutationOptions<
+    Awaited<ReturnType<typeof UserService.updateAccount>>,
+    Error,
+    Parameters<typeof UserService.updateAccount>[0]
+  >,
+) => {
+  return useMutation({
+    ...opt,
+    mutationFn: UserService.updateAccount,
+  });
+};
+
 export const useGetMeQuery = (
   opt?: QueryOptions<Awaited<ReturnType<typeof UserService.getMe>>>,
 ) =>

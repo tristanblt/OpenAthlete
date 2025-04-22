@@ -1,10 +1,15 @@
 import client, { routes } from '@/utils/axios';
 
-import { CreateAccountDto, User } from '@openathlete/shared';
+import { CreateAccountDto, UpdateAccountDto, User } from '@openathlete/shared';
 
 export class UserService {
   static async createAccount(body: CreateAccountDto): Promise<User> {
     const res = await client.post(routes.user.createAccount, body);
+    return res.data;
+  }
+
+  static async updateAccount(body: UpdateAccountDto): Promise<User> {
+    const res = await client.patch(routes.user.updateAccount, body);
     return res.data;
   }
 

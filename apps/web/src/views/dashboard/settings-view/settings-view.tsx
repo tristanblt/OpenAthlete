@@ -4,6 +4,7 @@ import { useUserRoles } from '@/contexts/auth';
 import { AthletesTab } from './athletes-tab';
 import { CoachesTab } from './coaches-tab';
 import { ConnectorsTab } from './connectors-tab';
+import { ProfileTab } from './profile-tab';
 import { TrainingZonesTab } from './training-zones-tab';
 
 export function SettingsView() {
@@ -14,6 +15,7 @@ export function SettingsView() {
       <Tabs defaultValue="connectors" className="mt-4">
         <TabsList>
           <TabsTrigger value="connectors">Connectors</TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="training_zones">Training zones</TabsTrigger>
           {roles?.includes('COACH') && (
             <TabsTrigger value="athletes">Athletes</TabsTrigger>
@@ -24,6 +26,9 @@ export function SettingsView() {
         </TabsList>
         <TabsContent value="connectors">
           <ConnectorsTab />
+        </TabsContent>
+        <TabsContent value="profile">
+          <ProfileTab />
         </TabsContent>
         <TabsContent value="training_zones">
           <TrainingZonesTab />
