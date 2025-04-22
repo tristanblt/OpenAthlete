@@ -10,6 +10,7 @@ export const ApiEnvSchema = z.object({
   HASH_PEPPER: z.string().nonempty(),
   JWT_SECRET_KEY: z.string().nonempty(),
   DATABASE_URL: z.string().nonempty(),
+  APP_URL: z.string().nonempty(),
 
   STRAVA_CLIENT_ID: z.string().nonempty(),
   STRAVA_CLIENT_SECRET: z.string().nonempty(),
@@ -17,6 +18,7 @@ export const ApiEnvSchema = z.object({
   STRAVA_WEBHOOK_TOKEN: z.string().nonempty(),
 
   SENDGRID_API_KEY: z.string().nonempty(),
+  SENDGRID_FROM_EMAIL: z.string().email().nonempty(),
 });
 
 export type ApiEnvSchemaType = z.infer<typeof ApiEnvSchema>;
