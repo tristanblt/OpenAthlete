@@ -17,6 +17,8 @@ export const routes = {
     getMe: '/user/me',
     createAccount: '/user',
     updateAccount: '/user',
+    passwordReset: '/user/password-reset',
+    passwordResetRequest: '/user/password-reset/request',
   },
   event: {
     create: '/event',

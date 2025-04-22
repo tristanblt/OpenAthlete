@@ -1,6 +1,12 @@
 import client, { routes } from '@/utils/axios';
 
-import { CreateAccountDto, UpdateAccountDto, User } from '@openathlete/shared';
+import {
+  CreateAccountDto,
+  PasswordResetDto,
+  PasswordResetRequestDto,
+  UpdateAccountDto,
+  User,
+} from '@openathlete/shared';
 
 export class UserService {
   static async createAccount(body: CreateAccountDto): Promise<User> {
@@ -16,5 +22,15 @@ export class UserService {
   static async getMe(): Promise<User> {
     const res = await client.get(routes.user.getMe);
     return res.data;
+  }
+
+  static async passwordResetRequest(
+    body: PasswordResetRequestDto,
+  ): Promise<void> {
+    await client.post(routes.user.passwordResetRequest, body);
+  }
+
+  static async passwordReset(body: PasswordResetDto): Promise<void> {
+    await client.post(routes.user.passwordReset, body);
   }
 }
