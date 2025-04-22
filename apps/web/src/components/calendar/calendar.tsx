@@ -18,6 +18,7 @@ import { CalendarEventDetailsDialog } from './calendar-event-details.dialog';
 import { CalendarHeader } from './calendar-header';
 import { CalendarContext } from './contexts/calendar-context';
 import { CalendarContextType, SummaryType } from './types/calendar-context';
+import { COLORED_BY } from './types/filter';
 
 interface P {
   events?: Event[];
@@ -43,6 +44,7 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
   const [filter, setFilter] = useState<(event: Event) => boolean>(
     () => () => true,
   );
+  const [coloredBy, setColoredBy] = useState<COLORED_BY | null>(null);
   const updateEventMutation = useUpdateEventMutation();
 
   const memoizedValue = useMemo<CalendarContextType>(
@@ -62,6 +64,8 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
       allowCreate,
       filter,
       setFilter,
+      coloredBy,
+      setColoredBy,
     }),
     [calendarData.displayedMonth, calendarData.events, filter],
   );

@@ -1,4 +1,4 @@
-import { getRpeColor } from '@/utils/activity';
+import { getRpeColor } from '@/utils/color';
 import { cn } from '@/utils/shadcn';
 import { ComponentProps } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';

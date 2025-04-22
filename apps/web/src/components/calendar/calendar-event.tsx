@@ -3,7 +3,7 @@ import {
   useDuplicateEventMutation,
 } from '@/services/event';
 import { useCreateEventTemplateMutation } from '@/services/event-template';
-import { getRpeColor } from '@/utils/activity';
+import { getEventTypeColor, getRpeColor, getSportColor } from '@/utils/color';
 import { cn } from '@/utils/shadcn';
 import { useDraggable } from '@dnd-kit/core';
 import { useMemo, useState } from 'react';
@@ -27,6 +27,7 @@ import {
   ContextMenuTrigger,
 } from '../ui/context-menu';
 import { useCalendarContext } from './hooks/use-calendar-context';
+import { COLORED_BY } from './types/filter';
 
 interface P {
   event: Event;
@@ -89,6 +90,7 @@ export function CalendarEvent({ event, wrapped }: P) {
     openEventDetails,
     editEvent,
     events: allEvents,
+    coloredBy,
   } = useCalendarContext();
   const [deleteEventDialog, setDeleteEventDialog] = useState<boolean>(false);
   const deleteEventMutation = useDeleteEventMutation();
@@ -98,17 +100,26 @@ export function CalendarEvent({ event, wrapped }: P) {
   });
 
   const eventColor = useMemo(() => {
-    switch (event.type) {
-      case 'ACTIVITY':
-        return 'bg-green-50 hover:bg-green-100 border-green-200';
-      case 'COMPETITION':
-        return 'bg-red-50 hover:bg-red-100 border-red-200';
-      case 'NOTE':
-        return 'bg-yellow-50 hover:bg-yellow-100 border-yellow-200';
-      case 'TRAINING':
-        return 'bg-blue-50 hover:bg-blue-100 border-blue-200';
+    switch (coloredBy || COLORED_BY.TYPE) {
+      case COLORED_BY.TYPE:
+        return getEventTypeColor(event.type);
+      case COLORED_BY.SPORT:
+        const sport = event.type !== EVENT_TYPE.NOTE ? event.sport : null;
+        if (sport === null)
+          return 'bg-gray-50 hover:bg-gray-100 border-gray-200';
+        return getSportColor(sport);
+      case COLORED_BY.RPE:
+        const rpe =
+          event.type === EVENT_TYPE.ACTIVITY
+            ? event.rpe
+            : event.type === EVENT_TYPE.TRAINING ||
+                event.type === EVENT_TYPE.COMPETITION
+              ? event.goalRpe
+              : null;
+        if (rpe === null) return 'bg-gray-50 hover:bg-gray-100 border-gray-200';
+        return getRpeColor(rpe, { bg: 50, hover: 100, border: 200 });
     }
-  }, [event.type]);
+  }, [event, coloredBy]);
 
   const draggable = event.type !== EVENT_TYPE.ACTIVITY && !wrapped;
   const relatedEvents = allEvents.filter(

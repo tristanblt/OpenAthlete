@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { EVENT_TYPE, Event } from '@openathlete/shared';
 
+import { COLORED_BY } from './filter';
+
 export type SummaryType = 'planned' | 'done' | 'planned-done';
 
 export type CalendarContextType = {
@@ -21,4 +23,6 @@ export type CalendarContextType = {
   setFilter: Dispatch<SetStateAction<(event: Event) => boolean>>;
   athleteId?: number;
   allowCreate: boolean;
+  coloredBy: COLORED_BY | null;
+  setColoredBy: (coloredBy: COLORED_BY | null) => void;
 };

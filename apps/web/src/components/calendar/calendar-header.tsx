@@ -16,12 +16,19 @@ import {
   SelectValue,
 } from '../ui/select';
 import { useCalendarContext } from './hooks/use-calendar-context';
+import { COLORED_BY, coloredByLabelMap } from './types/filter';
 
 interface P {}
 
 export function CalendarHeader({}: P) {
-  const { nextMonth, prevMonth, displayedMonth, setFilter } =
-    useCalendarContext();
+  const {
+    nextMonth,
+    prevMonth,
+    displayedMonth,
+    setFilter,
+    coloredBy,
+    setColoredBy,
+  } = useCalendarContext();
   const [sportFilter, setSportFilter] = useState<SPORT_TYPE | ''>('');
 
   const handleChangeSportFilter = (value: string | null) => {
@@ -47,6 +54,24 @@ export function CalendarHeader({}: P) {
         Calendar of {displayedMonthString}
       </h1>
       <div className="flex gap-2">
+        <Select
+          value={coloredBy || ''}
+          onValueChange={(c) =>
+            setColoredBy(c === '' ? null : (c as COLORED_BY))
+          }
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Colored by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={null!}>Colored by</SelectItem>
+            {Object.values(COLORED_BY).map((colorProfile) => (
+              <SelectItem key={colorProfile} value={colorProfile}>
+                {coloredByLabelMap[colorProfile]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Select value={sportFilter} onValueChange={handleChangeSportFilter}>
           <SelectTrigger>
             <SelectValue placeholder="All Sports" />
