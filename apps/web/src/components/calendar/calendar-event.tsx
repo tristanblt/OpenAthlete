@@ -2,10 +2,12 @@ import {
   useDeleteEventMutation,
   useDuplicateEventMutation,
 } from '@/services/event';
+import { useCreateEventTemplateMutation } from '@/services/event-template';
 import { getRpeColor } from '@/utils/activity';
 import { cn } from '@/utils/shadcn';
 import { useDraggable } from '@dnd-kit/core';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 import {
   EVENT_TYPE,
@@ -22,7 +24,6 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuShortcut,
   ContextMenuTrigger,
 } from '../ui/context-menu';
 import { useCalendarContext } from './hooks/use-calendar-context';
@@ -92,6 +93,9 @@ export function CalendarEvent({ event, wrapped }: P) {
   const [deleteEventDialog, setDeleteEventDialog] = useState<boolean>(false);
   const deleteEventMutation = useDeleteEventMutation();
   const duplicateEventMutation = useDuplicateEventMutation();
+  const createEventTemplateMutation = useCreateEventTemplateMutation({
+    onSuccess: () => toast.success('Saved as template successfully'),
+  });
 
   const eventColor = useMemo(() => {
     switch (event.type) {
@@ -148,6 +152,16 @@ export function CalendarEvent({ event, wrapped }: P) {
                   )}
                 />
               )}
+              {(event.type === EVENT_TYPE.TRAINING ||
+                event.type === EVENT_TYPE.COMPETITION) &&
+                event.goalRpe !== null && (
+                  <div
+                    className={cn(
+                      'h-2 w-2 rounded-full inline-block mr-1',
+                      getRpeColor(event.goalRpe),
+                    )}
+                  />
+                )}
               {event.name}
             </div>
             <div className="px-1 w-full">
@@ -173,8 +187,20 @@ export function CalendarEvent({ event, wrapped }: P) {
               e.stopPropagation();
             }}
           >
-            Edit<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+            Edit
           </ContextMenuItem>
+          {event.type === EVENT_TYPE.TRAINING && (
+            <ContextMenuItem
+              onClick={(e) => {
+                createEventTemplateMutation.mutate({
+                  eventId: event.eventId,
+                });
+                e.stopPropagation();
+              }}
+            >
+              Save as template
+            </ContextMenuItem>
+          )}
           {event.type !== EVENT_TYPE.ACTIVITY && (
             <ContextMenuItem
               onClick={(e) => {
@@ -182,7 +208,7 @@ export function CalendarEvent({ event, wrapped }: P) {
                 e.stopPropagation();
               }}
             >
-              Duplicate<ContextMenuShortcut>⌘D</ContextMenuShortcut>
+              Duplicate
             </ContextMenuItem>
           )}
           <ContextMenuItem
@@ -191,7 +217,7 @@ export function CalendarEvent({ event, wrapped }: P) {
               e.stopPropagation();
             }}
           >
-            Delete<ContextMenuShortcut>⌘X</ContextMenuShortcut>
+            Delete
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>

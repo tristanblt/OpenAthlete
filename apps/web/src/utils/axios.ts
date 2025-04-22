@@ -35,6 +35,12 @@ export const routes = {
       `/event/${eventId}/related-activity`,
     getMyIcalCalendarSecret: '/event/ical/secret',
   },
+  eventTemplate: {
+    getMyTemplates: '/event-template',
+    create: '/event-template',
+    delete: (eventTemplateId: Event['eventId']) =>
+      `/event-template/${eventTemplateId}`,
+  },
   connector: {
     getOAuthUri: (provider: ConnectorProvider) =>
       `/connector/${provider.toLowerCase()}/uri`,

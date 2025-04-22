@@ -10,6 +10,7 @@ export type CalendarContextType = {
   prevMonth: () => void;
   displayedWeeks: Date[][];
   createEvent: (date: Date, type: EVENT_TYPE) => void;
+  createEventFromTemplate: (date: Date) => void;
   editEvent: (eventId: Event['eventId']) => void;
   events: Event[];
   openEventDetails: (eventId: Event['eventId']) => void;

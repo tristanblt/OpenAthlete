@@ -12,6 +12,7 @@ import { useMemo, useState } from 'react';
 import { EVENT_TYPE, Event } from '@openathlete/shared';
 
 import { CreateEventDialog } from '../create-event-dialog/create-event.dialog';
+import { CreateEventFromTemplateDialog } from '../create-event-from-template-dialog/create-event-from-template.dialog';
 import { CalendarBody } from './calendar-body';
 import { CalendarEventDetailsDialog } from './calendar-event-details.dialog';
 import { CalendarHeader } from './calendar-header';
@@ -33,6 +34,8 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
     date: Date;
     type: EVENT_TYPE;
   } | null>(null);
+  const [createEventFromTemplateDialog, setCreateEventFromTemplateDialog] =
+    useState<Date | null>(null);
   const [editEventDialog, setEditEventDialog] = useState<
     Event['eventId'] | null
   >(null);
@@ -49,6 +52,7 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
       createEvent: (date, type) => {
         setCreateEventDialog({ date, type });
       },
+      createEventFromTemplate: setCreateEventFromTemplateDialog,
       openEventDetails: setEventDetailsOpened,
       eventDetailsOpened,
       editEvent: (eventId) => setEditEventDialog(eventId),
@@ -122,6 +126,11 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
             setEditEventDialog(eventDetailsOpened);
             setEventDetailsOpened(null);
           }}
+        />
+        <CreateEventFromTemplateDialog
+          open={createEventFromTemplateDialog !== null}
+          onClose={() => setCreateEventFromTemplateDialog(null)}
+          date={createEventFromTemplateDialog || undefined}
         />
       </CalendarContext.Provider>
     </div>

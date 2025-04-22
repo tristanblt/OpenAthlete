@@ -7,7 +7,7 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuShortcut,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from '../ui/context-menu';
 import { CalendarEvent } from './calendar-event';
@@ -19,7 +19,8 @@ interface P {
 }
 
 export function CalendarDay({ day, events }: P) {
-  const { displayedMonth, createEvent, allowCreate } = useCalendarContext();
+  const { displayedMonth, createEvent, allowCreate, createEventFromTemplate } =
+    useCalendarContext();
   const dayOfMonth = day.getDate();
   const isToday = day.toDateString() === new Date().toDateString();
   const isCurrentMonth = day.getMonth() === displayedMonth.getMonth();
@@ -59,18 +60,22 @@ export function CalendarDay({ day, events }: P) {
         </ContextMenuTrigger>
         {allowCreate && (
           <ContextMenuContent className="w-64">
+            <ContextMenuItem onClick={() => createEventFromTemplate(day)}>
+              Set a template
+            </ContextMenuItem>
+            <ContextMenuSeparator />
             <ContextMenuItem
               onClick={() => createEvent(day, EVENT_TYPE.TRAINING)}
             >
-              Plan a training<ContextMenuShortcut>⌘T</ContextMenuShortcut>
+              Plan a training
             </ContextMenuItem>
             <ContextMenuItem
               onClick={() => createEvent(day, EVENT_TYPE.COMPETITION)}
             >
-              Plan a competition<ContextMenuShortcut>⌘R</ContextMenuShortcut>
+              Plan a competition
             </ContextMenuItem>
             <ContextMenuItem onClick={() => createEvent(day, EVENT_TYPE.NOTE)}>
-              Plan a note<ContextMenuShortcut>⌘E</ContextMenuShortcut>
+              Plan a note
             </ContextMenuItem>
           </ContextMenuContent>
         )}
