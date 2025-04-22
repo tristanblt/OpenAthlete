@@ -6,7 +6,7 @@ import { CreateEventTemplateDto, keysToCamel } from '@openathlete/shared';
 import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
-import { EventService } from './event.service';
+import { EVENT_INCLUDES, EventService } from './event.service';
 
 @Injectable()
 export class EventTemplateService {
@@ -21,10 +21,17 @@ export class EventTemplateService {
         user_id: user.user_id,
       },
       include: {
-        event: true,
+        event: {
+          include: EVENT_INCLUDES,
+        },
       },
     });
-    return templates.map(keysToCamel);
+    return templates.map((t) =>
+      keysToCamel({
+        ...t,
+        event: this.eventService.prismaEventToEvent(t.event),
+      }),
+    );
   }
 
   async createEventTemplate(user: AuthUser, body: CreateEventTemplateDto) {

@@ -38,7 +38,7 @@ import {
   uncompressActivityStream,
 } from '../helpers/activity-stream';
 
-const EVENT_INCLUDES = {
+export const EVENT_INCLUDES = {
   training: {
     include: {
       related_activity: {
@@ -97,7 +97,7 @@ export class EventService {
       : undefined;
   }
 
-  private prismaEventToEvent(
+  public prismaEventToEvent(
     event: event & {
       competition: event_competition | null;
       training: event_training | null;
