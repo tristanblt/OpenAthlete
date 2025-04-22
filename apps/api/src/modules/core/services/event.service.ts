@@ -464,4 +464,46 @@ export class EventService {
 
     return Buffer.from(hash).toString('base64');
   }
+
+  async duplicateEvent(
+    user: AuthUser,
+    eventId: event['event_id'],
+  ): Promise<event> {
+    const ability = await this.abilities.getFor({ user });
+
+    const event = await this.prisma.event.findFirst({
+      where: {
+        AND: [{ event_id: eventId }, accessibleBy(ability, 'read').event],
+      },
+      include: EVENT_INCLUDES,
+    });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const { start_date, end_date, name, type, athlete_id } = event;
+
+    return this.prisma.event.create({
+      data: {
+        start_date,
+        end_date,
+        name,
+        type,
+        athlete_id,
+        [type.toLocaleLowerCase()]: {
+          create: {
+            ...event[type.toLocaleLowerCase()],
+            event_training_id: undefined,
+            event_competition_id: undefined,
+            event_note_id: undefined,
+            event_activity_id: undefined,
+            event_id: undefined,
+            related_activity_id: undefined,
+            related_activity: undefined,
+          },
+        },
+      },
+    });
+  }
 }

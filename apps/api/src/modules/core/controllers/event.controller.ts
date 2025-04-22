@@ -83,7 +83,8 @@ export class EventController {
   updateEvent(
     @JwtUser() user: AuthUser,
     @Param('eventId', ParseIntPipe) eventId: event['event_id'],
-    @Body(new ZodValidationPipe(createEventDtoSchema)) body: CreateEventDto,
+    // @Body(new ZodValidationPipe(createEventDtoSchema)) body: CreateEventDto,
+    @Body() body: Partial<CreateEventDto>,
   ) {
     return this.eventService.updateEvent(user, eventId, body);
   }
