@@ -69,6 +69,9 @@ export function TemplateRow({
             >
               Validate
             </Button>
+            <Button onClick={() => setUpdateTemplate(false)} variant="outline">
+              Cancel
+            </Button>
           </div>
         ) : (
           template.event?.name
