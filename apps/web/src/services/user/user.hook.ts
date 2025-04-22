@@ -41,3 +41,29 @@ export const useGetMeQuery = (
     queryFn: UserService.getMe,
     queryKey: ['UserService.getMe'],
   });
+
+export const usePasswordResetRequestMutation = (
+  opt?: MutationOptions<
+    Awaited<ReturnType<typeof UserService.passwordResetRequest>>,
+    Error,
+    Parameters<typeof UserService.passwordResetRequest>[0]
+  >,
+) => {
+  return useMutation({
+    ...opt,
+    mutationFn: UserService.passwordResetRequest,
+  });
+};
+
+export const usePasswordResetMutation = (
+  opt?: MutationOptions<
+    Awaited<ReturnType<typeof UserService.passwordReset>>,
+    Error,
+    Parameters<typeof UserService.passwordReset>[0]
+  >,
+) => {
+  return useMutation({
+    ...opt,
+    mutationFn: UserService.passwordReset,
+  });
+};

@@ -18,6 +18,18 @@ const CreateAccountPage = lazy(() =>
   })),
 );
 
+const PasswordResetPage = lazy(() =>
+  import('@/pages/auth/password-reset').then((module) => ({
+    default: module.PasswordResetPage,
+  })),
+);
+
+const PasswordResetRequestPage = lazy(() =>
+  import('@/pages/auth/password-reset-request').then((module) => ({
+    default: module.PasswordResetRequestPage,
+  })),
+);
+
 const OAuthCallbackPage = lazy(() =>
   import('@/pages/auth/oauth-callback').then((module) => ({
     default: module.OAuthCallbackPage,
@@ -48,6 +60,22 @@ export const authRoutes: RouteObject[] = [
         element: (
           <AuthLayout>
             <CreateAccountPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: getPathEnd(getPath(['auth', 'passwordReset'])),
+        element: (
+          <AuthLayout>
+            <PasswordResetPage />
+          </AuthLayout>
+        ),
+      },
+      {
+        path: getPathEnd(getPath(['auth', 'passwordResetRequest'])),
+        element: (
+          <AuthLayout>
+            <PasswordResetRequestPage />
           </AuthLayout>
         ),
       },

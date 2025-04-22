@@ -23,6 +23,8 @@ export const paths: Paths = {
     login: `${ROOTS.AUTH}/login`,
     createAccount: `${ROOTS.AUTH}/create-account`,
     oauth: `${ROOTS.AUTH}/callback/:provider`,
+    passwordReset: `${ROOTS.AUTH}/password-reset`,
+    passwordResetRequest: `${ROOTS.AUTH}/password-reset-request`,
   },
 
   // DASHBOARD

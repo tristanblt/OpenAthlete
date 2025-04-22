@@ -13,7 +13,7 @@ import z from 'zod';
 
 import { loginDtoSchema } from '@openathlete/shared';
 
-export function LoginView({ className }: React.ComponentProps<'form'>) {
+export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
   const { initialize } = useAuthContext();
   const navigate = useNavigate();
   const loginMutation = useLoginMutation({
@@ -57,7 +57,7 @@ export function LoginView({ className }: React.ComponentProps<'form'>) {
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
             <Link
-              to="/auth/password-reset-request"
+              to="/auth/forgot-password"
               className="ml-auto text-sm underline-offset-4 hover:underline"
             >
               Forgot your password?

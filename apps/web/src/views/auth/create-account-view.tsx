@@ -1,7 +1,6 @@
 import { StravaIcon } from '@/assets/icons';
 import { FormProvider, RHFTextField } from '@/components/hook-form';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { useAuthContext } from '@/contexts/auth';
 import { getPath } from '@/routes/paths';
 import { useLoginMutation } from '@/services/auth';
@@ -73,18 +72,12 @@ export function CreateAccountView({ className }: React.ComponentProps<'form'>) {
           label="Email"
           required
         />
-        <div className="grid gap-3">
-          <div className="flex items-center">
-            <Label htmlFor="password">Password *</Label>
-            <a
-              href="#"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
-            >
-              Forgot your password?
-            </a>
-          </div>
-          <RHFTextField name="password" type="password" required />
-        </div>
+        <RHFTextField
+          name="password"
+          type="password"
+          required
+          label="Password"
+        />
         <Button
           type="submit"
           className="w-full"
