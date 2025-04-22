@@ -10,6 +10,6 @@ export class NotificationService {
   constructor(private configService: ConfigService<ApiEnvSchemaType, true>) {}
 
   async sendEmail<T extends EmailId>(payload: SendEmail<T>) {
-    console.log('Sending email...');
+    console.log('Sending email...', payload);
   }
 }
