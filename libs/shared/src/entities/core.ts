@@ -5,6 +5,7 @@ import {
   event_activity,
   event_competition,
   event_note,
+  event_template,
   event_training,
   training_zone,
   training_zone_value,
@@ -30,6 +31,10 @@ export interface User extends ConvertKeysToCamelCase<user> {
 
 export interface Athlete extends ConvertKeysToCamelCase<athlete> {
   user?: User;
+}
+
+export interface EventTemplate extends ConvertKeysToCamelCase<event_template> {
+  event?: Event;
 }
 
 export interface TrainingEvent
