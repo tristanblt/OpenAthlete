@@ -32,3 +32,7 @@ enum training_zone_type {
   POWER
   PACE
 }
+
+enum token_type {
+  PASSWORD_RESET
+}

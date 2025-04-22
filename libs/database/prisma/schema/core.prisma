@@ -12,6 +12,7 @@ model user {
   // relationships
   athlete        athlete?
   coach_athletes coach_athlete[]
+  tokens         token[]
 
   // timestamps
   created_at DateTime @default(now())
@@ -30,6 +31,23 @@ model connector {
   // relationships
   athlete    athlete @relation(fields: [athlete_id], references: [athlete_id])
   athlete_id Int
+
+  // timestamps
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model token {
+  // primary key
+  token_id Int @id @default(autoincrement())
+
+  // fields
+  token String     @unique
+  type  token_type
+
+  // relationships
+  user    user @relation(fields: [user_id], references: [user_id])
+  user_id Int
 
   // timestamps
   created_at DateTime @default(now())
