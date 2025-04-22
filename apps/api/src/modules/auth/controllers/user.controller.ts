@@ -1,9 +1,14 @@
 import { ZodValidationPipe } from 'nestjs-zod';
 
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { CreateAccountDto, createAccountDtoSchema } from '@openathlete/shared';
+import {
+  CreateAccountDto,
+  UpdateAccountDto,
+  createAccountDtoSchema,
+  updateAccountDtoSchema,
+} from '@openathlete/shared';
 
 import { JwtUser } from '../decorators';
 import { AuthUser } from '../decorators/user.decorator';
@@ -19,6 +24,15 @@ export class UserController {
     @Body(new ZodValidationPipe(createAccountDtoSchema)) body: CreateAccountDto,
   ) {
     return this.userService.createAccount(body);
+  }
+
+  @UseGuards(AuthGuard('jwt'), UserTypeGuard)
+  @Patch()
+  updateAccount(
+    @JwtUser() user: AuthUser,
+    @Body(new ZodValidationPipe(updateAccountDtoSchema)) body: UpdateAccountDto,
+  ) {
+    return this.userService.updateAccount(user, body);
   }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)

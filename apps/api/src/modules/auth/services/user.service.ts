@@ -13,6 +13,7 @@ import { Prisma, user, user_role } from '@openathlete/database';
 import {
   ApiEnvSchemaType,
   CreateAccountDto,
+  UpdateAccountDto,
   keysToCamel,
 } from '@openathlete/shared';
 
@@ -98,6 +99,22 @@ export class UserService {
         },
         select: {
           user_id: true,
+        },
+      }),
+    );
+  };
+
+  public updateAccount = async (user: AuthUser, data: UpdateAccountDto) => {
+    return keysToCamel(
+      await this.prisma.user.update({
+        where: { user_id: user.user_id },
+        data: {
+          first_name: data.firstName,
+          last_name: data.lastName,
+        },
+        select: {
+          first_name: true,
+          last_name: true,
         },
       }),
     );
