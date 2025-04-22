@@ -94,6 +94,7 @@ export function StatisticsPeriodSelect({ onChange, period, className }: P) {
             variant="outline"
             size="sm"
             onClick={() => handleOffset('next')}
+            disabled={offset >= 0}
           >
             Next
           </Button>
