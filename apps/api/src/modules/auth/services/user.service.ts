@@ -10,7 +10,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-import { Prisma, user, user_role } from '@openathlete/database';
+import { Prisma, token_type, user, user_role } from '@openathlete/database';
 import {
   ApiEnvSchemaType,
   CreateAccountDto,
@@ -24,6 +24,7 @@ import { SendEmailEvent } from 'src/events';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
 import { AuthUser } from '../decorators/user.decorator';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class UserService {
@@ -34,6 +35,7 @@ export class UserService {
     private prisma: PrismaService,
     private readonly configService: ConfigService<ApiEnvSchemaType, true>,
     private eventEmitter: EventEmitter2,
+    private tokenService: TokenService,
   ) {
     this.HASH_PEPPER = this.configService.get('HASH_PEPPER')
       ? Buffer.from(this.configService.get('HASH_PEPPER'))
@@ -152,41 +154,40 @@ export class UserService {
       throw new UnauthorizedException();
     }
 
+    const token = await this.tokenService.createToken(
+      { user_id: user.user_id },
+      token_type.PASSWORD_RESET,
+    );
+
     this.eventEmitter.emit(
       SendEmailEvent.SLUG,
       new SendEmailEvent({
         type: 'password-reset',
         to: body.email,
         params: {
-          url: 'https://example.com/reset-password',
+          url: `${this.configService.get('APP_URL')}/auth/password-reset?token=${token.token}`,
         },
       }),
     );
   };
 
   public passwordReset = async (body: PasswordResetDto) => {
-    // const user = await this.prisma.user.findFirst({
-    //   where: { password_reset_token: token },
-    // });
-    // if (!user) {
-    //   this.logger.log(`User with token ${token} not found`);
-    //   throw new UnauthorizedException();
-    // }
-    // const hashedPassword = await this.hashPassword(password);
-    // if (!hashedPassword) {
-    //   throw new BadRequestException('Failed to hash password');
-    // }
-    // return keysToCamel(
-    //   await this.prisma.user.update({
-    //     where: { user_id: user.user_id },
-    //     data: {
-    //       password: hashedPassword,
-    //       password_reset_token: null,
-    //     },
-    //     select: {
-    //       user_id: true,
-    //     },
-    //   }),
-    // );
+    const user = await this.tokenService.verifyToken(body.token);
+
+    if (!user) {
+      this.logger.log(`Token ${body.token} not found or expired`);
+      throw new UnauthorizedException();
+    }
+
+    const hashedPassword = await this.hashPassword(body.password);
+
+    if (!hashedPassword) {
+      throw new BadRequestException('Failed to hash password');
+    }
+
+    await this.prisma.user.update({
+      where: { user_id: user.user_id },
+      data: { password: hashedPassword },
+    });
   };
 }
