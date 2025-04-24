@@ -65,7 +65,7 @@ export const RHFRpe = ({ name, label, ...other }: Props) => {
                       index !== 0 ? 'border-l-0' : '',
                       // Selected button gets the RPE color
                       isSelected
-                        ? getRpeColor(rpeValue / 10)
+                        ? getRpeColor(rpeValue / 10, undefined, false)
                         : 'bg-white hover:bg-gray-100 text-gray-800',
                       error && 'border-red-500',
                     )}

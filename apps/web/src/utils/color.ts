@@ -11,16 +11,17 @@ export const getRpeColor = (
     hover: 600,
     border: 700,
   },
+  border: boolean = true,
 ) => {
   if (rpe <= 0.2)
-    return `bg-green-${intensities.bg} hover:bg-green-${intensities.hover} border-green-${intensities.border}`;
+    return `bg-green-${intensities.bg} hover:bg-green-${intensities.hover} ${border ? `border-green-${intensities.border}` : ''}`;
   if (rpe <= 0.4)
-    return `bg-lime-${intensities.bg} hover:bg-lime-${intensities.hover} border-lime-${intensities.border}`;
+    return `bg-lime-${intensities.bg} hover:bg-lime-${intensities.hover} ${border ? `border-lime-${intensities.border}` : ''}`;
   if (rpe <= 0.6)
-    return `bg-yellow-${intensities.bg} hover:bg-yellow-${intensities.hover} border-yellow-${intensities.border}`;
+    return `bg-yellow-${intensities.bg} hover:bg-yellow-${intensities.hover} ${border ? `border-yellow-${intensities.border}` : ''}`;
   if (rpe <= 0.8)
-    return `bg-orange-${intensities.bg} hover:bg-orange-${intensities.hover} border-orange-${intensities.border}`;
-  return `bg-red-${intensities.bg} hover:bg-red-${intensities.hover} border-red-${intensities.border}`;
+    return `bg-orange-${intensities.bg} hover:bg-orange-${intensities.hover} ${border ? `border-orange-${intensities.border}` : ''}`;
+  return `bg-red-${intensities.bg} hover:bg-red-${intensities.hover} ${border ? `border-red-${intensities.border}` : ''}`;
 };
 
 export const getSportColor = (sport: SPORT_TYPE) => {
