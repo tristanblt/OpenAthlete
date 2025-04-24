@@ -154,7 +154,14 @@ export class EventService {
   async getEventsOfAthlete(user: AuthUser) {
     const ability = await this.abilities.getFor({ user });
     return this.prisma.event.findMany({
-      where: accessibleBy(ability, 'read').event,
+      where: {
+        AND: [
+          accessibleBy(ability, 'read').event,
+          {
+            athlete_id: { not: null },
+          },
+        ],
+      },
       include: EVENT_INCLUDES,
     });
   }
