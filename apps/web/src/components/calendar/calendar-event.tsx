@@ -3,7 +3,12 @@ import {
   useDuplicateEventMutation,
 } from '@/services/event';
 import { useCreateEventTemplateMutation } from '@/services/event-template';
-import { getEventTypeColor, getRpeColor, getSportColor } from '@/utils/color';
+import {
+  getEventTypeColor,
+  getHighSaturatedRpeColor,
+  getLowSaturatedRpeColor,
+  getSportColor,
+} from '@/utils/color';
 import { cn } from '@/utils/shadcn';
 import { useDraggable } from '@dnd-kit/core';
 import { useMemo, useState } from 'react';
@@ -117,7 +122,7 @@ export function CalendarEvent({ event, wrapped }: P) {
               ? event.goalRpe
               : null;
         if (rpe === null) return 'bg-gray-50 hover:bg-gray-100 border-gray-200';
-        return getRpeColor(rpe, { bg: 50, hover: 100, border: 200 });
+        return getLowSaturatedRpeColor(rpe);
     }
   }, [event, coloredBy]);
 
@@ -159,7 +164,7 @@ export function CalendarEvent({ event, wrapped }: P) {
                 <div
                   className={cn(
                     'h-2 w-2 rounded-full inline-block mr-1',
-                    getRpeColor(event.rpe),
+                    getHighSaturatedRpeColor(event.rpe),
                   )}
                 />
               )}
@@ -169,7 +174,7 @@ export function CalendarEvent({ event, wrapped }: P) {
                   <div
                     className={cn(
                       'h-2 w-2 rounded-full inline-block mr-1',
-                      getRpeColor(event.goalRpe),
+                      getHighSaturatedRpeColor(event.goalRpe),
                     )}
                   />
                 )}

@@ -1,27 +1,33 @@
 import { EVENT_TYPE, SPORT_TYPE } from '@openathlete/shared';
 
-export const getRpeColor = (
+export const getHighSaturatedRpeColor = (
   rpe: number,
-  intensities: {
-    bg: number;
-    hover: number;
-    border: number;
-  } = {
-    bg: 500,
-    hover: 600,
-    border: 700,
-  },
   border: boolean = true,
 ) => {
   if (rpe <= 0.2)
-    return `bg-green-${intensities.bg} hover:bg-green-${intensities.hover} ${border ? `border-green-${intensities.border}` : ''}`;
+    return `bg-green-500 hover:bg-green-600 ${border ? `border-green-700` : ''}`;
   if (rpe <= 0.4)
-    return `bg-lime-${intensities.bg} hover:bg-lime-${intensities.hover} ${border ? `border-lime-${intensities.border}` : ''}`;
+    return `bg-lime-500 hover:bg-lime-600 ${border ? `border-lime-700` : ''}`;
   if (rpe <= 0.6)
-    return `bg-yellow-${intensities.bg} hover:bg-yellow-${intensities.hover} ${border ? `border-yellow-${intensities.border}` : ''}`;
+    return `bg-yellow-500 hover:bg-yellow-600 ${border ? `border-yellow-700` : ''}`;
   if (rpe <= 0.8)
-    return `bg-orange-${intensities.bg} hover:bg-orange-${intensities.hover} ${border ? `border-orange-${intensities.border}` : ''}`;
-  return `bg-red-${intensities.bg} hover:bg-red-${intensities.hover} ${border ? `border-red-${intensities.border}` : ''}`;
+    return `bg-orange-500 hover:bg-orange-600 ${border ? `border-orange-700` : ''}`;
+  return `bg-red-500 hover:bg-red-600 ${border ? `border-red-700` : ''}`;
+};
+
+export const getLowSaturatedRpeColor = (
+  rpe: number,
+  border: boolean = true,
+) => {
+  if (rpe <= 0.2)
+    return `bg-green-50 hover:bg-green-100 ${border ? `border-green-200` : ''}`;
+  if (rpe <= 0.4)
+    return `bg-lime-50 hover:bg-lime-100 ${border ? `border-lime-200` : ''}`;
+  if (rpe <= 0.6)
+    return `bg-yellow-50 hover:bg-yellow-100 ${border ? `border-yellow-200` : ''}`;
+  if (rpe <= 0.8)
+    return `bg-orange-50 hover:bg-orange-100 ${border ? `border-orange-200` : ''}`;
+  return `bg-red-50 hover:bg-red-100 ${border ? `border-red-200` : ''}`;
 };
 
 export const getSportColor = (sport: SPORT_TYPE) => {

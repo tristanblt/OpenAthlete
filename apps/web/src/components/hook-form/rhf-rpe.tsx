@@ -1,4 +1,4 @@
-import { getRpeColor } from '@/utils/color';
+import { getHighSaturatedRpeColor } from '@/utils/color';
 import { cn } from '@/utils/shadcn';
 import { ComponentProps } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -65,7 +65,7 @@ export const RHFRpe = ({ name, label, ...other }: Props) => {
                       index !== 0 ? 'border-l-0' : '',
                       // Selected button gets the RPE color
                       isSelected
-                        ? getRpeColor(rpeValue / 10, undefined, false)
+                        ? getHighSaturatedRpeColor(rpeValue / 10, false)
                         : 'bg-white hover:bg-gray-100 text-gray-800',
                       error && 'border-red-500',
                     )}
