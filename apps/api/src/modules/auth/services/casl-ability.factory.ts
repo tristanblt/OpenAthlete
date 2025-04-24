@@ -36,6 +36,8 @@ export class CaslAbilityFactory {
     can('manage', 'user', { user_id: user.user_id });
     can('manage', 'athlete', { user_id: user.user_id });
 
+    can('manage', 'event', { templates: { some: { user_id: user.user_id } } });
+
     if (user.athlete) {
       can('manage', 'event', { athlete_id: user.athlete.athlete_id });
     }

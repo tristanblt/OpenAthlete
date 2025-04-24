@@ -37,6 +37,17 @@ export class EventTemplateService {
   async createEventTemplate(user: AuthUser, body: CreateEventTemplateDto) {
     const event = await this.eventService.duplicateEvent(user, body.eventId);
 
+    await this.prisma.event.update({
+      where: {
+        event_id: event.event_id,
+      },
+      data: {
+        athlete: {
+          disconnect: true,
+        },
+      },
+    });
+
     const eventTemplate = await this.prisma.event_template.create({
       data: {
         user_id: user.user_id,
