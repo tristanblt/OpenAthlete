@@ -5,10 +5,11 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
-type Props = ComponentProps<'input'> & {
+type Props = Omit<ComponentProps<'input'>, 'onChange'> & {
   name: string;
   label?: string;
   value?: number;
+  onChange?: (value: number | undefined) => void;
 };
 
 export const RHFDuration = ({
@@ -55,8 +56,10 @@ export const RHFDuration = ({
 
             if (hours === '' && minutes === '') {
               field.onChange(undefined);
+              onChange?.(undefined);
             } else {
               field.onChange(hoursNum * 3600 + minutesNum * 60);
+              onChange?.(hoursNum * 3600 + minutesNum * 60);
             }
           };
 

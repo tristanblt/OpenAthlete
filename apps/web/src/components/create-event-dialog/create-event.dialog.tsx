@@ -72,7 +72,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
       d.setSeconds(0);
       return d;
     } else if (edit) {
-      return rest.event?.startDate;
+      return rest.event?.endDate;
     }
   }, [rest]);
 
@@ -122,30 +122,6 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
   const goalDistanceValue = watch('goalDistance');
   const goalDurationValue = watch('goalDuration');
 
-  useEffect(() => {
-    // on startDate change, set endDate to startDate + 1 hour
-    if (startDateValue) {
-      const start = new Date(startDateValue);
-      const end = new Date(start);
-      end.setHours(start.getHours() + 1);
-      end.setMinutes(start.getMinutes() + 0);
-      end.setSeconds(0);
-      setValue('endDate', end);
-    }
-  }, [startDateValue, setValue]);
-
-  // useEffect(() => {
-  //   // on endDate change, set duration to endDate - startDate
-  //   if (endDateValue) {
-  //     const end = new Date(endDateValue);
-  //     const start = new Date(startDateValue);
-
-  //     const duration = end.getTime() - start.getTime();
-  //     const durationInSeconds = Math.floor(duration / 1000);
-  //     setValue('goalDuration', durationInSeconds);
-  //   }
-  // }, [endDateValue, setValue]);
-
   if ((create && (!rest.date || !rest.type)) || (edit && !rest.event)) {
     return null;
   }
@@ -194,7 +170,21 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           )}
           {type !== EVENT_TYPE.ACTIVITY && (
             <>
-              <RHFDateTimePicker name="startDate" label="Start Date" required />
+              <RHFDateTimePicker
+                name="startDate"
+                label="Start Date"
+                required
+                onChange={(value) => {
+                  const start = new Date(value);
+                  const end = new Date(start);
+                  if (goalDurationValue) {
+                    end.setSeconds(start.getSeconds() + goalDurationValue);
+                  } else {
+                    end.setHours(start.getHours() + 1);
+                  }
+                  setValue('endDate', end);
+                }}
+              />
               <RHFDateTimePicker
                 name="endDate"
                 label="End Date"
@@ -222,7 +212,17 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
             type === EVENT_TYPE.COMPETITION) && (
             <>
               <RHFDistance name="goalDistance" label="Goal Distance" />
-              <RHFDuration name="goalDuration" label="Goal Duration" />
+              <RHFDuration
+                name="goalDuration"
+                label="Goal Duration"
+                onChange={(value) => {
+                  const start = new Date(startDateValue);
+                  const duration = value || 0;
+                  const end = new Date(start);
+                  end.setSeconds(start.getSeconds() + duration);
+                  setValue('endDate', end);
+                }}
+              />
               {!!goalDistanceValue && !!goalDurationValue && (
                 <div className="text-sm text-gray-500 flex items-center col-span-2">
                   Pace:{' '}
