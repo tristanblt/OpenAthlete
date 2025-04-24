@@ -6,7 +6,7 @@ const baseEventSchema = z.object({
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
   name: z.string().min(1).max(100),
-  athleteId: z.number().optional(),
+  athleteId: z.number().optional().nullable(),
 });
 
 const trainingEventSchema = baseEventSchema.extend({
