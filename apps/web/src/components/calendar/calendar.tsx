@@ -87,7 +87,6 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
     updateEventMutation.mutate({
       eventId: event.eventId,
       body: {
-        ...event,
         startDate,
         endDate,
       },
