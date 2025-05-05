@@ -1,61 +1,67 @@
-import { record } from '@openathlete/database';
+import { record, record_type } from '@openathlete/database';
 import { ActivityStream } from '@openathlete/shared';
 
-export const computeRecords = (
-  stream: ActivityStream,
+// Target distances for all record types (in meters)
+const TARGET_DISTANCES = [
+  400, // 400m
+  800, // 800m
+  1000, // 1000m
+  1500, // 1500m
+  3000, // 3000m
+  5000, // 5000m
+  10000, // 10k
+  15000, // 15k
+  20000, // 20k
+  21097.5, // Semi
+  42195, // Marathon
+  50000, // 50km
+  100000, // 100km
+];
+
+/**
+ * Generic function to compute distance-based records for any stream
+ */
+const computeDistanceBasedRecords = (
+  timeStream: number[],
+  latlngStream: number[][],
+  valueStream: number[],
+  recordType: record_type,
+  computeMax: boolean = false, // true for max average, false for min average
 ): Pick<
   record,
-  'distance' | 'duration' | 'start_duration' | 'end_duration'
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
 >[] => {
-  const timeStream = stream.time;
-  const latlngStream = stream.latlng;
-
   if (
     !timeStream ||
     !latlngStream ||
+    !valueStream ||
     timeStream.length === 0 ||
-    latlngStream.length === 0
+    latlngStream.length === 0 ||
+    valueStream.length === 0
   ) {
     return [];
   }
 
-  const targetDistances = [
-    400, // 400m
-    800, // 800m
-    1000, // 1000m
-    1500, // 1500m
-    3000, // 3000m
-    5000, // 5000m
-    10000, // 10k
-    15000, // 15k
-    20000, // 20k
-    21097.5, // Semi
-    42195, // Marathon
-    50000, // 50km
-    100000, // 100km
-  ];
-
+  // Calculate cumulative distances
   const cumulativeDistances: number[] = [0];
-
   for (let i = 1; i < latlngStream.length; i++) {
     const [lat1, lng1] = latlngStream[i - 1];
     const [lat2, lng2] = latlngStream[i];
-
     const distance = calculateHaversineDistance(lat1, lng1, lat2, lng2);
     cumulativeDistances.push(cumulativeDistances[i - 1] + distance);
   }
 
   const records: Pick<
     record,
-    'distance' | 'duration' | 'start_duration' | 'end_duration'
+    'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
   >[] = [];
 
-  for (const targetDistance of targetDistances) {
+  for (const targetDistance of TARGET_DISTANCES) {
     if (cumulativeDistances[cumulativeDistances.length - 1] < targetDistance) {
       continue;
     }
 
-    let bestTime = Number.MAX_SAFE_INTEGER;
+    let bestValue = computeMax ? -Infinity : Infinity;
     let bestStart = 0;
     let bestEnd = 0;
     let right = 0;
@@ -69,27 +75,64 @@ export const computeRecords = (
       }
 
       if (right < cumulativeDistances.length) {
-        const segmentTime = timeStream[right] - timeStream[left];
+        // For speed records, we want the minimum time (bestValue = segmentTime)
+        // For other metrics, we typically want maximum average (bestValue = average)
+        if (recordType === 'SPEED') {
+          const segmentTime = timeStream[right] - timeStream[left];
 
-        let hasPause = false;
-        for (let i = left + 1; i <= right; i++) {
-          if (timeStream[i] - timeStream[i - 1] > 5) {
-            hasPause = true;
-            break;
+          let hasPause = false;
+          for (let i = left + 1; i <= right; i++) {
+            if (timeStream[i] - timeStream[i - 1] > 5) {
+              hasPause = true;
+              break;
+            }
           }
-        }
 
-        if (!hasPause && segmentTime < bestTime) {
-          bestTime = segmentTime;
-          bestStart = timeStream[left];
-          bestEnd = timeStream[right];
+          if (!hasPause && segmentTime < bestValue) {
+            bestValue = segmentTime;
+            bestStart = timeStream[left];
+            bestEnd = timeStream[right];
+          }
+        } else {
+          // For other metrics, calculate average value over the segment
+          let sum = 0;
+          let count = 0;
+
+          // Find points within the segment
+          const segmentPoints = [] as number[];
+          for (let i = left; i <= right; i++) {
+            if (i < valueStream.length) {
+              segmentPoints.push(valueStream[i]);
+            }
+          }
+
+          // Calculate average
+          const average =
+            segmentPoints.reduce((sum, val) => sum + val, 0) /
+            segmentPoints.length;
+
+          // Update best value if this segment has better average
+          const isBetter = computeMax
+            ? average > bestValue
+            : average < bestValue;
+
+          if (isBetter && segmentPoints.length > 0) {
+            bestValue = average;
+            bestStart = timeStream[left];
+            bestEnd = timeStream[right];
+          }
         }
       }
     }
 
-    if (bestTime < Number.MAX_SAFE_INTEGER) {
+    const validValue = computeMax
+      ? bestValue > -Infinity
+      : bestValue < Infinity;
+
+    if (validValue) {
       records.push({
-        duration: bestTime,
+        value: bestValue,
+        type: recordType,
         distance: targetDistance,
         start_duration: bestStart,
         end_duration: bestEnd,
@@ -98,6 +141,288 @@ export const computeRecords = (
   }
 
   return records;
+};
+
+const computeSpeedRecords = (
+  stream: ActivityStream,
+): Pick<
+  record,
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+>[] => {
+  const { time, latlng } = stream;
+
+  if (!time || !latlng || time.length === 0 || latlng.length === 0) {
+    return [];
+  }
+
+  return computeDistanceBasedRecords(time, latlng, time, 'SPEED', false);
+};
+
+const computePowerRecords = (
+  stream: ActivityStream,
+): Pick<
+  record,
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+>[] => {
+  const { time, latlng, watts } = stream;
+
+  if (
+    !time ||
+    !latlng ||
+    !watts ||
+    time.length === 0 ||
+    latlng.length === 0 ||
+    watts.length === 0
+  ) {
+    return [];
+  }
+
+  return computeDistanceBasedRecords(time, latlng, watts, 'POWER', true);
+};
+
+const computeHeartRateRecords = (
+  stream: ActivityStream,
+): Pick<
+  record,
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+>[] => {
+  const { time, latlng, heartrate } = stream;
+
+  if (
+    !time ||
+    !latlng ||
+    !heartrate ||
+    time.length === 0 ||
+    latlng.length === 0 ||
+    heartrate.length === 0
+  ) {
+    return [];
+  }
+
+  return computeDistanceBasedRecords(
+    time,
+    latlng,
+    heartrate,
+    'HEARTRATE',
+    true,
+  );
+};
+
+const computeCadenceRecords = (
+  stream: ActivityStream,
+): Pick<
+  record,
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+>[] => {
+  const { time, latlng, cadence } = stream;
+
+  if (
+    !time ||
+    !latlng ||
+    !cadence ||
+    time.length === 0 ||
+    latlng.length === 0 ||
+    cadence.length === 0
+  ) {
+    return [];
+  }
+
+  return computeDistanceBasedRecords(time, latlng, cadence, 'CADENCE', true);
+};
+
+/**
+ * Compute elevation gain records over specified distances
+ */
+const computeElevationGainRecords = (
+  stream: ActivityStream,
+): Pick<
+  record,
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+>[] => {
+  const { time, latlng, altitude } = stream;
+
+  if (
+    !time ||
+    !latlng ||
+    !altitude ||
+    time.length === 0 ||
+    latlng.length === 0 ||
+    altitude.length === 0
+  ) {
+    return [];
+  }
+
+  // Calculate cumulative distances
+  const cumulativeDistances: number[] = [0];
+  for (let i = 1; i < latlng.length; i++) {
+    const [lat1, lng1] = latlng[i - 1];
+    const [lat2, lng2] = latlng[i];
+    const distance = calculateHaversineDistance(lat1, lng1, lat2, lng2);
+    cumulativeDistances.push(cumulativeDistances[i - 1] + distance);
+  }
+
+  const records: Pick<
+    record,
+    'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+  >[] = [];
+
+  for (const targetDistance of TARGET_DISTANCES) {
+    if (cumulativeDistances[cumulativeDistances.length - 1] < targetDistance) {
+      continue;
+    }
+
+    let maxGain = -Infinity;
+    let bestStart = 0;
+    let bestEnd = 0;
+    let right = 0;
+
+    for (let left = 0; left < cumulativeDistances.length; left++) {
+      while (
+        right < cumulativeDistances.length &&
+        cumulativeDistances[right] - cumulativeDistances[left] < targetDistance
+      ) {
+        right++;
+      }
+
+      if (right < cumulativeDistances.length) {
+        // Calculate elevation gain for this segment
+        let elevGain = 0;
+        for (let i = left + 1; i <= right && i < altitude.length; i++) {
+          const diff = altitude[i] - altitude[i - 1];
+          if (diff > 0) {
+            elevGain += diff;
+          }
+        }
+
+        if (elevGain > maxGain) {
+          maxGain = elevGain;
+          bestStart = time[left];
+          bestEnd = time[right];
+        }
+      }
+    }
+
+    if (maxGain > -Infinity) {
+      records.push({
+        value: maxGain,
+        type: 'ELEVATION_GAIN',
+        distance: targetDistance,
+        start_duration: bestStart,
+        end_duration: bestEnd,
+      });
+    }
+  }
+
+  return records;
+};
+
+/**
+ * Compute elevation loss records over specified distances
+ */
+const computeElevationLossRecords = (
+  stream: ActivityStream,
+): Pick<
+  record,
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+>[] => {
+  const { time, latlng, altitude } = stream;
+
+  if (
+    !time ||
+    !latlng ||
+    !altitude ||
+    time.length === 0 ||
+    latlng.length === 0 ||
+    altitude.length === 0
+  ) {
+    return [];
+  }
+
+  // Calculate cumulative distances
+  const cumulativeDistances: number[] = [0];
+  for (let i = 1; i < latlng.length; i++) {
+    const [lat1, lng1] = latlng[i - 1];
+    const [lat2, lng2] = latlng[i];
+    const distance = calculateHaversineDistance(lat1, lng1, lat2, lng2);
+    cumulativeDistances.push(cumulativeDistances[i - 1] + distance);
+  }
+
+  const records: Pick<
+    record,
+    'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+  >[] = [];
+
+  for (const targetDistance of TARGET_DISTANCES) {
+    if (cumulativeDistances[cumulativeDistances.length - 1] < targetDistance) {
+      continue;
+    }
+
+    let maxLoss = -Infinity;
+    let bestStart = 0;
+    let bestEnd = 0;
+    let right = 0;
+
+    for (let left = 0; left < cumulativeDistances.length; left++) {
+      while (
+        right < cumulativeDistances.length &&
+        cumulativeDistances[right] - cumulativeDistances[left] < targetDistance
+      ) {
+        right++;
+      }
+
+      if (right < cumulativeDistances.length) {
+        // Calculate elevation loss for this segment
+        let elevLoss = 0;
+        for (let i = left + 1; i <= right && i < altitude.length; i++) {
+          const diff = altitude[i - 1] - altitude[i];
+          if (diff > 0) {
+            elevLoss += diff;
+          }
+        }
+
+        if (elevLoss > maxLoss) {
+          maxLoss = elevLoss;
+          bestStart = time[left];
+          bestEnd = time[right];
+        }
+      }
+    }
+
+    if (maxLoss > -Infinity) {
+      records.push({
+        value: maxLoss,
+        type: 'ELEVATION_LOSS',
+        distance: targetDistance,
+        start_duration: bestStart,
+        end_duration: bestEnd,
+      });
+    }
+  }
+
+  return records;
+};
+
+export const computeRecords = (
+  stream: ActivityStream,
+): Pick<
+  record,
+  'distance' | 'value' | 'start_duration' | 'end_duration' | 'type'
+>[] => {
+  const speedRecords = computeSpeedRecords(stream);
+  const powerRecords = computePowerRecords(stream);
+  const heartRateRecords = computeHeartRateRecords(stream);
+  const cadenceRecords = computeCadenceRecords(stream);
+  const elevationGainRecords = computeElevationGainRecords(stream);
+  const elevationLossRecords = computeElevationLossRecords(stream);
+
+  return [
+    ...speedRecords,
+    ...powerRecords,
+    ...heartRateRecords,
+    ...cadenceRecords,
+    ...elevationGainRecords,
+    ...elevationLossRecords,
+  ];
 };
 
 function calculateHaversineDistance(
