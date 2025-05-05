@@ -9,6 +9,7 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 import { useSpaceContext } from '@/contexts/space';
+import { m } from '@/paraglide/messages';
 import { getPath } from '@/routes/paths';
 import { useGetMyCoachedAthletesQuery } from '@/services/athlete';
 import { Calendar, MedalIcon, PieChart } from 'lucide-react';
@@ -24,12 +25,12 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
     () => [
       space === 'COACH'
         ? {
-            title: 'Calendar',
+            title: m.calendar(),
             icon: Calendar,
             spaces: ['ATHLETE', 'COACH'] as UserRole[],
             items: [
               {
-                title: 'My Athletes',
+                title: m.my_athletes(),
                 url: getPath(['dashboard', 'calendar']),
               },
               ...(athletes?.map((athlete) => ({
@@ -40,19 +41,19 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
             ],
           }
         : {
-            title: 'Calendar',
+            title: m.calendar(),
             url: getPath(['dashboard', 'calendar']),
             icon: Calendar,
             spaces: ['ATHLETE', 'COACH'] as UserRole[],
           },
       {
-        title: 'Statistics',
+        title: m.statistics(),
         url: getPath(['dashboard', 'statistics']),
         icon: PieChart,
         spaces: ['ATHLETE'] as UserRole[],
       },
       {
-        title: 'Records',
+        title: m.records(),
         url: getPath(['dashboard', 'records']),
         icon: MedalIcon,
         spaces: ['ATHLETE'] as UserRole[],

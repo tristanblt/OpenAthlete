@@ -1,4 +1,5 @@
 import { useTrainingZones } from '@/hooks/use-training-zones';
+import { m } from '@/paraglide/messages';
 import { useMemo } from 'react';
 import { Line, LineChart, YAxis } from 'recharts';
 
@@ -52,7 +53,7 @@ export function HeartrateChart({ heartrateStream, sport }: P) {
     <ChartContainer
       config={{
         heartrate: {
-          label: 'Heart Rate',
+          label: m.heart_rate(),
         },
       }}
       className="h-[100px] w-full"

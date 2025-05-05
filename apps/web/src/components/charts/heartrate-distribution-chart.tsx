@@ -1,4 +1,5 @@
 import { useTrainingZones } from '@/hooks/use-training-zones';
+import { m } from '@/paraglide/messages';
 import { useMemo } from 'react';
 import { Pie, PieChart } from 'recharts';
 
@@ -48,7 +49,7 @@ export function HeartrateDistributionChart({
     <ChartContainer
       config={{
         heartrate: {
-          label: 'Heart Rate',
+          label: m.heart_rate(),
         },
       }}
       className="h-[300px] w-full"
@@ -64,7 +65,9 @@ export function HeartrateDistributionChart({
                   {name}
                   <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
                     {Math.round(Number(value) * 100)}
-                    <span className="font-normal text-muted-foreground">%</span>
+                    <span className="font-normal text-muted-foreground">
+                      {m.percent_symbol()}
+                    </span>
                   </div>
                   {duration && (
                     <div className="">

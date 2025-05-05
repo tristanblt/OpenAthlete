@@ -102,7 +102,6 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
       });
     } else {
       const newEvent = await duplicateEventMutation.mutateAsync(event.eventId);
-      console.log('newEvent', newEvent);
       if (newEvent) {
         updateEventMutation.mutate({
           eventId: newEvent.eventId,

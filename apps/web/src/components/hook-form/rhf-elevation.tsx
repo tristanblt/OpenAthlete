@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { cn } from '@/utils/shadcn';
 import { ComponentProps, useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -72,7 +73,7 @@ export const RHFElevation = ({
                 )}
               />
               <div className="rounded-l-none rounded-r-md border border-l-0 shadow-xs py-1.25 px-3 text-base">
-                <span className="text-md text-gray-500">m</span>
+                <span className="text-md text-gray-500">{m.meters()}</span>
               </div>
             </div>
           );

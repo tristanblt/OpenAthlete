@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { cn } from '@/utils/shadcn';
 import { ComponentProps, useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -105,12 +106,12 @@ export const RHFDistance = ({
               />
               <Select value={unit} onValueChange={handleUnitChange}>
                 <SelectTrigger className="w-24 rounded-l-none">
-                  <SelectValue placeholder="Unit" />
+                  <SelectValue placeholder={m.unit()} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="m">m</SelectItem>
-                  <SelectItem value="km">km</SelectItem>
-                  <SelectItem value="mi">mi</SelectItem>
+                  <SelectItem value="m">{m.meters()}</SelectItem>
+                  <SelectItem value="km">{m.kilometers()}</SelectItem>
+                  <SelectItem value="mi">{m.miles()}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

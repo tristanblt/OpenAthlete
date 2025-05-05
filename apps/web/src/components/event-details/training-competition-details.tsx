@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import {
   useSetRelatedActivityMutation,
   useUnsetRelatedActivityMutation,
@@ -27,25 +28,25 @@ export function TrainingCompetitionDetails({ event }: P) {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Card className="col-span-1">
         <CardHeader>
-          <CardTitle>Details</CardTitle>
+          <CardTitle>{m.details()}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {event.goalDuration && (
               <DurationStat
-                label="Goal Duration"
+                label={m.goal_duration()}
                 duration={event.goalDuration}
               />
             )}
             {event.goalDistance && (
               <DistanceStat
-                label="Goal Distance"
+                label={m.goal_distance()}
                 distance={event.goalDistance}
               />
             )}
             {event.goalElevationGain && (
               <ElevationStat
-                label="Goal Elevation Gain"
+                label={m.goal_elevation_gain()}
                 elevation={event.goalElevationGain}
               />
             )}
@@ -54,7 +55,7 @@ export function TrainingCompetitionDetails({ event }: P) {
       </Card>
       <Card className="col-span-1">
         <CardHeader>
-          <CardTitle>Related Activity</CardTitle>
+          <CardTitle>{m.related_activity()}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
@@ -104,7 +105,7 @@ export function TrainingCompetitionDetails({ event }: P) {
                   setRelatedActivityMutation.isPending
                 }
               >
-                Remove
+                {m.remove()}
               </Button>
             )}
           </div>
@@ -113,7 +114,7 @@ export function TrainingCompetitionDetails({ event }: P) {
       {event.description && (
         <Card className="col-span-2">
           <CardHeader>
-            <CardTitle>Description</CardTitle>
+            <CardTitle>{m.description()}</CardTitle>
           </CardHeader>
           <CardContent>
             {event.description.split('\n').map((part) => (

@@ -1,3 +1,5 @@
+import { m } from '@/paraglide/messages';
+
 import { NoteEvent } from '@openathlete/shared';
 
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -11,7 +13,7 @@ export function NoteDetails({ event }: P) {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
       <Card className="col-span-1">
         <CardHeader>
-          <CardTitle>Description</CardTitle>
+          <CardTitle>{m.description()}</CardTitle>
         </CardHeader>
         <CardContent>
           {event.description.split('\n').map((part) => (

@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import {
   EventService,
   useCreateEventMutation,
@@ -74,10 +75,10 @@ export function TemplateRow({
                 })
               }
             >
-              Validate
+              {m.validate()}
             </Button>
             <Button onClick={() => setUpdateTemplate(false)} variant="outline">
-              Cancel
+              {m.cancel()}
             </Button>
           </div>
         ) : (
@@ -105,7 +106,7 @@ export function TemplateRow({
       <TableCell className="text-right">
         <div className="flex gap-1 justify-end">
           <Button variant="outline" onClick={onCreate}>
-            Use
+            {m.use()}
           </Button>
           <Button
             variant="outline"
@@ -151,10 +152,10 @@ export function CreateEventFromTemplateDialog({ open, onClose, ...rest }: P) {
   const createEventMutation = useCreateEventMutation({
     onSuccess: () => {
       onClose();
-      toast.success('Event created successfully');
+      toast.success(m.event_created_successfully());
     },
     onError: () => {
-      toast.error('Failed to create event');
+      toast.error(m.failed_to_create_event());
     },
   });
 
@@ -165,16 +166,16 @@ export function CreateEventFromTemplateDialog({ open, onClose, ...rest }: P) {
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Select a template</DialogTitle>
+          <DialogTitle>{m.select_a_template()}</DialogTitle>
         </DialogHeader>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Sport</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead>Distance</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{m.name()}</TableHead>
+              <TableHead>{m.sport()}</TableHead>
+              <TableHead>{m.duration()}</TableHead>
+              <TableHead>{m.distance()}</TableHead>
+              <TableHead className="text-right">{m.actions()}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

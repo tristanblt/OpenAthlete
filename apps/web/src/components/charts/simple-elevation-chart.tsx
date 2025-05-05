@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useMemo } from 'react';
 import { Area, AreaChart } from 'recharts';
 
@@ -17,7 +18,7 @@ interface P {
 
 const chartConfig = {
   altitude: {
-    label: 'Altidude',
+    label: m.altitude(),
     color: 'var(--chart-1)',
   },
 } satisfies ChartConfig;

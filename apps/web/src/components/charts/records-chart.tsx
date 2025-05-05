@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useCallback, useMemo } from 'react';
 import { Line, LineChart, XAxis, YAxis } from 'recharts';
 
@@ -76,42 +77,50 @@ export function RecordsChart({ records }: P) {
         return (
           <>
             {formatSpeed(value)}{' '}
-            <span className="font-normal text-muted-foreground">/ km</span>
+            <span className="font-normal text-muted-foreground">
+              {m.per_km()}
+            </span>
           </>
         );
       case RECORD_TYPE.POWER:
         return (
           <>
             {Math.round(value)}{' '}
-            <span className="font-normal text-muted-foreground">watts</span>
+            <span className="font-normal text-muted-foreground">
+              {m.watts()}
+            </span>
           </>
         );
       case RECORD_TYPE.HEARTRATE:
         return (
           <>
             {Math.round(value)}{' '}
-            <span className="font-normal text-muted-foreground">bpm</span>
+            <span className="font-normal text-muted-foreground">{m.bpm()}</span>
           </>
         );
       case RECORD_TYPE.CADENCE:
         return (
           <>
             {Math.round(value)}{' '}
-            <span className="font-normal text-muted-foreground">rpm</span>
+            <span className="font-normal text-muted-foreground">{m.rpm()}</span>
           </>
         );
       case RECORD_TYPE.ELEVATION_GAIN:
         return (
           <>
             {Math.round(value)}{' '}
-            <span className="font-normal text-muted-foreground">m/hour</span>
+            <span className="font-normal text-muted-foreground">
+              {m.m_per_hour()}
+            </span>
           </>
         );
       case RECORD_TYPE.ELEVATION_LOSS:
         return (
           <>
             {Math.round(value)}{' '}
-            <span className="font-normal text-muted-foreground">m/hour</span>
+            <span className="font-normal text-muted-foreground">
+              {m.m_per_hour()}
+            </span>
           </>
         );
     }
@@ -121,22 +130,22 @@ export function RecordsChart({ records }: P) {
     <ChartContainer
       config={{
         POWER: {
-          label: 'Power',
+          label: m.power(),
         },
         SPEED: {
-          label: 'Speed',
+          label: m.speed(),
         },
         HEARTRATE: {
-          label: 'Heart Rate',
+          label: m.heart_rate(),
         },
         CADENCE: {
-          label: 'Cadence',
+          label: m.cadence(),
         },
         ELEVATION_GAIN: {
-          label: 'Elevation Gain',
+          label: m.elevation_gain(),
         },
         ELEVATION_LOSS: {
-          label: 'Elevation Loss',
+          label: m.elevation_loss(),
         },
       }}
       className="h-[300px] w-full"

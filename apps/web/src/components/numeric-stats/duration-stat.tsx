@@ -1,3 +1,5 @@
+import { m } from '@/paraglide/messages';
+
 import { formatDuration } from '@openathlete/shared';
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -21,7 +23,7 @@ export function DurationStat({ label, duration, movingDuration }: P) {
         <PopoverContent>
           {movingDuration && (
             <div>
-              Moving Time: <b>{formatDuration(movingDuration)}</b>
+              {m.moving_time()}: <b>{formatDuration(movingDuration)}</b>
             </div>
           )}
         </PopoverContent>

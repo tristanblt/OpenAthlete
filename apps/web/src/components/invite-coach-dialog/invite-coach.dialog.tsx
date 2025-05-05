@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useInviteCoachMutation } from '@/services/athlete';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -19,9 +20,7 @@ export function InviteCoachDialog({ open, onClose }: P) {
       onClose();
     },
     onError: () => {
-      toast.error(
-        'Failed to invite coach. Be sure that the email is an existing user.',
-      );
+      toast.error(m.failed_to_invite_coach());
     },
   });
 
@@ -29,20 +28,20 @@ export function InviteCoachDialog({ open, onClose }: P) {
     <Dialog onOpenChange={(o) => !o && onClose()} open={open}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Invite a coach</DialogTitle>
+          <DialogTitle>{m.invite_a_coach()}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-4">
-          <p>To invite a coach, please enter their email address below.</p>
+          <p>{m.invite_coach_instructions()}</p>
           <Input
             type="email"
-            placeholder="Enter coach's email address"
+            placeholder={m.enter_coach_email()}
             className="w-full"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <div className="flex justify-end gap-2">
             <Button variant="outline" size="sm" onClick={onClose}>
-              Cancel
+              {m.cancel()}
             </Button>
             <Button
               size="sm"
@@ -50,7 +49,7 @@ export function InviteCoachDialog({ open, onClose }: P) {
                 inviteCoachMutation.mutate({ email });
               }}
             >
-              Invite
+              {m.invite()}
             </Button>
           </div>
         </div>

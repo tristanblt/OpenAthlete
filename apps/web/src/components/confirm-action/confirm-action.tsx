@@ -1,3 +1,5 @@
+import { m } from '@/paraglide/messages';
+
 import { Button } from '../ui/button';
 import {
   Dialog,
@@ -25,8 +27,8 @@ export function ConfirmAction({
   onConfirm,
   title,
   message,
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  confirmText = m.confirm(),
+  cancelText = m.cancel(),
   isLoading = false,
 }: P) {
   return (

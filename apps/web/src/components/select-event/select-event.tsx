@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useGetMyEventsQuery } from '@/services/event';
 import { cn } from '@/utils/shadcn';
 import { Check, ChevronsUpDown } from 'lucide-react';
@@ -49,7 +50,7 @@ export function SelectEvent({
             ? displayRow
               ? displayRow(currentEvent)
               : currentEvent.name
-            : 'Select event...'}
+            : m.select_event()}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -64,9 +65,9 @@ export function SelectEvent({
               : 0
           }
         >
-          <CommandInput placeholder="Search event..." className="h-9" />
+          <CommandInput placeholder={m.search_event()} className="h-9" />
           <CommandList>
-            <CommandEmpty>No event found.</CommandEmpty>
+            <CommandEmpty>{m.no_event_found()}</CommandEmpty>
             <CommandGroup>
               {events.map((event) => (
                 <CommandItem

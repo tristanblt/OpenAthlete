@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { cn } from '@/utils/shadcn';
 import { ComponentProps, useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -83,7 +84,7 @@ export const RHFDuration = ({
                   )}
                 />
                 <div className="rounded-none border border-l-0 shadow-xs py-1.25 px-3 text-base">
-                  <span className="text-md text-gray-500">hours</span>
+                  <span className="text-md text-gray-500">{m.hours()}</span>
                 </div>
               </div>
               <div className="flex items-center">
@@ -105,7 +106,7 @@ export const RHFDuration = ({
                   )}
                 />
                 <div className="rounded-l-none rounded-r-md border border-l-0 shadow-xs py-1.25 px-3 text-base">
-                  <span className="text-md text-gray-500">mins</span>
+                  <span className="text-md text-gray-500">{m.minutes()}</span>
                 </div>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { CheckCircle2 } from 'lucide-react';
 
 import {
@@ -43,7 +44,10 @@ export function DoneSummary({ events }: P) {
       {!!trainingCompetitions.length && (
         <div className="flex gap-1 items-center">
           <span>
-            {doneTrainingCompetitions.length} / {trainingCompetitions.length}
+            {m.done_summary({
+              done: doneTrainingCompetitions.length,
+              total: trainingCompetitions.length,
+            })}
           </span>
           {doneTrainingCompetitions.length === trainingCompetitions.length && (
             <CheckCircle2 size={14} />

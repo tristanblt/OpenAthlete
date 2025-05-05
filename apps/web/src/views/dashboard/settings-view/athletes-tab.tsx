@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { m } from '@/paraglide/messages';
 import { getPath } from '@/routes/paths';
 import {
   useGetMyCoachedAthletesQuery,
@@ -31,9 +32,9 @@ export function AthletesTab({}: P) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{m.name()}</TableHead>
+            <TableHead>{m.email()}</TableHead>
+            <TableHead className="text-right">{m.actions()}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -54,7 +55,7 @@ export function AthletesTab({}: P) {
                     )
                   }
                 >
-                  View calendar
+                  {m.view_calendar()}
                 </Button>
                 <Button
                   variant="outline"
@@ -63,7 +64,7 @@ export function AthletesTab({}: P) {
                     setDeleteAthleteDialog(athlete.athleteId);
                   }}
                 >
-                  Delete
+                  {m.delete()}
                 </Button>
               </TableCell>
             </TableRow>
@@ -79,8 +80,8 @@ export function AthletesTab({}: P) {
           }
           setDeleteAthleteDialog(null);
         }}
-        title="Delete Athlete"
-        message="Are you sure you want to delete this athlete ?"
+        title={m.delete_athlete()}
+        message={m.confirm_delete_athlete()}
         isLoading={removeAthleteMutation.isPending}
       />
     </>

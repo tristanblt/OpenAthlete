@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import {
   useCreateEventMutation,
   useUpdateEventMutation,
@@ -79,19 +80,19 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
   const createEventMutation = useCreateEventMutation({
     onSuccess: () => {
       onClose();
-      toast.success('Event created successfully');
+      toast.success(m.event_created_successfully());
     },
     onError: () => {
-      toast.error('Failed to create event');
+      toast.error(m.failed_to_create_event());
     },
   });
   const updateEventMutation = useUpdateEventMutation({
     onSuccess: () => {
       onClose();
-      toast.success('Event updated successfully');
+      toast.success(m.event_updated_successfully());
     },
     onError: () => {
-      toast.error('Failed to update event');
+      toast.error(m.failed_to_update_event());
     },
   });
 
@@ -135,7 +136,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
       <DialogContent className="sm:max-w-4xl">
         <DialogHeader>
           <DialogTitle>
-            {edit ? 'Edit' : 'Plan'} a {eventTypeLabelMap[type]}
+            {edit ? m.edit() : m.plan()} {m.a()} {eventTypeLabelMap[type]}
           </DialogTitle>
         </DialogHeader>
         <FormProvider
@@ -146,8 +147,8 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           <RHFTextField
             name="name"
             type="text"
-            placeholder="Morning Run"
-            label="Event Name"
+            placeholder={m.morning_run()}
+            label={m.event_name()}
             required
           />
           {type === EVENT_TYPE.TRAINING ||
@@ -155,9 +156,9 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           type === EVENT_TYPE.ACTIVITY ? (
             <RHFSelect
               name="sport"
-              label="Sport"
+              label={m.sport()}
               required
-              placeholder="Select a sport"
+              placeholder={m.select_a_sport()}
             >
               {Object.values(SPORT_TYPE).map((sport) => (
                 <SelectItem key={sport} value={sport}>
@@ -172,7 +173,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
             <>
               <RHFTimePicker
                 name="startDate"
-                label="Start Time"
+                label={m.start_time()}
                 required
                 onChange={(value) => {
                   if (!value) return;
@@ -188,7 +189,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
               />
               <RHFTimePicker
                 name="endDate"
-                label="End Time"
+                label={m.end_time()}
                 required
                 onChange={(value) => {
                   if (!value) return;
@@ -205,7 +206,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           <div className="col-span-2">
             <RHFTextarea
               name="description"
-              label="Description"
+              label={m.description()}
               className="h-24"
               required={type === EVENT_TYPE.NOTE}
             />
@@ -213,10 +214,10 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           {(type === EVENT_TYPE.TRAINING ||
             type === EVENT_TYPE.COMPETITION) && (
             <>
-              <RHFDistance name="goalDistance" label="Goal Distance" />
+              <RHFDistance name="goalDistance" label={m.goal_distance()} />
               <RHFDuration
                 name="goalDuration"
-                label="Goal Duration"
+                label={m.goal_duration()}
                 onChange={(value) => {
                   const start = new Date(startDateValue);
                   const duration = value || 0;
@@ -227,21 +228,21 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
               />
               {!!goalDistanceValue && !!goalDurationValue && (
                 <div className="text-sm text-gray-500 flex items-center col-span-2">
-                  Pace:{' '}
+                  {m.pace()}:{' '}
                   {formatSpeed(goalDistanceValue / goalDurationValue, 'min/km')}{' '}
-                  /km
+                  {m.per_km()}
                 </div>
               )}
               <RHFElevation
                 name="goalElevationGain"
-                label="Goal Elevation Gain"
+                label={m.goal_elevation_gain()}
               />
-              <RHFRpe name="goalRpe" label="Goal RPE" />
+              <RHFRpe name="goalRpe" label={m.goal_rpe()} />
             </>
           )}
           {type === EVENT_TYPE.ACTIVITY && (
             <div className="col-span-2">
-              <RHFRpe name="rpe" label="RPE" />
+              <RHFRpe name="rpe" label={m.rpe()} />
             </div>
           )}
 
@@ -251,7 +252,7 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
             onClick={onSubmit}
             isLoading={createEventMutation.isPending}
           >
-            {edit ? 'Edit' : 'Create'} the {eventTypeLabelMap[type]}
+            {edit ? m.edit() : m.create()} {m.the()} {eventTypeLabelMap[type]}
           </Button>
         </FormProvider>
       </DialogContent>

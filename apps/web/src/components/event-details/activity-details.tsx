@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useGetEventStreamQuery } from '@/services/event';
 
 import { ActivityEvent } from '@openathlete/shared';
@@ -28,7 +29,7 @@ export function ActivityDetails({ event }: P) {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <Card className="col-span-1">
         <CardHeader>
-          <CardTitle>Statistics</CardTitle>
+          <CardTitle>{m.statistics()}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -46,7 +47,7 @@ export function ActivityDetails({ event }: P) {
         <>
           <Card className="col-span-2">
             <CardHeader>
-              <CardTitle>Pace</CardTitle>
+              <CardTitle>{m.pace()}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <SpeedChart
@@ -61,7 +62,7 @@ export function ActivityDetails({ event }: P) {
         <>
           <Card className="col-span-2">
             <CardHeader>
-              <CardTitle>Power</CardTitle>
+              <CardTitle>{m.power()}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <PowerChart wattsStream={stream.watts} timeStream={stream.time} />
@@ -73,7 +74,7 @@ export function ActivityDetails({ event }: P) {
         <>
           <Card className="col-span-2">
             <CardHeader>
-              <CardTitle>Heart Rate</CardTitle>
+              <CardTitle>{m.heart_rate()}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <HeartrateChart
@@ -84,7 +85,7 @@ export function ActivityDetails({ event }: P) {
           </Card>
           <Card className="col-span-1">
             <CardHeader>
-              <CardTitle>Heart Rate Distribution</CardTitle>
+              <CardTitle>{m.heart_rate_distribution()}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <HeartrateDistributionChart
@@ -100,7 +101,7 @@ export function ActivityDetails({ event }: P) {
         <>
           <Card className="col-span-2">
             <CardHeader>
-              <CardTitle>Records</CardTitle>
+              <CardTitle>{m.records()}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <RecordsChart records={event.records} />

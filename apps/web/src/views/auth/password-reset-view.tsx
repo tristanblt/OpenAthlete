@@ -1,5 +1,6 @@
 import { FormProvider, RHFTextField } from '@/components/hook-form';
 import { Button } from '@/components/ui/button';
+import { m } from '@/paraglide/messages';
 import { getPath } from '@/routes/paths';
 import { usePasswordResetMutation } from '@/services/user';
 import { cn } from '@/utils/shadcn';
@@ -18,10 +19,10 @@ export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
   const passwordResetMutation = usePasswordResetMutation({
     onSuccess: async () => {
       nav(getPath(['auth', 'login']));
-      toast.success('Password updated successfully');
+      toast.success(m.password_updated_successfully());
     },
     onError: () => {
-      toast.error('Error updating password');
+      toast.error(m.error_updating_password());
     },
   });
   const methods = useForm<z.infer<typeof passwordResetSchema>>({
@@ -45,9 +46,9 @@ export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
       className={cn('flex flex-col gap-6', className)}
     >
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Reset your password</h1>
+        <h1 className="text-2xl font-bold">{m.reset_your_password()}</h1>
         <p className="text-muted-foreground text-sm text-balance">
-          Enter your new password and we will update it for you.
+          {m.enter_new_password()}
         </p>
       </div>
       <div className="grid gap-6">
@@ -55,7 +56,7 @@ export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
           <RHFTextField
             name="password"
             type="password"
-            label="New password"
+            label={m.new_password()}
             required
           />
         </div>
@@ -65,7 +66,7 @@ export function PasswordResetView({ className }: React.ComponentProps<'form'>) {
           onClick={onSubmit}
           isLoading={passwordResetMutation.isPending}
         >
-          Update password
+          {m.update_password()}
         </Button>
       </div>
     </FormProvider>

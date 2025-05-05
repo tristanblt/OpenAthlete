@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useGetMyAthleteQuery } from '@/services/athlete';
 import { useMemo } from 'react';
 
@@ -8,36 +9,36 @@ const DEFAULT_TRAINING_ZONES = [
     type: TRAINING_ZONE_TYPE.HEARTRATE,
     values: [
       {
-        name: 'Zone 1',
-        description: 'Recovery',
+        name: m.zone_1(),
+        description: m.recovery(),
         min: 0,
         max: 131,
         color: 'grey',
       },
       {
-        name: 'Zone 2',
-        description: 'Endurance',
+        name: m.zone_2(),
+        description: m.endurance(),
         min: 132,
         max: 142,
         color: 'green',
       },
       {
-        name: 'Zone 3',
-        description: 'Tempo',
+        name: m.zone_3(),
+        description: m.tempo(),
         min: 143,
         max: 152,
         color: 'yellow',
       },
       {
-        name: 'Zone 4',
-        description: 'Threshold',
+        name: m.zone_4(),
+        description: m.threshold(),
         min: 153,
         max: 163,
         color: 'orange',
       },
       {
-        name: 'Zone 5',
-        description: 'VO2 Max',
+        name: m.zone_5(),
+        description: m.vo2_max(),
         min: 164,
         max: 220,
         color: 'red',

@@ -1,6 +1,7 @@
 import { FormProvider, RHFTextField } from '@/components/hook-form';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth';
+import { m } from '@/paraglide/messages';
 import { getPath } from '@/routes/paths';
 import { useLoginMutation } from '@/services/auth';
 import { useCreateAccountMutation } from '@/services/user';
@@ -44,38 +45,38 @@ export function CreateAccountView({ className }: React.ComponentProps<'form'>) {
       className={cn('flex flex-col gap-6', className)}
     >
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Create an account</h1>
+        <h1 className="text-2xl font-bold">{m.create_an_account()}</h1>
         <p className="text-muted-foreground text-sm text-balance">
-          Enter your details below to create an account
+          {m.enter_details_to_create_account()}
         </p>
       </div>
       <div className="grid gap-6">
         <RHFTextField
           name="firstName"
           type="text"
-          placeholder="John"
-          label="First Name"
+          placeholder={m.first_name_placeholder()}
+          label={m.first_name()}
           required
         />
         <RHFTextField
           name="lastName"
           type="text"
-          placeholder="Doe"
-          label="Last Name"
+          placeholder={m.last_name_placeholder()}
+          label={m.last_name()}
           required
         />
         <RHFTextField
           name="email"
           type="email"
-          placeholder="m@example.com"
-          label="Email"
+          placeholder={m.email_placeholder()}
+          label={m.email()}
           required
         />
         <RHFTextField
           name="password"
           type="password"
           required
-          label="Password"
+          label={m.password()}
         />
         <Button
           type="submit"
@@ -83,22 +84,13 @@ export function CreateAccountView({ className }: React.ComponentProps<'form'>) {
           onClick={onSubmit}
           isLoading={createAccountMutation.isPending}
         >
-          Create Account
+          {m.create_account()}
         </Button>
-        {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-          <span className="bg-background text-muted-foreground relative z-10 px-2">
-            Or continue with
-          </span>
-        </div>
-        <Button variant="outline" className="w-full">
-          <StravaIcon />
-          Sign up with Strava
-        </Button> */}
       </div>
       <div className="text-center text-sm">
-        Already have an account?{' '}
+        {m.already_have_account()}{' '}
         <Link to="/auth/login" className="underline underline-offset-4">
-          Login
+          {m.login()}
         </Link>
       </div>
     </FormProvider>

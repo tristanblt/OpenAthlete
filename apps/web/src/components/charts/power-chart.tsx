@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useMemo } from 'react';
 import { Line, LineChart, YAxis } from 'recharts';
 
@@ -34,7 +35,7 @@ export function PowerChart({ wattsStream, timeStream }: P) {
     <ChartContainer
       config={{
         watts: {
-          label: 'Power',
+          label: m.power(),
         },
       }}
       className="h-[100px] w-full"
@@ -57,7 +58,7 @@ export function PowerChart({ wattsStream, timeStream }: P) {
                   <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
                     {Number(value)}{' '}
                     <span className="font-normal text-muted-foreground">
-                      watts
+                      {m.watts()}
                     </span>
                   </div>
                 </div>

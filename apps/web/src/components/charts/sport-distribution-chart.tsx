@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useMemo } from 'react';
 import { Pie, PieChart } from 'recharts';
 
@@ -32,7 +33,7 @@ export function SportDistributionChart({ sports, keyToUse, formatter }: P) {
     <ChartContainer
       config={{
         sport: {
-          label: 'Sport',
+          label: m.sport(),
         },
       }}
       className="h-[300px] w-full"
@@ -48,7 +49,9 @@ export function SportDistributionChart({ sports, keyToUse, formatter }: P) {
                   {name}
                   <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
                     {Math.round((Number(value) / total) * 100)}
-                    <span className="font-normal text-muted-foreground">%</span>
+                    <span className="font-normal text-muted-foreground">
+                      {m.percent_symbol()}
+                    </span>
                   </div>
                   {formatter && <div>{formatter(Number(value))}</div>}
                 </div>

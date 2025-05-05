@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/sidebar';
 import { useUserRoles } from '@/contexts/auth';
 import { useSpaceContext } from '@/contexts/space';
+import { m } from '@/paraglide/messages';
 import { ChevronsUpDown, Medal, Users } from 'lucide-react';
 import * as React from 'react';
 
@@ -33,13 +34,13 @@ export function SpaceSwitcher() {
           case 'ATHLETE':
             return {
               role: 'ATHLETE',
-              name: 'Athlete',
+              name: m.athlete(),
               logo: Medal,
             };
           case 'COACH':
             return {
               role: 'COACH',
-              name: 'Coach',
+              name: m.coach(),
               logo: Users,
             };
         }
@@ -78,7 +79,7 @@ export function SpaceSwitcher() {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-muted-foreground text-xs">
-              Spaces
+              {m.spaces()}
             </DropdownMenuLabel>
             {spaces.map((space, index) => (
               <DropdownMenuItem

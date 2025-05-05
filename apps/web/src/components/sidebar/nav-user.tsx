@@ -21,6 +21,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useAuthContext } from '@/contexts/auth';
+import { m } from '@/paraglide/messages';
 import { getLocale, setLocale } from '@/paraglide/runtime';
 import { getPath } from '@/routes/paths';
 import { getLocaleName } from '@/utils/locales';
@@ -87,12 +88,12 @@ export function NavUser() {
                 onClick={() => navigate(getPath(['dashboard', 'settings']))}
               >
                 <CogIcon />
-                Settings
+                {m.settings()}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Language</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger>{m.language()}</DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
                     {['en', 'fr'].map((lang) => (
@@ -113,7 +114,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => logout()}>
               <LogOut />
-              Log out
+              {m.log_out()}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

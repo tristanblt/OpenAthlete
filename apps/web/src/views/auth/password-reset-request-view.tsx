@@ -1,5 +1,6 @@
 import { FormProvider, RHFTextField } from '@/components/hook-form';
 import { Button } from '@/components/ui/button';
+import { m } from '@/paraglide/messages';
 import { usePasswordResetRequestMutation } from '@/services/user';
 import { cn } from '@/utils/shadcn';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,10 +16,10 @@ export function PasswordResetRequestView({
 }: React.ComponentProps<'form'>) {
   const passwordResetRequestMutation = usePasswordResetRequestMutation({
     onSuccess: async () => {
-      toast.success('Password reset email sent');
+      toast.success(m.password_reset_email_sent());
     },
     onError: () => {
-      toast.error('Error sending password reset email');
+      toast.error(m.error_sending_password_reset_email());
     },
   });
   const methods = useForm<z.infer<typeof passwordResetRequestSchema>>({
@@ -39,10 +40,9 @@ export function PasswordResetRequestView({
       className={cn('flex flex-col gap-6', className)}
     >
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Reset your password</h1>
+        <h1 className="text-2xl font-bold">{m.reset_your_password()}</h1>
         <p className="text-muted-foreground text-sm text-balance">
-          Enter your email address and we will send you a link to reset your
-          password.
+          {m.enter_email_to_reset_password()}
         </p>
       </div>
       <div className="grid gap-6">
@@ -50,8 +50,8 @@ export function PasswordResetRequestView({
           <RHFTextField
             name="email"
             type="email"
-            placeholder="m@example.com"
-            label="Email"
+            placeholder={m.email_placeholder()}
+            label={m.email()}
             required
           />
         </div>
@@ -61,13 +61,13 @@ export function PasswordResetRequestView({
           onClick={onSubmit}
           isLoading={passwordResetRequestMutation.isPending}
         >
-          Send password reset email
+          {m.send_password_reset_email()}
         </Button>
       </div>
       <div className="text-center text-sm">
-        Remembered your password?{' '}
+        {m.remembered_your_password()}{' '}
         <Link to="/auth/login" className="underline underline-offset-4">
-          Log in
+          {m.log_in()}
         </Link>
       </div>
     </FormProvider>

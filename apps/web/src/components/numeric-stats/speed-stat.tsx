@@ -1,3 +1,5 @@
+import { m } from '@/paraglide/messages';
+
 import { formatSpeed } from '@openathlete/shared';
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -14,21 +16,23 @@ export function SpeedStat({ label, speed }: P) {
         <div className="text-sm font-semibold">{label}</div>
         <div>
           {formatSpeed(speed, 'min/km')}{' '}
-          <span className="text-gray-500 text-sm">/ km</span>
+          <span className="text-gray-500 text-sm">{m.per_km()}</span>
         </div>
       </PopoverTrigger>
       <PopoverContent>
         <div>
           {formatSpeed(speed, 'm/s')}{' '}
-          <span className="text-gray-500 text-sm">m/s</span>
+          <span className="text-gray-500 text-sm">{m.meters_per_second()}</span>
         </div>
         <div>
           {formatSpeed(speed, 'km/h')}{' '}
-          <span className="text-gray-500 text-sm">km/h</span>
+          <span className="text-gray-500 text-sm">
+            {m.kilometers_per_hour()}
+          </span>
         </div>
         <div>
           {formatSpeed(speed, 'mph')}{' '}
-          <span className="text-gray-500 text-sm">mph</span>
+          <span className="text-gray-500 text-sm">{m.miles_per_hour()}</span>
         </div>
       </PopoverContent>
     </Popover>

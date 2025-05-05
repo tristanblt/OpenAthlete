@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { useMemo } from 'react';
 import { Line, LineChart, YAxis } from 'recharts';
 
@@ -71,7 +72,7 @@ export function SpeedChart({ latLngStream, timeStream }: P) {
     <ChartContainer
       config={{
         speed: {
-          label: 'Pace',
+          label: m.pace(),
         },
       }}
       className="h-[100px] w-full"
@@ -94,7 +95,7 @@ export function SpeedChart({ latLngStream, timeStream }: P) {
                   <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
                     {formatSpeed(Number(value), 'min/km')}
                     <span className="font-normal text-muted-foreground">
-                      / km
+                      {m.per_km()}
                     </span>
                   </div>
                 </div>

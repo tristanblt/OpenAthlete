@@ -1,3 +1,5 @@
+import { m } from '@/paraglide/messages';
+
 import { ActivityEvent, ActivityStream, SPORT_TYPE } from '@openathlete/shared';
 
 import {
@@ -23,30 +25,30 @@ export function ActivityStatistics({ event, stream }: P) {
   ) {
     return (
       <>
-        <DistanceStat label="Distance" distance={event.distance} />
-        <SpeedStat label="Average Speed" speed={event.averageSpeed} />
+        <DistanceStat label={m.distance()} distance={event.distance} />
+        <SpeedStat label={m.average_speed()} speed={event.averageSpeed} />
         <DurationStat
-          label="Duration"
+          label={m.duration()}
           duration={event.movingTime}
           movingDuration={event.movingTime}
         />
-        <SpeedStat label="Max Speed" speed={event.maxSpeed} />
+        <SpeedStat label={m.max_speed()} speed={event.maxSpeed} />
         <ElevationStat
-          label="Elevation Gain"
+          label={m.elevation_gain()}
           elevation={event.elevationGain}
           altitudeStream={stream?.altitude}
           distanceStream={stream?.distance}
         />
         {event.averageHeartrate && (
           <HeartrateStat
-            label="Average Heart Rate"
+            label={m.average_heart_rate()}
             heartrate={event.averageHeartrate}
             sport={event.sport}
           />
         )}
         {event.maxHeartrate && (
           <HeartrateStat
-            label="Max Heart Rate"
+            label={m.max_heart_rate()}
             heartrate={event.maxHeartrate}
             sport={event.sport}
           />
@@ -56,30 +58,30 @@ export function ActivityStatistics({ event, stream }: P) {
   } else if (event.sport === SPORT_TYPE.CYCLING) {
     return (
       <>
-        <DistanceStat label="Distance" distance={event.distance} />
-        <SpeedStat label="Average Speed" speed={event.averageSpeed} />
+        <DistanceStat label={m.distance()} distance={event.distance} />
+        <SpeedStat label={m.average_speed()} speed={event.averageSpeed} />
         <DurationStat
-          label="Duration"
+          label={m.duration()}
           duration={event.movingTime}
           movingDuration={event.movingTime}
         />
-        <SpeedStat label="Max Speed" speed={event.maxSpeed} />
+        <SpeedStat label={m.max_speed()} speed={event.maxSpeed} />
         <ElevationStat
-          label="Elevation Gain"
+          label={m.elevation_gain()}
           elevation={event.elevationGain}
           altitudeStream={stream?.altitude}
           distanceStream={stream?.distance}
         />
         {event.averageHeartrate && (
           <HeartrateStat
-            label="Average Heart Rate"
+            label={m.average_heart_rate()}
             heartrate={event.averageHeartrate}
             sport={event.sport}
           />
         )}
         {event.maxHeartrate && (
           <HeartrateStat
-            label="Max Heart Rate"
+            label={m.max_heart_rate()}
             heartrate={event.maxHeartrate}
             sport={event.sport}
           />
@@ -89,29 +91,29 @@ export function ActivityStatistics({ event, stream }: P) {
   } else if (event.sport === SPORT_TYPE.HIKING) {
     return (
       <>
-        <DistanceStat label="Distance" distance={event.distance} />
-        <SpeedStat label="Average Speed" speed={event.averageSpeed} />
+        <DistanceStat label={m.distance()} distance={event.distance} />
+        <SpeedStat label={m.average_speed()} speed={event.averageSpeed} />
         <DurationStat
-          label="Duration"
+          label={m.duration()}
           duration={event.movingTime}
           movingDuration={event.movingTime}
         />
         <ElevationStat
-          label="Elevation Gain"
+          label={m.elevation_gain()}
           elevation={event.elevationGain}
           altitudeStream={stream?.altitude}
           distanceStream={stream?.distance}
         />
         {event.averageHeartrate && (
           <HeartrateStat
-            label="Average Heart Rate"
+            label={m.average_heart_rate()}
             heartrate={event.averageHeartrate}
             sport={event.sport}
           />
         )}
         {event.maxHeartrate && (
           <HeartrateStat
-            label="Max Heart Rate"
+            label={m.max_heart_rate()}
             heartrate={event.maxHeartrate}
             sport={event.sport}
           />
@@ -122,7 +124,7 @@ export function ActivityStatistics({ event, stream }: P) {
     return (
       <>
         <DurationStat
-          label="Duration"
+          label={m.duration()}
           duration={event.movingTime}
           movingDuration={event.movingTime}
         />

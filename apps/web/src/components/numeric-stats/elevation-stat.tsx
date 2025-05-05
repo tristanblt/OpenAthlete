@@ -1,3 +1,5 @@
+import { m } from '@/paraglide/messages';
+
 import { ActivityStream } from '@openathlete/shared';
 
 import { SimpleElevationChart } from '../charts/simple-elevation-chart';
@@ -21,7 +23,8 @@ export function ElevationStat({
       <PopoverTrigger className="text-left">
         {label && <div className="text-sm font-semibold">{label}</div>}
         <div>
-          {elevation} <span className="text-gray-500 text-sm">m</span>
+          {elevation}{' '}
+          <span className="text-gray-500 text-sm">{m.meters()}</span>
         </div>
       </PopoverTrigger>
       {altitudeStream && distanceStream && (

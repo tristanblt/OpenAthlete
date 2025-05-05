@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { getDateLocale } from '@/utils/locales';
 import { useState } from 'react';
@@ -79,9 +80,9 @@ export function StatisticsPeriodSelect({ onChange, period, className }: P) {
           }
         >
           <TabsList>
-            <TabsTrigger value="week">Week</TabsTrigger>
-            <TabsTrigger value="month">Month</TabsTrigger>
-            <TabsTrigger value="year">Year</TabsTrigger>
+            <TabsTrigger value="week">{m.week()}</TabsTrigger>
+            <TabsTrigger value="month">{m.month()}</TabsTrigger>
+            <TabsTrigger value="year">{m.year()}</TabsTrigger>
           </TabsList>
         </Tabs>
         <div className="flex gap-2">
@@ -90,7 +91,7 @@ export function StatisticsPeriodSelect({ onChange, period, className }: P) {
             size="sm"
             onClick={() => handleOffset('prev')}
           >
-            Prev
+            {m.prev()}
           </Button>
           <Button
             variant="outline"
@@ -98,7 +99,7 @@ export function StatisticsPeriodSelect({ onChange, period, className }: P) {
             onClick={() => handleOffset('next')}
             disabled={offset >= 0}
           >
-            Next
+            {m.next()}
           </Button>
           <Badge>
             {type === 'week'
