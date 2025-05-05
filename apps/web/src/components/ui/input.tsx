@@ -12,6 +12,26 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
         'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
         className,
       )}
+      onKeyDown={(e) => {
+        if (
+          (type === 'number' || type === 'tel') &&
+          (e.key === 'ArrowUp' || e.key === 'ArrowDown') &&
+          e.shiftKey
+        ) {
+          e.preventDefault();
+          const step = e.key === 'ArrowUp' ? 10 : -10;
+          const currentValue = parseFloat(e.currentTarget.value) || 0;
+          const min = e.currentTarget.min
+            ? parseFloat(e.currentTarget.min)
+            : -Infinity;
+          const max = e.currentTarget.max
+            ? parseFloat(e.currentTarget.max)
+            : Infinity;
+          const newValue = Math.min(max, Math.max(min, currentValue + step));
+          e.currentTarget.value = newValue.toString();
+          e.currentTarget.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }}
       {...props}
     />
   );
