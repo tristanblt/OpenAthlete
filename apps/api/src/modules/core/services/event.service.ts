@@ -80,6 +80,7 @@ export const EVENT_INCLUDES = {
       sport: true,
       provider: true,
       description: true,
+      records: true,
     },
   },
 };
