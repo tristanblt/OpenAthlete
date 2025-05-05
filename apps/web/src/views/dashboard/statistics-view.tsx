@@ -41,56 +41,60 @@ export function StatisticsView({ athleteId }: P) {
             count={statistics?.count || 0}
             className="col-span-2"
           />
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle>Duration for each sport</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <SportDistributionChart
-                sports={statistics.sports}
-                keyToUse="duration"
-                formatter={(value: number) => `${formatDuration(value)}`}
-              />
-            </CardContent>
-          </Card>
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle>Distance for each sport</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <SportDistributionChart
-                sports={statistics.sports}
-                keyToUse="distance"
-                formatter={(value: number) => `${formatDistance(value)} km`}
-              />
-            </CardContent>
-          </Card>
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle>Elevation for each sport</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <SportDistributionChart
-                sports={statistics.sports}
-                keyToUse="elevationGain"
-                formatter={(value: number) => `${value} d+`}
-              />
-            </CardContent>
-          </Card>
-          <Card className="col-span-1">
-            <CardHeader>
-              <CardTitle>Activities for each sport</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <SportDistributionChart
-                sports={statistics.sports}
-                keyToUse="count"
-                formatter={(value: number) =>
-                  `${value} activit${value > 1 ? 'ies' : 'y'}`
-                }
-              />
-            </CardContent>
-          </Card>
+          {statistics.sports.length !== 0 && (
+            <>
+              <Card className="col-span-1">
+                <CardHeader>
+                  <CardTitle>Duration for each sport</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <SportDistributionChart
+                    sports={statistics.sports}
+                    keyToUse="duration"
+                    formatter={(value: number) => `${formatDuration(value)}`}
+                  />
+                </CardContent>
+              </Card>
+              <Card className="col-span-1">
+                <CardHeader>
+                  <CardTitle>Distance for each sport</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <SportDistributionChart
+                    sports={statistics.sports}
+                    keyToUse="distance"
+                    formatter={(value: number) => `${formatDistance(value)} km`}
+                  />
+                </CardContent>
+              </Card>
+              <Card className="col-span-1">
+                <CardHeader>
+                  <CardTitle>Elevation for each sport</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <SportDistributionChart
+                    sports={statistics.sports}
+                    keyToUse="elevationGain"
+                    formatter={(value: number) => `${value} d+`}
+                  />
+                </CardContent>
+              </Card>
+              <Card className="col-span-1">
+                <CardHeader>
+                  <CardTitle>Activities for each sport</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <SportDistributionChart
+                    sports={statistics.sports}
+                    keyToUse="count"
+                    formatter={(value: number) =>
+                      `${value} activit${value > 1 ? 'ies' : 'y'}`
+                    }
+                  />
+                </CardContent>
+              </Card>
+            </>
+          )}
         </>
       )}
       {/* {statistics && (
