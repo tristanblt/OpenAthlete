@@ -1,4 +1,11 @@
-import { Event, eventTypeLabelMap } from '@openathlete/shared';
+import { getConnectorProviderActivityLink } from '@/utils/connector-provider';
+
+import {
+  EVENT_TYPE,
+  Event,
+  connectorProviderLabelMap,
+  eventTypeLabelMap,
+} from '@openathlete/shared';
 
 import { EventDetails } from '../event-details/event-details';
 import { Badge } from '../ui/badge';
@@ -26,6 +33,30 @@ export function CalendarEventDetailsDialog({
             <div className="flex items-center gap-2 grow">
               {event?.name}{' '}
               {event && <Badge>{eventTypeLabelMap[event.type]}</Badge>}
+              {event &&
+                event.type === EVENT_TYPE.ACTIVITY &&
+                event.externalId &&
+                event.provider &&
+                getConnectorProviderActivityLink(
+                  event.provider,
+                  event.externalId,
+                ) && (
+                  <Badge
+                    variant="outline"
+                    className="cursor-pointer hover:underline"
+                    onClick={() => {
+                      const link = getConnectorProviderActivityLink(
+                        event.provider!,
+                        event.externalId,
+                      );
+                      console.log(link);
+                      if (!link) return;
+                      window.open(link, '_blank');
+                    }}
+                  >
+                    Imported from {connectorProviderLabelMap[event.provider]}
+                  </Badge>
+                )}
             </div>
             <div className="flex items-center gap-2 pr-4 -translate-y-4">
               <Button onClick={onEditEvent} variant="outline" size="sm">
