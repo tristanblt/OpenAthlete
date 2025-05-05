@@ -57,7 +57,7 @@ export function RecordsView({}: P) {
           {records && !!records.length && <RecordsChart records={records} />}
           {!records?.length && (
             <h1 className="text-2xl font-semibold">
-              No records found for this sport
+              No records found {!!sport && `for this sport`}
             </h1>
           )}
         </CardContent>
