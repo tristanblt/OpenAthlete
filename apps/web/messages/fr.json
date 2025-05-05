@@ -148,7 +148,7 @@
   "error_sending_password_reset_email": "Erreur lors de l'envoi de l'email de réinitialisation du mot de passe",
   "reset_your_password": "Réinitialisez votre mot de passe",
   "enter_email_to_reset_password": "Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.",
-  "send_password_reset_email": "Envoyer l'email de réinitialisation du mot de passe",
+  "send_password_reset_email": "Envoyer le mail",
   "remembered_your_password": "Vous vous souvenez de votre mot de passe ?",
   "log_in": "Se connecter",
   "password_reset": "Réinitialisation du mot de passe",

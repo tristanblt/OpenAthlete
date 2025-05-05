@@ -251,7 +251,8 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
             onClick={onSubmit}
             isLoading={createEventMutation.isPending}
           >
-            {edit ? m.edit() : m.create()} {m.the()} {eventTypeLabelMap[type]}
+            {edit ? m.edit() : m.create()} {m.the()}
+            {eventTypeLabelMap[type]}
           </Button>
         </FormProvider>
       </DialogContent>
