@@ -188,7 +188,7 @@ export class EventService {
     }
 
     return keysToCamel(
-      this.prisma.event.create({
+      await this.prisma.event.create({
         data: {
           athlete_id: finalAthleteId,
           start_date,
