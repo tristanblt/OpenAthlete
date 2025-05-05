@@ -20,7 +20,6 @@ import {
   SPORT_TYPE,
   formatDistance,
   formatDuration,
-  getActivityDuration,
 } from '@openathlete/shared';
 
 import { ConfirmAction } from '../confirm-action';
@@ -51,7 +50,7 @@ function EventSecondLine({ event }: { event: Event }) {
       return (
         <div className="flex justify-between w-full">
           <div className="text-xs font-medium text-gray-500">
-            {formatDuration(getActivityDuration(event))}
+            {formatDuration(event.movingTime)}
           </div>
           <div className="text-xs font-medium text-gray-500">
             {formatDistance(event.distance, 'km')} km
@@ -62,7 +61,7 @@ function EventSecondLine({ event }: { event: Event }) {
       return (
         <div className="flex justify-between w-full">
           <div className="text-xs font-medium text-gray-500">
-            {formatDuration(getActivityDuration(event))}
+            {formatDuration(event.movingTime)}
           </div>
         </div>
       );

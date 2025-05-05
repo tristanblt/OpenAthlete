@@ -6,7 +6,6 @@ import {
   EVENT_TYPE,
   Event,
   TrainingEvent,
-  getActivityDuration,
 } from '@openathlete/shared';
 
 import { DistanceStat, DurationStat, ElevationStat } from '../numeric-stats';
@@ -21,7 +20,7 @@ export function DoneSummary({ events }: P) {
     (event) => event.type === EVENT_TYPE.ACTIVITY,
   ) as ActivityEvent[];
   const totalDuration = activities.reduce((acc, event) => {
-    const duration = getActivityDuration(event);
+    const duration = event.movingTime;
     return acc + duration;
   }, 0);
   const totalDistance = activities.reduce((acc, event) => {
@@ -107,7 +106,7 @@ export function PlannedDoneSummary({ events }: P) {
   }, 0);
 
   const totalActivitiesDuration = doneActivities.reduce((acc, event) => {
-    const duration = getActivityDuration(event) || 0;
+    const duration = event.movingTime || 0;
     return acc + duration;
   }, 0);
   const totalActivitiesDistance = doneActivities.reduce((acc, event) => {

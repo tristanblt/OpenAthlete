@@ -1,6 +1,6 @@
 import { useGetEventStreamQuery } from '@/services/event';
 
-import { ActivityEvent, getActivityDuration } from '@openathlete/shared';
+import { ActivityEvent } from '@openathlete/shared';
 
 import { HeartrateChart } from '../charts/heartrate-chart';
 import { HeartrateDistributionChart } from '../charts/heartrate-distribution-chart';
@@ -89,7 +89,7 @@ export function ActivityDetails({ event }: P) {
               <HeartrateDistributionChart
                 heartrateStream={stream.heartrate}
                 sport={event.sport}
-                duration={getActivityDuration(event)}
+                duration={event.movingTime}
               />
             </CardContent>
           </Card>

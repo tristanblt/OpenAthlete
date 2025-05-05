@@ -1,9 +1,4 @@
-import {
-  ActivityEvent,
-  ActivityStream,
-  SPORT_TYPE,
-  getActivityDuration,
-} from '@openathlete/shared';
+import { ActivityEvent, ActivityStream, SPORT_TYPE } from '@openathlete/shared';
 
 import {
   DistanceStat,
@@ -32,7 +27,7 @@ export function ActivityStatistics({ event, stream }: P) {
         <SpeedStat label="Average Speed" speed={event.averageSpeed} />
         <DurationStat
           label="Duration"
-          duration={getActivityDuration(event)}
+          duration={event.movingTime}
           movingDuration={event.movingTime}
         />
         <SpeedStat label="Max Speed" speed={event.maxSpeed} />
@@ -65,7 +60,7 @@ export function ActivityStatistics({ event, stream }: P) {
         <SpeedStat label="Average Speed" speed={event.averageSpeed} />
         <DurationStat
           label="Duration"
-          duration={getActivityDuration(event)}
+          duration={event.movingTime}
           movingDuration={event.movingTime}
         />
         <SpeedStat label="Max Speed" speed={event.maxSpeed} />
@@ -98,7 +93,7 @@ export function ActivityStatistics({ event, stream }: P) {
         <SpeedStat label="Average Speed" speed={event.averageSpeed} />
         <DurationStat
           label="Duration"
-          duration={getActivityDuration(event)}
+          duration={event.movingTime}
           movingDuration={event.movingTime}
         />
         <ElevationStat
@@ -128,7 +123,7 @@ export function ActivityStatistics({ event, stream }: P) {
       <>
         <DurationStat
           label="Duration"
-          duration={getActivityDuration(event)}
+          duration={event.movingTime}
           movingDuration={event.movingTime}
         />
       </>
