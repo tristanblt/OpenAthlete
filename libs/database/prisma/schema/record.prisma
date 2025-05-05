@@ -4,10 +4,11 @@ model record {
 
   // fields
   distance       Float // in meters
-  duration       Int // in seconds
   date           DateTime
   start_duration Int? // in seconds
   end_duration   Int? // in seconds
+  type           record_type
+  value          Float // unit depends on type
 
   // relationships
   event_activity    event_activity? @relation(fields: [event_activity_id], references: [event_activity_id])

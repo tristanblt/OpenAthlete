@@ -36,3 +36,12 @@ enum training_zone_type {
 enum token_type {
   PASSWORD_RESET
 }
+
+enum record_type {
+  SPEED
+  HEARTRATE
+  POWER
+  ELEVATION_GAIN
+  ELEVATION_LOSS
+  CADENCE
+}
