@@ -8,6 +8,7 @@ import {
   event_note,
   event_template,
   event_training,
+  record,
   training_zone,
   training_zone_value,
   user,
@@ -31,6 +32,8 @@ export interface User extends ConvertKeysToCamelCase<user> {
 }
 
 export interface Connector extends ConvertKeysToCamelCase<connector> {}
+
+export interface Record extends ConvertKeysToCamelCase<record> {}
 
 export interface Athlete extends ConvertKeysToCamelCase<athlete> {
   user?: User;
@@ -58,6 +61,7 @@ export interface ActivityEvent
   extends ConvertKeysToCamelCase<event & event_activity> {
   type: EVENT_TYPE.ACTIVITY;
   sport: SPORT_TYPE;
+  records?: Record[];
 }
 
 export type Event =

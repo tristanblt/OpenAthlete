@@ -8,3 +8,5 @@ export * from './training-zone-type.label-map';
 export * from './metrics';
 export * from './user-role.label-map';
 export * from './connector-provider.label-map';
+export * from './record-type.enum';
+export * from './record-type.label-map';

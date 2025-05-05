@@ -25,7 +25,8 @@ export const convertSpeed = (
     case 'mph':
       return pace * 2.23694;
     case 'min/km':
-      return pace / 60;
+      // convert meter / seconds to minute / km
+      return (pace * 60) / 1000;
     case 'min/mi':
       return pace / 1609.34;
     default:
