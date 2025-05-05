@@ -1,9 +1,10 @@
+import { m } from '@/paraglide/messages';
 import { LoginView } from '@/views/auth';
 
 export function LoginPage() {
   return (
     <>
-      <title>Login</title>
+      <title>{m.login()}</title>
       <LoginView />
     </>
   );

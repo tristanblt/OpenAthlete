@@ -2,6 +2,7 @@ import { SportDistributionChart } from '@/components/charts/sport-distribution-c
 import { StatisticsGlobals } from '@/components/statistics-globals/statistics-globals';
 import { StatisticsPeriodSelect } from '@/components/statistics-period-select/statistics-period-select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { m } from '@/paraglide/messages';
 import { useGetStatisticsForPeriodQuery } from '@/services/statistics';
 import { useState } from 'react';
 
@@ -45,7 +46,7 @@ export function StatisticsView({ athleteId }: P) {
             <>
               <Card className="col-span-1">
                 <CardHeader>
-                  <CardTitle>Duration for each sport</CardTitle>
+                  <CardTitle>{m.duration_for_each_sport()}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <SportDistributionChart
@@ -57,7 +58,7 @@ export function StatisticsView({ athleteId }: P) {
               </Card>
               <Card className="col-span-1">
                 <CardHeader>
-                  <CardTitle>Distance for each sport</CardTitle>
+                  <CardTitle>{m.distance_for_each_sport()}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <SportDistributionChart
@@ -69,7 +70,7 @@ export function StatisticsView({ athleteId }: P) {
               </Card>
               <Card className="col-span-1">
                 <CardHeader>
-                  <CardTitle>Elevation for each sport</CardTitle>
+                  <CardTitle>{m.elevation_for_each_sport()}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <SportDistributionChart
@@ -81,14 +82,14 @@ export function StatisticsView({ athleteId }: P) {
               </Card>
               <Card className="col-span-1">
                 <CardHeader>
-                  <CardTitle>Activities for each sport</CardTitle>
+                  <CardTitle>{m.activities_for_each_sport()}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <SportDistributionChart
                     sports={statistics.sports}
                     keyToUse="count"
                     formatter={(value: number) =>
-                      `${value} activit${value > 1 ? 'ies' : 'y'}`
+                      `${value} ${value > 1 ? m.activities() : m.activity()}`
                     }
                   />
                 </CardContent>

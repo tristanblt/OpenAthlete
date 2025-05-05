@@ -1,4 +1,5 @@
 import { LoadingScreen } from '@/components/loading-screen';
+import { m } from '@/paraglide/messages';
 import { getPath } from '@/routes/paths';
 import { useSetOAuthTokenMutation } from '@/services/connector';
 import { useEffect } from 'react';
@@ -13,7 +14,7 @@ export function OAuthCallbackPage() {
   const nav = useNavigate();
   const setOAuthTokenMutation = useSetOAuthTokenMutation({
     onSuccess: () => {
-      toast.success('Connected successfully');
+      toast.success(m.connected_successfully());
       nav(getPath(['dashboard', 'settings']));
     },
     onError: (error) => {
@@ -33,9 +34,13 @@ export function OAuthCallbackPage() {
       });
     } else {
       nav(getPath(['dashboard', 'settings']));
-      toast.error('Invalid provider');
+      toast.error(m.invalid_provider());
     }
   }, [provider, searchParams]);
 
-  return <LoadingScreen message={`Importing data from ${provider}`} />;
+  return (
+    <LoadingScreen
+      message={m.importing_data_from_provider({ provider: provider || '' })}
+    />
+  );
 }

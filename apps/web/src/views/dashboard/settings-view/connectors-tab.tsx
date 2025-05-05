@@ -1,6 +1,7 @@
 import { StravaIcon } from '@/assets/icons';
 import { Button } from '@/components/ui/button';
 import { API_BASE_URL } from '@/config';
+import { m } from '@/paraglide/messages';
 import { useGetOAuthUriMutation } from '@/services/connector';
 import { useGetMyIcalCalendarSecretQuery } from '@/services/event';
 
@@ -23,12 +24,12 @@ export function ConnectorsTab({}: P) {
         isLoading={getStravaUriMutation.isPending}
       >
         <StravaIcon />
-        Connect with Strava
+        {m.connect_with_strava()}
       </Button>
       {icalSecret && (
         <>
           <div className="text-sm font-semibold">
-            ICalendar URL (for syncing with other calendars):
+            {m.icalendar_url_description()}
           </div>
           <div className="text-sm text-muted-foreground font-mono p-2 border-1 break-all rounded-sm">
             {`${API_BASE_URL}/event/ical?calendar=${icalSecret}`}

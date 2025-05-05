@@ -1,9 +1,10 @@
+import { m } from '@/paraglide/messages';
 import { DashboardView } from '@/views/dashboard';
 
 export function DashboardPage() {
   return (
     <>
-      <title>Dashboard</title>
+      <title>{m.dashboard()}</title>
       <DashboardView />
     </>
   );

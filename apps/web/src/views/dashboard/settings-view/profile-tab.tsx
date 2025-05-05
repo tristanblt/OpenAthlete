@@ -1,6 +1,7 @@
 import { FormProvider, RHFTextField } from '@/components/hook-form';
 import { Button } from '@/components/ui/button';
 import { useAuthContext } from '@/contexts/auth';
+import { m } from '@/paraglide/messages';
 import { useUpdateAccountMutation } from '@/services/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -15,7 +16,7 @@ export function ProfileTab({}: P) {
   const { user } = useAuthContext();
   const updateAccountMutation = useUpdateAccountMutation({
     onSuccess: async () => {
-      toast.success('Account updated successfully');
+      toast.success(m.account_updated_successfully());
     },
   });
   const methods = useForm<z.infer<typeof updateAccountDtoSchema>>({
@@ -34,21 +35,21 @@ export function ProfileTab({}: P) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <div className="text-muted-foreground text-sm text-balance my-4">
-        Update your profile information below
+        {m.update_profile_information()}
       </div>
       <div className="flex flex-col gap-4 w-fit">
         <RHFTextField
           name="firstName"
           type="text"
-          placeholder="John"
-          label="First Name"
+          placeholder={m.first_name_placeholder()}
+          label={m.first_name()}
           required
         />
         <RHFTextField
           name="lastName"
           type="text"
-          placeholder="Doe"
-          label="Last Name"
+          placeholder={m.last_name_placeholder()}
+          label={m.last_name()}
           required
         />
         <Button
@@ -56,7 +57,7 @@ export function ProfileTab({}: P) {
           className="w-fit"
           isLoading={updateAccountMutation.isPending}
         >
-          Update
+          {m.update()}
         </Button>
       </div>
     </FormProvider>

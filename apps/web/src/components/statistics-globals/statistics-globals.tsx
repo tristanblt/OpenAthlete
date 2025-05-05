@@ -29,7 +29,9 @@ export function StatisticsGlobals({
         </div>
         <div className="text-2xl font-bold">
           {elevationGain}{' '}
-          <span className="text-xl text-gray-500">{m.elevation_gain()}</span>
+          <span className="text-xl text-gray-500">
+            {m.short_elevation_gain()}
+          </span>
         </div>
         <div className="text-2xl font-bold">
           {count}{' '}

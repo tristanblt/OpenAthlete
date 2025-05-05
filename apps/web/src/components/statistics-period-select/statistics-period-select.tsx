@@ -109,7 +109,7 @@ export function StatisticsPeriodSelect({ onChange, period, className }: P) {
                     day: 'numeric',
                     month: 'short',
                   },
-                )} to ${new Date(period.end).toLocaleString(
+                )} ${m.to()} ${new Date(period.end).toLocaleString(
                   getDateLocale(getLocale()),
                   {
                     day: 'numeric',

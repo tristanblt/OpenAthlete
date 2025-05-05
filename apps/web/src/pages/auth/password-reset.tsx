@@ -1,9 +1,10 @@
+import { m } from '@/paraglide/messages';
 import { PasswordResetView } from '@/views/auth/password-reset-view';
 
 export function PasswordResetPage() {
   return (
     <>
-      <title>Password Reset</title>
+      <title>{m.password_reset()}</title>
       <PasswordResetView />
     </>
   );

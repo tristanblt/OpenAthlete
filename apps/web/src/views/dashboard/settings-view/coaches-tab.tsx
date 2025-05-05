@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { m } from '@/paraglide/messages';
 import {
   useGetMyCoachesQuery,
   useRemoveCoachMutation,
@@ -31,9 +32,9 @@ export function CoachesTab({}: P) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{m.name()}</TableHead>
+            <TableHead>{m.email()}</TableHead>
+            <TableHead className="text-right">{m.actions()}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -51,7 +52,7 @@ export function CoachesTab({}: P) {
                     setDeleteEventDialog(coach.userId);
                   }}
                 >
-                  Delete
+                  {m.delete()}
                 </Button>
               </TableCell>
             </TableRow>
@@ -66,7 +67,7 @@ export function CoachesTab({}: P) {
           setInviteCoachDialogOpen(true);
         }}
       >
-        Invite a coach
+        {m.invite_a_coach()}
       </Button>
       <InviteCoachDialog
         open={inviteCoachDialogOpen}
@@ -81,8 +82,8 @@ export function CoachesTab({}: P) {
           }
           setDeleteEventDialog(null);
         }}
-        title="Delete Coach"
-        message="Are you sure you want to delete this coach?"
+        title={m.delete_coach()}
+        message={m.confirm_delete_coach()}
         isLoading={removeCoachMutation.isPending}
       />
     </>

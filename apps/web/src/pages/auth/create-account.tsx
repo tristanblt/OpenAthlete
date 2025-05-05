@@ -1,9 +1,10 @@
+import { m } from '@/paraglide/messages';
 import { CreateAccountView } from '@/views/auth/create-account-view';
 
 export function CreateAccountPage() {
   return (
     <>
-      <title>Login</title>
+      <title>{m.create_account()}</title>
       <CreateAccountView />
     </>
   );

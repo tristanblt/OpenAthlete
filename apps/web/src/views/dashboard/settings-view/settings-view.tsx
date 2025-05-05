@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserRoles } from '@/contexts/auth';
+import { m } from '@/paraglide/messages';
 
 import { AthletesTab } from './athletes-tab';
 import { CoachesTab } from './coaches-tab';
@@ -11,17 +12,17 @@ export function SettingsView() {
   const roles = useUserRoles();
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-semibold">Settings</h1>
+      <h1 className="text-2xl font-semibold">{m.settings()}</h1>
       <Tabs defaultValue="connectors" className="mt-4">
         <TabsList>
-          <TabsTrigger value="connectors">Connectors</TabsTrigger>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="training_zones">Training zones</TabsTrigger>
+          <TabsTrigger value="connectors">{m.connectors()}</TabsTrigger>
+          <TabsTrigger value="profile">{m.profile()}</TabsTrigger>
+          <TabsTrigger value="training_zones">{m.training_zones()}</TabsTrigger>
           {roles?.includes('COACH') && (
-            <TabsTrigger value="athletes">Athletes</TabsTrigger>
+            <TabsTrigger value="athletes">{m.athletes()}</TabsTrigger>
           )}
           {roles?.includes('ATHLETE') && (
-            <TabsTrigger value="coaches">Coaches</TabsTrigger>
+            <TabsTrigger value="coaches">{m.coaches()}</TabsTrigger>
           )}
         </TabsList>
         <TabsContent value="connectors">
