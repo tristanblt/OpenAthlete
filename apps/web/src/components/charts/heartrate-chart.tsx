@@ -57,7 +57,7 @@ export function HeartrateChart({ heartrateStream, sport }: P) {
       }}
       className="h-[100px] w-full"
     >
-      <LineChart data={chartData}>
+      <LineChart data={chartData} syncId="event">
         <YAxis type="number" domain={[minHeartrate, maxHeartrate]} hide />
         <defs>
           <linearGradient id="colorUv" y1="0%" x1="0" y2="100%" x2="0">

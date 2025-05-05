@@ -21,8 +21,6 @@ export function PowerChart({ wattsStream, timeStream }: P) {
     });
   }, [wattsStream, timeStream]);
 
-  console.log('chartData', chartData);
-
   const minPower = useMemo(
     () => Math.min(...chartData.map((data) => data.watts)),
     [chartData],
@@ -41,7 +39,7 @@ export function PowerChart({ wattsStream, timeStream }: P) {
       }}
       className="h-[100px] w-full"
     >
-      <LineChart data={chartData}>
+      <LineChart data={chartData} syncId="event">
         <YAxis type="number" domain={[minPower, maxPower]} hide />
         <Line
           type="monotone"

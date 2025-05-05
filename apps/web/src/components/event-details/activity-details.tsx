@@ -5,6 +5,7 @@ import { ActivityEvent } from '@openathlete/shared';
 import { HeartrateChart } from '../charts/heartrate-chart';
 import { HeartrateDistributionChart } from '../charts/heartrate-distribution-chart';
 import { PowerChart } from '../charts/power-chart';
+import { RecordsChart } from '../charts/records-chart';
 import { SpeedChart } from '../charts/speed-chart';
 import { Map } from '../map/map';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
@@ -91,6 +92,18 @@ export function ActivityDetails({ event }: P) {
                 sport={event.sport}
                 duration={event.movingTime}
               />
+            </CardContent>
+          </Card>
+        </>
+      )}
+      {event.records && (
+        <>
+          <Card className="col-span-2">
+            <CardHeader>
+              <CardTitle>Records</CardTitle>
+            </CardHeader>
+            <CardContent className="p-0">
+              <RecordsChart records={event.records} />
             </CardContent>
           </Card>
         </>

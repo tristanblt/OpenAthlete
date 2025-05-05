@@ -76,7 +76,7 @@ export function SpeedChart({ latLngStream, timeStream }: P) {
       }}
       className="h-[100px] w-full"
     >
-      <LineChart data={chartData}>
+      <LineChart data={chartData} syncId="event">
         <YAxis type="number" domain={[minSpeed, maxSpeed]} hide />
         <Line
           type="monotone"
