@@ -11,6 +11,7 @@ model athlete {
   events         event[]
   connectors     connector[]
   training_zones training_zone[]
+  records        record[]
 
   // timestamps
   created_at DateTime @default(now())

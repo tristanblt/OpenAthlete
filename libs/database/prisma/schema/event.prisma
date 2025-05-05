@@ -101,6 +101,7 @@ model event_activity {
   event_id            Int                @unique
   related_training    event_training?
   related_competition event_competition?
+  records             record[]
 }
 
 model event_template {
