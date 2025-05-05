@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { m } from '@/paraglide/messages';
 import { useGetMyRecordsQuery } from '@/services/record';
 import { useState } from 'react';
 
@@ -31,7 +32,9 @@ export function RecordsView({}: P) {
     <div className="p-8 grid grid-cols-2 gap-4">
       <Card className="col-span-2">
         <CardHeader>
-          <CardTitle>My Records</CardTitle>
+          <CardTitle>
+            My Records {m.example_message({ username: 'abc' })}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Select value={sport} onValueChange={handleChangeSportFilter}>

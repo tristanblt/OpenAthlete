@@ -7,7 +7,11 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -17,7 +21,9 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { useAuthContext } from '@/contexts/auth';
+import { getLocale, setLocale } from '@/paraglide/runtime';
 import { getPath } from '@/routes/paths';
+import { getLocaleName } from '@/utils/locales';
 import { ChevronsUpDown, CogIcon, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -83,6 +89,26 @@ export function NavUser() {
                 <CogIcon />
                 Settings
               </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuGroup>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>Language</DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    {['en', 'de'].map((lang) => (
+                      <DropdownMenuItem
+                        key={lang}
+                        className={getLocale() === lang ? 'font-bold' : ''}
+                        onClick={() => {
+                          setLocale(lang as 'en' | 'de');
+                        }}
+                      >
+                        {getLocaleName(lang)}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => logout()}>
