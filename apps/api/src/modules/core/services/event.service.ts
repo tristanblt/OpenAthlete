@@ -268,6 +268,9 @@ export class EventService {
     await this.prisma.event_activity.deleteMany({
       where: { event_id: eventId },
     });
+    await this.prisma.record.deleteMany({
+      where: { event_activity: { event: { event_id: eventId } } },
+    });
 
     return this.prisma.event.delete({
       where: { event_id: eventId },
