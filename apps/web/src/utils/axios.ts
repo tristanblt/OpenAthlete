@@ -41,6 +41,9 @@ export const routes = {
     delete: (eventTemplateId: Event['eventId']) =>
       `/event-template/${eventTemplateId}`,
   },
+  record: {
+    getMyRecords: '/record',
+  },
   connector: {
     getOAuthUri: (provider: ConnectorProvider) =>
       `/connector/${provider.toLowerCase()}/uri`,

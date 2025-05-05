@@ -48,7 +48,8 @@ export function RecordsChart({ records }: P) {
         ) {
           const duration =
             (record.endDuration || 1) - (record.startDuration || 0);
-          acc[distance][record.type] = record.value / duration;
+          console.log(record);
+          acc[distance][record.type] = record.value / (duration / 3600);
         }
 
         return acc;
@@ -103,14 +104,14 @@ export function RecordsChart({ records }: P) {
         return (
           <>
             {Math.round(value)}{' '}
-            <span className="font-normal text-muted-foreground">m/s</span>
+            <span className="font-normal text-muted-foreground">m/hour</span>
           </>
         );
       case RECORD_TYPE.ELEVATION_LOSS:
         return (
           <>
             {Math.round(value)}{' '}
-            <span className="font-normal text-muted-foreground">m/s</span>
+            <span className="font-normal text-muted-foreground">m/hour</span>
           </>
         );
     }

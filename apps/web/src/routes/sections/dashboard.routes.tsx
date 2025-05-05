@@ -1,6 +1,7 @@
 import { DashboardLayout } from '@/components/layouts';
 import { LoadingScreen } from '@/components/loading-screen';
 import { AuthGuard } from '@/guards';
+import { RecordsPage } from '@/pages/dashboard/records';
 import { SettingsPage } from '@/pages/dashboard/settings';
 import { StatisticsPage } from '@/pages/dashboard/statistics';
 import { Suspense, lazy } from 'react';
@@ -51,6 +52,10 @@ export const dashboardRoutes: RouteObject[] = [
       {
         path: getPath(['dashboard', 'statistics']),
         element: <StatisticsPage />,
+      },
+      {
+        path: getPath(['dashboard', 'records']),
+        element: <RecordsPage />,
       },
       {
         path: getPath(['dashboard', 'settings']),
