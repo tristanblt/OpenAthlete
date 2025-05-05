@@ -3,13 +3,15 @@ model record {
   record_id Int @id @default(autoincrement())
 
   // fields
-  distance Float // in meters
-  duration Int // in seconds
-  date     DateTime
+  distance       Float // in meters
+  duration       Int // in seconds
+  date           DateTime
+  start_duration Int? // in seconds
+  end_duration   Int? // in seconds
 
   // relationships
   event_activity    event_activity? @relation(fields: [event_activity_id], references: [event_activity_id])
-  event_activity_id Int?            @unique
+  event_activity_id Int?
   athlete           athlete         @relation(fields: [athlete_id], references: [athlete_id])
   athlete_id        Int
 
