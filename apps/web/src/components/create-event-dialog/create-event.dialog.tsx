@@ -21,7 +21,6 @@ import {
 import { useCalendarContext } from '../calendar/hooks/use-calendar-context';
 import {
   FormProvider,
-  RHFDateTimePicker,
   RHFDistance,
   RHFDuration,
   RHFSelect,
@@ -30,6 +29,7 @@ import {
 import { RHFElevation } from '../hook-form/rhf-elevation';
 import { RHFRpe } from '../hook-form/rhf-rpe';
 import { RHFTextarea } from '../hook-form/rhf-textarea';
+import { RHFTimePicker } from '../hook-form/rhf-time-picker';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { SelectItem } from '../ui/select';
@@ -170,11 +170,12 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
           )}
           {type !== EVENT_TYPE.ACTIVITY && (
             <>
-              <RHFDateTimePicker
+              <RHFTimePicker
                 name="startDate"
-                label="Start Date"
+                label="Start Time"
                 required
                 onChange={(value) => {
+                  if (!value) return;
                   const start = new Date(value);
                   const end = new Date(start);
                   if (goalDurationValue) {
@@ -185,11 +186,12 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
                   setValue('endDate', end);
                 }}
               />
-              <RHFDateTimePicker
+              <RHFTimePicker
                 name="endDate"
-                label="End Date"
+                label="End Time"
                 required
                 onChange={(value) => {
+                  if (!value) return;
                   const end = new Date(value);
                   const start = new Date(startDateValue);
 
