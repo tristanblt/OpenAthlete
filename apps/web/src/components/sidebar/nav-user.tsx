@@ -95,12 +95,12 @@ export function NavUser() {
                 <DropdownMenuSubTrigger>Language</DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
-                    {['en', 'de'].map((lang) => (
+                    {['en', 'fr'].map((lang) => (
                       <DropdownMenuItem
                         key={lang}
                         className={getLocale() === lang ? 'font-bold' : ''}
                         onClick={() => {
-                          setLocale(lang as 'en' | 'de');
+                          setLocale(lang as 'en' | 'fr');
                         }}
                       >
                         {getLocaleName(lang)}
