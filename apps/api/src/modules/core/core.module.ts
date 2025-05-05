@@ -7,11 +7,13 @@ import { EventController } from './controllers';
 import { AthleteController } from './controllers/athlete.controller';
 import { ConnectorController } from './controllers/connector.controller';
 import { EventTemplateController } from './controllers/event-template.controller';
+import { RecordController } from './controllers/record.controller';
 import { StatisticsController } from './controllers/statistics.controller';
 import { EventService } from './services';
 import { AthleteService } from './services/athlete.service';
 import { StravaConnectorService } from './services/connector/strava.service';
 import { EventTemplateService } from './services/event-template.service';
+import { RecordService } from './services/record.service';
 import { StatisticsService } from './services/statistics.service';
 
 @Module({
@@ -22,6 +24,7 @@ import { StatisticsService } from './services/statistics.service';
     ConnectorController,
     AthleteController,
     StatisticsController,
+    RecordController,
   ],
   providers: [
     EventService,
@@ -30,6 +33,7 @@ import { StatisticsService } from './services/statistics.service';
     AthleteService,
     StatisticsService,
     PrismaService,
+    RecordService,
   ],
   exports: [EventService],
 })
