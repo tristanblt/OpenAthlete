@@ -1,11 +1,9 @@
 import { m } from '@/paraglide/messages';
+import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { useMemo } from 'react';
 import { Pie, PieChart } from 'recharts';
 
-import {
-  GetStatisticsForPeriodDto,
-  sportTypeLabelMap,
-} from '@openathlete/shared';
+import { GetStatisticsForPeriodDto } from '@openathlete/shared';
 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../ui/chart';
 

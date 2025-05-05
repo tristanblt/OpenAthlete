@@ -117,6 +117,9 @@
   "spaces": "Spaces",
   "activities": "activities",
   "activity": "activity",
+  "training": "Training",
+  "competition": "Competition",
+  "note": "Note",
   "zone_1": "Zone 1",
   "zone_2": "Zone 2",
   "zone_3": "Zone 3",
@@ -170,5 +173,13 @@
   "connected_successfully": "Connected successfully",
   "invalid_provider": "Invalid provider",
   "importing_data_from_provider": "Importing data from {provider}",
-  "to": "to"
+  "to": "to",
+  "running": "Running",
+  "cycling": "Cycling",
+  "swimming": "Swimming",
+  "trail_running": "Trail Running",
+  "hiking": "Hiking",
+  "rock_climbing": "Rock Climbing",
+  "other": "Other",
+  "type": "Type"
 }

@@ -16,9 +16,10 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useSpaceContext } from '@/contexts/space';
+import { userRoleLabelMap } from '@/utils/label-map/core';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
 
-import { UserRole, userRoleLabelMap } from '@openathlete/shared';
+import { UserRole } from '@openathlete/shared';
 
 export function NavMain({
   items,

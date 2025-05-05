@@ -1,12 +1,11 @@
 import { m } from '@/paraglide/messages';
 import { getConnectorProviderActivityLink } from '@/utils/connector-provider';
-
 import {
-  EVENT_TYPE,
-  Event,
   connectorProviderLabelMap,
   eventTypeLabelMap,
-} from '@openathlete/shared';
+} from '@/utils/label-map/core';
+
+import { EVENT_TYPE, Event } from '@openathlete/shared';
 
 import { EventDetails } from '../event-details/event-details';
 import { Badge } from '../ui/badge';

@@ -1,14 +1,10 @@
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
+import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { getDateLocale } from '@/utils/locales';
 import { useState } from 'react';
 
-import {
-  EVENT_TYPE,
-  Event,
-  SPORT_TYPE,
-  sportTypeLabelMap,
-} from '@openathlete/shared';
+import { EVENT_TYPE, Event, SPORT_TYPE } from '@openathlete/shared';
 
 import { Button } from '../ui/button';
 import {

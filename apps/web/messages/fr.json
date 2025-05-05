@@ -115,6 +115,9 @@
   "spaces": "Espaces",
   "activities": "activités",
   "activity": "activité",
+  "training": "Entraînement",
+  "competition": "Compétition",
+  "note": "Note",
   "zone_1": "Zone 1",
   "zone_2": "Zone 2",
   "zone_3": "Zone 3",
@@ -172,5 +175,13 @@
   "average_speed": "Vitesse moyenne",
   "max_speed": "Vitesse maximale",
   "average_heart_rate": "Fréquence cardiaque moyenne",
-  "max_heart_rate": "Fréquence cardiaque maximale"
+  "max_heart_rate": "Fréquence cardiaque maximale",
+  "running": "Course à pied",
+  "cycling": "Cyclisme",
+  "swimming": "Natation",
+  "trail_running": "Course en sentier",
+  "hiking": "Randonnée",
+  "rock_climbing": "Escalade",
+  "other": "Autre",
+  "type": "Type"
 }

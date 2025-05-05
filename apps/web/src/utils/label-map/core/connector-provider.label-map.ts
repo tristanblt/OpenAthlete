@@ -1,4 +1,4 @@
-import { ConnectorProvider } from '../../../entities';
+import { ConnectorProvider } from '@openathlete/shared';
 
 export const connectorProviderLabelMap: Record<ConnectorProvider, string> = {
   STRAVA: 'Strava',

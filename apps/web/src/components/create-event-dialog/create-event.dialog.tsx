@@ -3,6 +3,7 @@ import {
   useCreateEventMutation,
   useUpdateEventMutation,
 } from '@/services/event';
+import { eventTypeLabelMap, sportTypeLabelMap } from '@/utils/label-map/core';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,9 +15,7 @@ import {
   Event,
   SPORT_TYPE,
   createEventDtoSchema,
-  eventTypeLabelMap,
   formatSpeed,
-  sportTypeLabelMap,
 } from '@openathlete/shared';
 
 import { useCalendarContext } from '../calendar/hooks/use-calendar-context';

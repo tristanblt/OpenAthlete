@@ -8,6 +8,7 @@ import {
   useDeleteEventTemplateMutation,
   useGetMyEventTemplatesQuery,
 } from '@/services/event-template';
+import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { Edit, Trash } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -17,7 +18,6 @@ import {
   EventTemplate,
   formatDistance,
   formatDuration,
-  sportTypeLabelMap,
 } from '@openathlete/shared';
 
 import { useCalendarContext } from '../calendar/hooks/use-calendar-context';

@@ -1,4 +1,5 @@
 import { m } from '@/paraglide/messages';
+import { recordTypeLabelMap } from '@/utils/label-map/core';
 import { useCallback, useMemo } from 'react';
 import { Line, LineChart, XAxis, YAxis } from 'recharts';
 
@@ -6,7 +7,6 @@ import {
   RECORD_TYPE,
   Record as RecordType,
   formatSpeed,
-  recordTypeLabelMap,
 } from '@openathlete/shared';
 
 import {

@@ -1,3 +1,5 @@
+import { m } from '@/paraglide/messages';
+
 export enum COLORED_BY {
   TYPE = 'TYPE',
   SPORT = 'SPORT',
@@ -5,7 +7,7 @@ export enum COLORED_BY {
 }
 
 export const coloredByLabelMap: Record<COLORED_BY, string> = {
-  [COLORED_BY.TYPE]: 'Type',
-  [COLORED_BY.SPORT]: 'Sport',
-  [COLORED_BY.RPE]: 'RPE',
+  [COLORED_BY.TYPE]: m.type(),
+  [COLORED_BY.SPORT]: m.sport(),
+  [COLORED_BY.RPE]: m.rpe(),
 };

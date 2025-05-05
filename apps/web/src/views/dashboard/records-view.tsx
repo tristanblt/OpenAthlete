@@ -9,9 +9,10 @@ import {
 } from '@/components/ui/select';
 import { m } from '@/paraglide/messages';
 import { useGetMyRecordsQuery } from '@/services/record';
+import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { useState } from 'react';
 
-import { SPORT_TYPE, sportTypeLabelMap } from '@openathlete/shared';
+import { SPORT_TYPE } from '@openathlete/shared';
 
 interface P {}
 
