@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { getConnectorProviderActivityLink } from '@/utils/connector-provider';
 
 import {
@@ -54,13 +55,15 @@ export function CalendarEventDetailsDialog({
                       window.open(link, '_blank');
                     }}
                   >
-                    Imported from {connectorProviderLabelMap[event.provider]}
+                    {m.imported_from({
+                      provider: connectorProviderLabelMap[event.provider],
+                    })}
                   </Badge>
                 )}
             </div>
             <div className="flex items-center gap-2 pr-4 -translate-y-4">
               <Button onClick={onEditEvent} variant="outline" size="sm">
-                Edit
+                {m.edit()}
               </Button>
             </div>
           </DialogTitle>

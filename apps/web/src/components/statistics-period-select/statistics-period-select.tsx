@@ -1,3 +1,5 @@
+import { getLocale } from '@/paraglide/runtime';
+import { getDateLocale } from '@/utils/locales';
 import { useState } from 'react';
 
 import {
@@ -100,17 +102,26 @@ export function StatisticsPeriodSelect({ onChange, period, className }: P) {
           </Button>
           <Badge>
             {type === 'week'
-              ? `${new Date(period.start).toLocaleString('en-US', {
-                  day: 'numeric',
-                  month: 'short',
-                })} to ${new Date(period.end).toLocaleString('en-US', {
-                  day: 'numeric',
-                  month: 'short',
-                })}`
+              ? `${new Date(period.start).toLocaleString(
+                  getDateLocale(getLocale()),
+                  {
+                    day: 'numeric',
+                    month: 'short',
+                  },
+                )} to ${new Date(period.end).toLocaleString(
+                  getDateLocale(getLocale()),
+                  {
+                    day: 'numeric',
+                    month: 'short',
+                  },
+                )}`
               : type === 'month'
-                ? `${new Date(period.start).toLocaleString('en-US', {
-                    month: 'long',
-                  })} ${new Date(period.start).getFullYear()}`
+                ? `${new Date(period.start).toLocaleString(
+                    getDateLocale(getLocale()),
+                    {
+                      month: 'long',
+                    },
+                  )} ${new Date(period.start).getFullYear()}`
                 : `${new Date(period.start).getFullYear()}`}
           </Badge>
         </div>

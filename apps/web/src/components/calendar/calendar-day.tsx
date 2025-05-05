@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import { cn } from '@/utils/shadcn';
 import { useDroppable } from '@dnd-kit/core';
 
@@ -61,21 +62,21 @@ export function CalendarDay({ day, events }: P) {
         {allowCreate && (
           <ContextMenuContent className="w-64">
             <ContextMenuItem onClick={() => createEventFromTemplate(day)}>
-              Set a template
+              {m.set_a_template()}
             </ContextMenuItem>
             <ContextMenuSeparator />
             <ContextMenuItem
               onClick={() => createEvent(day, EVENT_TYPE.TRAINING)}
             >
-              Plan a training
+              {m.plan_a_training()}
             </ContextMenuItem>
             <ContextMenuItem
               onClick={() => createEvent(day, EVENT_TYPE.COMPETITION)}
             >
-              Plan a competition
+              {m.plan_a_competition()}
             </ContextMenuItem>
             <ContextMenuItem onClick={() => createEvent(day, EVENT_TYPE.NOTE)}>
-              Plan a note
+              {m.plan_a_note()}
             </ContextMenuItem>
           </ContextMenuContent>
         )}

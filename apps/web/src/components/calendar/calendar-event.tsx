@@ -1,3 +1,4 @@
+import { m } from '@/paraglide/messages';
 import {
   useDeleteEventMutation,
   useDuplicateEventMutation,
@@ -202,7 +203,7 @@ export function CalendarEvent({ event, wrapped }: P) {
               e.stopPropagation();
             }}
           >
-            Edit
+            {m.edit()}
           </ContextMenuItem>
           {event.type === EVENT_TYPE.TRAINING && (
             <ContextMenuItem
@@ -213,7 +214,7 @@ export function CalendarEvent({ event, wrapped }: P) {
                 e.stopPropagation();
               }}
             >
-              Save as template
+              {m.save_as_template()}
             </ContextMenuItem>
           )}
           {event.type !== EVENT_TYPE.ACTIVITY && (
@@ -223,7 +224,7 @@ export function CalendarEvent({ event, wrapped }: P) {
                 e.stopPropagation();
               }}
             >
-              Duplicate
+              {m.duplicate()}
             </ContextMenuItem>
           )}
           <ContextMenuItem
@@ -232,7 +233,7 @@ export function CalendarEvent({ event, wrapped }: P) {
               e.stopPropagation();
             }}
           >
-            Delete
+            {m.delete()}
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
@@ -243,8 +244,8 @@ export function CalendarEvent({ event, wrapped }: P) {
           deleteEventMutation.mutate(event.eventId);
           setDeleteEventDialog(false);
         }}
-        title="Delete Event"
-        message="Are you sure you want to delete this event?"
+        title={m.delete_event()}
+        message={m.confirm_delete_event()}
         isLoading={deleteEventMutation.isPending}
       />
     </>

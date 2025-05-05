@@ -1,3 +1,7 @@
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+import { getDateLocale } from '@/utils/locales';
+
 import { EVENT_TYPE, endOfDay, startOfDay } from '@openathlete/shared';
 
 import {
@@ -25,7 +29,9 @@ export function CalendarBody({}: P) {
             key={i}
             className="h-8 flex justify-center items-center text-sm font-semibold [&:not(:last-child)]:border-r-1"
           >
-            {new Date(day).toLocaleString('en-US', { weekday: 'short' })}
+            {new Date(day).toLocaleString(getDateLocale(getLocale()), {
+              weekday: 'short',
+            })}
           </div>
         ))}
         <div className="h-8 [&:not(:last-child)]:border-r-1">
@@ -37,9 +43,9 @@ export function CalendarBody({}: P) {
               <SelectValue className="font-bold" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="planned-done">Planned + Done</SelectItem>
-              <SelectItem value="planned">Planned</SelectItem>
-              <SelectItem value="done">Done</SelectItem>
+              <SelectItem value="planned-done">{m.planned_done()}</SelectItem>
+              <SelectItem value="planned">{m.planned()}</SelectItem>
+              <SelectItem value="done">{m.done()}</SelectItem>
             </SelectContent>
           </Select>
         </div>

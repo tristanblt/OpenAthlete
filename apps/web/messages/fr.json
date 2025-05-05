@@ -1,4 +1,25 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Guten Tag {username}"
+  "my_records": "Mes records",
+  "all_sports": "Tous les sports",
+  "no_records_found": "Aucun record trouvé {sport}",
+  "for_this_sport": "pour ce sport",
+  "planned_done": "Planifié + Réalisé",
+  "planned": "Planifié",
+  "done": "Réalisé",
+  "set_a_template": "Placer un modèle",
+  "plan_a_training": "Planifier un entraînement",
+  "plan_a_competition": "Planifier une compétition",
+  "plan_a_note": "Planifier une note",
+  "imported_from": "Importé depuis {provider}",
+  "edit": "Modifier",
+  "save_as_template": "Enregistrer comme modèle",
+  "duplicate": "Dupliquer",
+  "delete": "Supprimer",
+  "delete_event": "Supprimer l'événement",
+  "confirm_delete_event": "Êtes-vous sûr de vouloir supprimer cet événement ?",
+  "calendar_of": "Calendrier de {month}",
+  "colored_by": "Coloré par",
+  "prev": "Précédent",
+  "next": "Suivant"
 }

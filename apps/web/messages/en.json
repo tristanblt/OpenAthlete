@@ -1,4 +1,25 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
-  "example_message": "Hello world {username}"
+  "my_records": "My records",
+  "all_sports": "All Sports",
+  "no_records_found": "No records found {sport}",
+  "for_this_sport": "for this sport",
+  "planned_done": "Planned + Done",
+  "planned": "Planned",
+  "done": "Done",
+  "set_a_template": "Set a template",
+  "plan_a_training": "Plan a training",
+  "plan_a_competition": "Plan a competition",
+  "plan_a_note": "Plan a note",
+  "imported_from": "Imported from {provider}",
+  "edit": "Edit",
+  "save_as_template": "Save as template",
+  "duplicate": "Duplicate",
+  "delete": "Delete",
+  "delete_event": "Delete Event",
+  "confirm_delete_event": "Are you sure you want to delete this event?",
+  "calendar_of": "Calendar of {month}",
+  "colored_by": "Colored by",
+  "prev": "Prev",
+  "next": "Next"
 }

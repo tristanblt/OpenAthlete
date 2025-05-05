@@ -1,3 +1,6 @@
+import { m } from '@/paraglide/messages';
+import { getLocale } from '@/paraglide/runtime';
+import { getDateLocale } from '@/utils/locales';
 import { useState } from 'react';
 
 import {
@@ -44,14 +47,17 @@ export function CalendarHeader({}: P) {
     }
   };
 
-  const displayedMonthString = displayedMonth.toLocaleString('en-US', {
-    month: 'long',
-    year: 'numeric',
-  });
+  const displayedMonthString = displayedMonth.toLocaleString(
+    getDateLocale(getLocale()),
+    {
+      month: 'long',
+      year: 'numeric',
+    },
+  );
   return (
     <div className="flex justify-between">
       <h1 className="text-2xl font-semibold">
-        Calendar of {displayedMonthString}
+        {m.calendar_of({ month: displayedMonthString })}
       </h1>
       <div className="flex gap-2">
         <Select
@@ -61,10 +67,10 @@ export function CalendarHeader({}: P) {
           }
         >
           <SelectTrigger>
-            <SelectValue placeholder="Colored by" />
+            <SelectValue placeholder={m.colored_by()} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={null!}>Colored by</SelectItem>
+            <SelectItem value={null!}>{m.colored_by()}</SelectItem>
             {Object.values(COLORED_BY).map((colorProfile) => (
               <SelectItem key={colorProfile} value={colorProfile}>
                 {coloredByLabelMap[colorProfile]}
@@ -74,10 +80,10 @@ export function CalendarHeader({}: P) {
         </Select>
         <Select value={sportFilter} onValueChange={handleChangeSportFilter}>
           <SelectTrigger>
-            <SelectValue placeholder="All Sports" />
+            <SelectValue placeholder={m.all_sports()} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value={null!}>All Sports</SelectItem>
+            <SelectItem value={null!}>{m.all_sports()}</SelectItem>
             {Object.values(SPORT_TYPE).map((sportType) => (
               <SelectItem key={sportType} value={sportType}>
                 {sportTypeLabelMap[sportType]}
@@ -85,8 +91,8 @@ export function CalendarHeader({}: P) {
             ))}
           </SelectContent>
         </Select>
-        <Button onClick={() => prevMonth()}>Prev</Button>
-        <Button onClick={() => nextMonth()}>Next</Button>
+        <Button onClick={() => prevMonth()}>{m.prev()}</Button>
+        <Button onClick={() => nextMonth()}>{m.next()}</Button>
       </div>
     </div>
   );

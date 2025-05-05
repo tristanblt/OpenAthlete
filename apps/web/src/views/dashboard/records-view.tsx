@@ -32,17 +32,15 @@ export function RecordsView({}: P) {
     <div className="p-8 grid grid-cols-2 gap-4">
       <Card className="col-span-2">
         <CardHeader>
-          <CardTitle>
-            My Records {m.example_message({ username: 'abc' })}
-          </CardTitle>
+          <CardTitle>{m.my_records()}</CardTitle>
         </CardHeader>
         <CardContent>
           <Select value={sport} onValueChange={handleChangeSportFilter}>
             <SelectTrigger>
-              <SelectValue placeholder="All Sports" />
+              <SelectValue placeholder={m.all_sports()} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value={null!}>All Sports</SelectItem>
+              <SelectItem value={null!}>{m.all_sports()}</SelectItem>
               {Object.values(SPORT_TYPE).map((sportType) => (
                 <SelectItem key={sportType} value={sportType}>
                   {sportTypeLabelMap[sportType]}
@@ -57,7 +55,7 @@ export function RecordsView({}: P) {
           {records && !!records.length && <RecordsChart records={records} />}
           {!records?.length && (
             <h1 className="text-2xl font-semibold">
-              No records found {!!sport && `for this sport`}
+              {m.no_records_found({ sport: !!sport ? m.for_this_sport() : '' })}
             </h1>
           )}
         </CardContent>
