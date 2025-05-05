@@ -40,14 +40,14 @@ export function SpeedChart({ latLngStream, timeStream }: P) {
       };
     });
 
-    // Remove outliers
-    // An outlier is defined as a point that is more than 3 times the speed of the previous and next point
     return rawData.map((data, i) => {
       if (
         i > 0 &&
         i < rawData.length - 1 &&
-        data.speed > rawData[i - 1].speed * 3 &&
-        data.speed > rawData[i + 1].speed * 3
+        ((data.speed > rawData[i - 1].speed * 2 &&
+          data.speed > rawData[i + 1].speed * 2) ||
+          (data.speed < rawData[i - 1].speed / 2 &&
+            data.speed < rawData[i + 1].speed / 2))
       ) {
         return {
           ...data,
