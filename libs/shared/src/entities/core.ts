@@ -1,5 +1,6 @@
 import {
   athlete,
+  connector,
   connector_provider,
   event,
   event_activity,
@@ -28,6 +29,8 @@ export interface User extends ConvertKeysToCamelCase<user> {
   roles: UserRole[];
   athlete?: Athlete;
 }
+
+export interface Connector extends ConvertKeysToCamelCase<connector> {}
 
 export interface Athlete extends ConvertKeysToCamelCase<athlete> {
   user?: User;
