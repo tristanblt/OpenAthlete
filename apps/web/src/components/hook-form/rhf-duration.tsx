@@ -90,6 +90,7 @@ export const RHFDuration = ({
                 <Input
                   type="number"
                   min={0}
+                  max={59}
                   value={minutesInput}
                   onChange={(event) => {
                     const newMinutesInput = event.target.value;
