@@ -1,8 +1,12 @@
 import { useCalendarData } from '@/components/calendar/hooks/use-calendar-data';
-import { useUpdateEventMutation } from '@/services/event';
+import {
+  useDuplicateEventMutation,
+  useUpdateEventMutation,
+} from '@/services/event';
 import {
   DndContext,
   DragEndEvent,
+  KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -46,6 +50,7 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
   );
   const [coloredBy, setColoredBy] = useState<COLORED_BY | null>(null);
   const updateEventMutation = useUpdateEventMutation();
+  const duplicateEventMutation = useDuplicateEventMutation();
 
   const memoizedValue = useMemo<CalendarContextType>(
     () => ({
@@ -70,12 +75,14 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
     [calendarData.displayedMonth, calendarData.events, filter],
   );
 
-  const dndOnDragEnd = (e: DragEndEvent) => {
+  const dndOnDragEnd = async (e: DragEndEvent) => {
     if (!e.over?.id) return;
+    const altKey = (e.activatorEvent as PointerEvent).altKey;
     const day = new Date(e.over?.id);
     const eventId = Number(e.active.id);
     const event = events?.find((evt) => evt.eventId === eventId);
     if (!event) return;
+
     const startDate = event.startDate;
     const endDate = event.endDate;
     startDate.setDate(day.getDate());
@@ -84,13 +91,28 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
     endDate.setDate(day.getDate());
     endDate.setMonth(day.getMonth());
     endDate.setFullYear(day.getFullYear());
-    updateEventMutation.mutate({
-      eventId: event.eventId,
-      body: {
-        startDate,
-        endDate,
-      },
-    });
+
+    if (!altKey) {
+      updateEventMutation.mutate({
+        eventId: event.eventId,
+        body: {
+          startDate,
+          endDate,
+        },
+      });
+    } else {
+      const newEvent = await duplicateEventMutation.mutateAsync(event.eventId);
+      console.log('newEvent', newEvent);
+      if (newEvent) {
+        updateEventMutation.mutate({
+          eventId: newEvent.eventId,
+          body: {
+            startDate,
+            endDate,
+          },
+        });
+      }
+    }
   };
 
   const sensors = useSensors(
@@ -99,6 +121,7 @@ export function Calendar({ events, athleteId, allowCreate = true }: P) {
         distance: 8,
       },
     }),
+    useSensor(KeyboardSensor),
   );
 
   return (
