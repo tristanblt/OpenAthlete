@@ -10,6 +10,7 @@ import {
   event,
   event_activity,
   event_type,
+  user,
 } from '@openathlete/database';
 import { ActivityStream, ApiEnvSchemaType } from '@openathlete/shared';
 
@@ -17,6 +18,7 @@ import { AuthUser } from 'src/modules/auth/decorators/user.decorator';
 import { PrismaService } from 'src/modules/prisma/services/prisma.service';
 
 import { compressActivityStream } from '../../helpers/activity-stream';
+import { computeRecords } from '../../helpers/record';
 import { mapStravaSportType } from '../../helpers/strava';
 import { StravaSummaryActivity } from '../../types/connector';
 
@@ -79,12 +81,22 @@ export class StravaConnectorService {
         });
         await this.fetchInitialStravaData(connector);
       } else {
-        await this.prisma.connector.update({
+        const connector = await this.prisma.connector.update({
           where: { connector_id: exist.connector_id },
           data: {
             external_user_id: Number(data.athlete.id).toString(),
           },
+          include: {
+            athlete: {
+              select: {
+                user_id: true,
+              },
+            },
+          },
         });
+        if (this.configService.get('NODE_ENV') === 'development') {
+          await this.fetchInitialStravaData(connector);
+        }
       }
     } catch (error) {
       if (isAxiosError(error)) console.error(error.response?.data);
@@ -115,6 +127,7 @@ export class StravaConnectorService {
     accessToken: string,
     event: event,
     activity: StravaSummaryActivity,
+    user_id: user['user_id'],
   ): Promise<event_activity> {
     const { data } = await axios.get(
       `https://www.strava.com/api/v3/activities/${activity.id}/streams`,
@@ -134,9 +147,11 @@ export class StravaConnectorService {
       mergedData[stream.type] = stream.data;
     }
 
+    const records = computeRecords(mergedData);
+
     const compressedActivityStream = compressActivityStream(mergedData);
 
-    return this.prisma.event_activity.create({
+    const savedActivity = await this.prisma.event_activity.create({
       data: {
         provider: connector_provider.STRAVA,
         distance: activity.distance,
@@ -161,6 +176,34 @@ export class StravaConnectorService {
         },
       },
     });
+
+    if (records.length > 0) {
+      const athlete = await this.prisma.athlete.findFirst({
+        where: {
+          user: {
+            user_id,
+          },
+        },
+        select: {
+          athlete_id: true,
+        },
+      });
+
+      if (!athlete) {
+        throw new InternalServerErrorException('Athlete not found');
+      }
+
+      await this.prisma.record.createMany({
+        data: records.map((record) => ({
+          ...record,
+          date: event.start_date,
+          event_activity_id: savedActivity.event_activity_id,
+          athlete_id: athlete.athlete_id,
+        })),
+      });
+    }
+
+    return savedActivity;
   }
 
   async fetchInitialStravaData(
@@ -213,7 +256,12 @@ export class StravaConnectorService {
           },
         });
 
-        await this.fetchStravaActivityData(accessToken, event, activity);
+        await this.fetchStravaActivityData(
+          accessToken,
+          event,
+          activity,
+          connector.athlete.user_id,
+        );
 
         // break; // TODO: Remove this break
       }
