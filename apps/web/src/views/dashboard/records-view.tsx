@@ -1,15 +1,8 @@
 import { RecordsChart } from '@/components/charts/records-chart';
+import { SportSelect } from '@/components/sport-select/sport-select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { m } from '@/paraglide/messages';
 import { useGetMyRecordsQuery } from '@/services/record';
-import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { useState } from 'react';
 
 import { SPORT_TYPE } from '@openathlete/shared';
@@ -17,7 +10,7 @@ import { SPORT_TYPE } from '@openathlete/shared';
 interface P {}
 
 export function RecordsView({}: P) {
-  const [sport, setSport] = useState<SPORT_TYPE | ''>('');
+  const [sport, setSport] = useState<SPORT_TYPE | null>(null);
   const { data: records, refetch } = useGetMyRecordsQuery(
     sport || (undefined as SPORT_TYPE | undefined),
   );
@@ -36,19 +29,7 @@ export function RecordsView({}: P) {
           <CardTitle>{m.my_records()}</CardTitle>
         </CardHeader>
         <CardContent>
-          <Select value={sport} onValueChange={handleChangeSportFilter}>
-            <SelectTrigger>
-              <SelectValue placeholder={m.all_sports()} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={null!}>{m.all_sports()}</SelectItem>
-              {Object.values(SPORT_TYPE).map((sportType) => (
-                <SelectItem key={sportType} value={sportType}>
-                  {sportTypeLabelMap[sportType]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <SportSelect selected={sport} onChange={handleChangeSportFilter} />
         </CardContent>
       </Card>
       <Card className="col-span-2">

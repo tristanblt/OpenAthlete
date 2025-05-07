@@ -1,12 +1,12 @@
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
-import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { getDateLocale } from '@/utils/locales';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
 import { EVENT_TYPE, Event, SPORT_TYPE } from '@openathlete/shared';
 
+import { SportSelect } from '../sport-select/sport-select';
 import { Button } from '../ui/button';
 import {
   Select,
@@ -29,7 +29,7 @@ export function CalendarHeader({}: P) {
     coloredBy,
     setColoredBy,
   } = useCalendarContext();
-  const [sportFilter, setSportFilter] = useState<SPORT_TYPE | ''>('');
+  const [sportFilter, setSportFilter] = useState<SPORT_TYPE | null>(null);
 
   const handleChangeSportFilter = (value: string | null) => {
     setSportFilter(value as SPORT_TYPE);
@@ -75,19 +75,10 @@ export function CalendarHeader({}: P) {
             ))}
           </SelectContent>
         </Select>
-        <Select value={sportFilter} onValueChange={handleChangeSportFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder={m.all_sports()} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={null!}>{m.all_sports()}</SelectItem>
-            {Object.values(SPORT_TYPE).map((sportType) => (
-              <SelectItem key={sportType} value={sportType}>
-                {sportTypeLabelMap[sportType]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <SportSelect
+          selected={sportFilter}
+          onChange={(sport) => handleChangeSportFilter(sport)}
+        />
         <Button size="icon" onClick={() => prevMonth()}>
           <ChevronLeft />
         </Button>
