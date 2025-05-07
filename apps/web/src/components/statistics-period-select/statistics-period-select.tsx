@@ -1,6 +1,7 @@
 import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { getDateLocale } from '@/utils/locales';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
 import {
@@ -88,18 +89,18 @@ export function StatisticsPeriodSelect({ onChange, period, className }: P) {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handleOffset('prev')}
           >
-            {m.prev()}
+            <ChevronLeft />
           </Button>
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => handleOffset('next')}
             disabled={offset >= 0}
           >
-            {m.next()}
+            <ChevronRight />
           </Button>
           <Badge>
             {type === 'week'

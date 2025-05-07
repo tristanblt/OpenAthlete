@@ -2,6 +2,7 @@ import { m } from '@/paraglide/messages';
 import { getLocale } from '@/paraglide/runtime';
 import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { getDateLocale } from '@/utils/locales';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
 import { EVENT_TYPE, Event, SPORT_TYPE } from '@openathlete/shared';
@@ -87,8 +88,12 @@ export function CalendarHeader({}: P) {
             ))}
           </SelectContent>
         </Select>
-        <Button onClick={() => prevMonth()}>{m.prev()}</Button>
-        <Button onClick={() => nextMonth()}>{m.next()}</Button>
+        <Button size="icon" onClick={() => prevMonth()}>
+          <ChevronLeft />
+        </Button>
+        <Button onClick={() => nextMonth()} size="icon">
+          <ChevronRight />
+        </Button>
       </div>
     </div>
   );
