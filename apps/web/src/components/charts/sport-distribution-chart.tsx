@@ -3,8 +3,9 @@ import { sportTypeLabelMap } from '@/utils/label-map/core';
 import { useMemo } from 'react';
 import { Pie, PieChart } from 'recharts';
 
-import { GetStatisticsForPeriodDto } from '@openathlete/shared';
+import { GetStatisticsForPeriodDto, SPORT_TYPE } from '@openathlete/shared';
 
+import { SportIcon } from '../sport-icon/sport-icon';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../ui/chart';
 
 interface P {
@@ -18,6 +19,7 @@ export function SportDistributionChart({ sports, keyToUse, formatter }: P) {
     return sports.map((sport, i) => ({
       fill: `var(--chart-${(i % 5) + 1})`,
       value: sport[keyToUse],
+      sport: sport.sport,
       name: sportTypeLabelMap[sport.sport],
     }));
   }, [sports, keyToUse]);
@@ -42,8 +44,11 @@ export function SportDistributionChart({ sports, keyToUse, formatter }: P) {
           content={
             <ChartTooltipContent
               hideLabel
-              formatter={(value, name) => (
+              formatter={(value, name, _, __, payload) => (
                 <div className="flex min-w-[130px] items-center text-xs text-muted-foreground gap-2">
+                  <SportIcon
+                    sport={(payload as unknown as { sport: SPORT_TYPE }).sport}
+                  />
                   {name}
                   <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
                     {Math.round((Number(value) / total) * 100)}
