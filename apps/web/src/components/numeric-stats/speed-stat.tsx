@@ -1,22 +1,25 @@
 import { m } from '@/paraglide/messages';
 
-import { formatSpeed } from '@openathlete/shared';
+import { SpeedUnit, formatSpeed, formatSpeedUnit } from '@openathlete/shared';
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 interface P {
   label: string;
   speed: number;
+  unit?: SpeedUnit;
 }
 
-export function SpeedStat({ label, speed }: P) {
+export function SpeedStat({ label, speed, unit }: P) {
   return (
     <Popover>
       <PopoverTrigger className="text-left">
         <div className="text-sm font-semibold">{label}</div>
         <div>
-          {formatSpeed(speed, 'min/km')}{' '}
-          <span className="text-gray-500 text-sm">{m.per_km()}</span>
+          {formatSpeed(speed, unit)}{' '}
+          <span className="text-gray-500 text-sm">
+            {unit ? formatSpeedUnit(unit) : '/ km'}
+          </span>
         </div>
       </PopoverTrigger>
       <PopoverContent>

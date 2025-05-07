@@ -59,13 +59,17 @@ export function ActivityStatistics({ event, stream }: P) {
     return (
       <>
         <DistanceStat label={m.distance()} distance={event.distance} />
-        <SpeedStat label={m.average_speed()} speed={event.averageSpeed} />
+        <SpeedStat
+          label={m.average_speed()}
+          speed={event.averageSpeed}
+          unit="km/h"
+        />
         <DurationStat
           label={m.duration()}
           duration={event.movingTime}
           movingDuration={event.movingTime}
         />
-        <SpeedStat label={m.max_speed()} speed={event.maxSpeed} />
+        <SpeedStat label={m.max_speed()} speed={event.maxSpeed} unit="km/h" />
         <ElevationStat
           label={m.elevation_gain()}
           elevation={event.elevationGain}

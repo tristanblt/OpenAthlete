@@ -97,7 +97,7 @@ export function ActivityDetails({ event }: P) {
           </Card>
         </>
       )}
-      {event.records && (
+      {event.records && !!event.records.length && (
         <>
           <Card className="col-span-2">
             <CardHeader>
