@@ -8,6 +8,7 @@ import {
 import { EVENT_TYPE, Event } from '@openathlete/shared';
 
 import { EventDetails } from '../event-details/event-details';
+import { SportIcon } from '../sport-icon/sport-icon';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
@@ -31,6 +32,9 @@ export function CalendarEventDetailsDialog({
         <DialogHeader>
           <DialogTitle className="flex items-start justify-center gap-2">
             <div className="flex items-center gap-2 grow">
+              {event?.type !== EVENT_TYPE.NOTE && event?.sport && (
+                <SportIcon sport={event.sport} />
+              )}
               {event?.name}{' '}
               {event && <Badge>{eventTypeLabelMap[event.type]}</Badge>}
               {event &&
