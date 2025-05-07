@@ -18,6 +18,7 @@ import {
 import { useSpaceContext } from '@/contexts/space';
 import { userRoleLabelMap } from '@/utils/label-map/core';
 import { ChevronRight, type LucideIcon } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 import { UserRole } from '@openathlete/shared';
 
@@ -37,6 +38,7 @@ export function NavMain({
   }[];
 }) {
   const { space } = useSpaceContext();
+  const { pathname } = useLocation();
 
   return (
     <SidebarGroup>
@@ -54,7 +56,10 @@ export function NavMain({
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
+                    <SidebarMenuButton
+                      tooltip={item.title}
+                      className={item.isActive ? 'active-class' : ''}
+                    >
                       {item.icon && <item.icon />}
                       <span>{item.title}</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -65,7 +70,12 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <a
+                              href={subItem.url}
+                              className={
+                                pathname === subItem.url ? 'font-bold' : ''
+                              }
+                            >
                               <span>{subItem.title}</span>
                             </a>
                           </SidebarMenuSubButton>
@@ -78,7 +88,12 @@ export function NavMain({
             ) : (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url} className="flex items-center gap-2">
+                  <a
+                    href={item.url}
+                    className={`flex items-center gap-2 ${
+                      pathname === item.url ? 'font-bold' : ''
+                    }`}
+                  >
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>
                   </a>
