@@ -1,5 +1,6 @@
 import { m } from '@/paraglide/messages';
 import { recordTypeLabelMap } from '@/utils/label-map/core';
+import { cn } from '@/utils/shadcn';
 import { useCallback, useMemo } from 'react';
 import { Line, LineChart, XAxis, YAxis } from 'recharts';
 
@@ -19,9 +20,10 @@ import {
 
 interface P {
   records: RecordType[];
+  className?: string;
 }
 
-export function RecordsChart({ records }: P) {
+export function RecordsChart({ records, className }: P) {
   const chartData = useMemo(() => {
     const groupedByDistance = records.reduce(
       (acc, record) => {
@@ -148,7 +150,7 @@ export function RecordsChart({ records }: P) {
           label: m.elevation_loss(),
         },
       }}
-      className="h-[300px] w-full"
+      className={cn('h-[300px] w-full', className)}
     >
       <LineChart data={chartData}>
         <YAxis yAxisId="POWER" hide domain={['dataMin', 'dataMax']} />

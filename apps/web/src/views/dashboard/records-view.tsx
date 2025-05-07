@@ -53,7 +53,9 @@ export function RecordsView({}: P) {
       </Card>
       <Card className="col-span-2">
         <CardContent>
-          {records && !!records.length && <RecordsChart records={records} />}
+          {records && !!records.length && (
+            <RecordsChart records={records} className="h-[500px]" />
+          )}
           {!records?.length && (
             <h1 className="text-2xl font-semibold">
               {m.no_records_found({ sport: !!sport ? m.for_this_sport() : '' })}
