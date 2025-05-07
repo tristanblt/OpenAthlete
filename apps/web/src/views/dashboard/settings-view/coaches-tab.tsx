@@ -52,7 +52,7 @@ export function CoachesTab({}: P) {
                     setDeleteEventDialog(coach.userId);
                   }}
                 >
-                  {m.delete()}
+                  {m.delete_()}
                 </Button>
               </TableCell>
             </TableRow>

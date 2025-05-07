@@ -16,7 +16,7 @@
   "edit": "Edit",
   "save_as_template": "Save as template",
   "duplicate": "Duplicate",
-  "delete": "Delete",
+  "delete_": "Delete",
   "delete_event": "Delete Event",
   "confirm_delete_event": "Are you sure you want to delete this event?",
   "calendar_of": "Calendar of {month}",

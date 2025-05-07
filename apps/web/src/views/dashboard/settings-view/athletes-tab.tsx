@@ -64,7 +64,7 @@ export function AthletesTab({}: P) {
                     setDeleteAthleteDialog(athlete.athleteId);
                   }}
                 >
-                  {m.delete()}
+                  {m.delete_()}
                 </Button>
               </TableCell>
             </TableRow>

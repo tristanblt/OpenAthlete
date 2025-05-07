@@ -233,7 +233,7 @@ export function CalendarEvent({ event, wrapped }: P) {
               e.stopPropagation();
             }}
           >
-            {m.delete()}
+            {m.delete_()}
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
