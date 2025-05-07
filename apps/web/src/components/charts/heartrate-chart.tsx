@@ -1,6 +1,6 @@
 import { useTrainingZones } from '@/hooks/use-training-zones';
 import { m } from '@/paraglide/messages';
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { Line, LineChart, YAxis } from 'recharts';
 
 import {
@@ -63,10 +63,10 @@ export function HeartrateChart({ heartrateStream, sport }: P) {
         <defs>
           <linearGradient id="colorUv" y1="0%" x1="0" y2="100%" x2="0">
             {percentagesHeartrate.map((zone, i) => (
-              <>
-                <stop key={i} offset={zone.max} stopColor={zone.color} />
-                <stop key={i + 100} offset={zone.min} stopColor={zone.color} />
-              </>
+              <Fragment key={i}>
+                <stop offset={zone.max} stopColor={zone.color} />
+                <stop offset={zone.min} stopColor={zone.color} />
+              </Fragment>
             ))}
           </linearGradient>
         </defs>
