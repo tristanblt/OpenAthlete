@@ -5,3 +5,4 @@ export { RHFSelect } from './rhf-select';
 export { RHFTextarea } from './rhf-textarea';
 export { RHFDuration } from './rhf-duration';
 export { RHFDistance } from './rhf-distance';
+export { RHFCheckbox } from './rhf-checkbox';
