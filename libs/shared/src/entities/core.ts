@@ -2,6 +2,7 @@ import {
   athlete,
   connector,
   connector_provider,
+  equipment,
   event,
   event_activity,
   event_competition,
@@ -15,7 +16,7 @@ import {
   user_role,
 } from '@openathlete/database';
 
-import { EVENT_TYPE, SPORT_TYPE } from '../types/misc';
+import { EQUIPMENT_TYPE, EVENT_TYPE, SPORT_TYPE } from '../types/misc';
 import { ConvertKeysToCamelCase } from '../utils/data.mapper';
 
 export type UserRole = ConvertKeysToCamelCase<user_role>;
@@ -34,6 +35,11 @@ export interface User extends ConvertKeysToCamelCase<user> {
 export interface Connector extends ConvertKeysToCamelCase<connector> {}
 
 export interface Record extends ConvertKeysToCamelCase<record> {}
+
+export interface Equipment extends ConvertKeysToCamelCase<equipment> {
+  type: EQUIPMENT_TYPE;
+  sports: SPORT_TYPE[];
+}
 
 export interface Athlete extends ConvertKeysToCamelCase<athlete> {
   user?: User;
