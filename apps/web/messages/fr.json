@@ -183,5 +183,18 @@
   "hiking": "Randonnée",
   "rock_climbing": "Escalade",
   "other": "Autre",
-  "type": "Type"
+  "type": "Type",
+  "select_type": "Sélectionnez un type",
+  "shoe": "Chaussure",
+  "bike": "Vélo",
+  "sports": "Sports",
+  "default_equipment": "Équipement par défaut",
+  "equipment": "Équipement",
+  "add_equipment": "Ajouter un équipement",
+  "edit_equipment": "Modifier un équipement",
+  "no_equipment": "Aucun équipement",
+  "total_distance": "Distance totale",
+  "settings_description": "Gérez les paramètres et préférences de votre compte",
+  "equipment_name": "Nom de l'équipement",
+  "required": "Ce champ est requis"
 }

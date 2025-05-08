@@ -181,5 +181,18 @@
   "hiking": "Hiking",
   "rock_climbing": "Rock Climbing",
   "other": "Other",
-  "type": "Type"
+  "type": "Type",
+  "select_type": "Select type",
+  "shoe": "Shoe",
+  "bike": "Bike",
+  "sports": "Sports",
+  "default_equipment": "Default equipment",
+  "equipment": "Equipment",
+  "no_equipment": "No equipment",
+  "add_equipment": "Add equipment",
+  "edit_equipment": "Edit equipment",
+  "total_distance": "Total distance",
+  "settings_description": "Manage your account settings and preferences",
+  "equipment_name": "Equipment name",
+  "required": "This field is required"
 }
