@@ -81,6 +81,14 @@ export const EVENT_INCLUDES = {
       provider: true,
       description: true,
       records: true,
+      equipment_id: true,
+      equipment: {
+        select: {
+          equipment_id: true,
+          name: true,
+          type: true,
+        },
+      },
     },
   },
 };
