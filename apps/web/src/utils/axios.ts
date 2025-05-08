@@ -44,6 +44,12 @@ export const routes = {
   record: {
     getMyRecords: '/record',
   },
+  equipment: {
+    getMyEquipment: '/equipment',
+    createEquipment: '/equipment',
+    updateEquipment: (equipmentId: number) => `/equipment/${equipmentId}`,
+    deleteEquipment: (equipmentId: number) => `/equipment/${equipmentId}`,
+  },
   connector: {
     getOAuthUri: (provider: ConnectorProvider) =>
       `/connector/${provider.toLowerCase()}/uri`,
