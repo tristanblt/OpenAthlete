@@ -1,8 +1,5 @@
 import { m } from '@/paraglide/messages';
 import { useGetMyEquipmentQuery } from '@/services/equipment';
-import { sportTypeLabelMap } from '@/utils/label-map/core';
-
-import { EQUIPMENT_TYPE } from '@openathlete/shared';
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
