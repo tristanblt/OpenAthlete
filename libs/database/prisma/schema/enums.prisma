@@ -45,3 +45,8 @@ enum record_type {
   ELEVATION_LOSS
   CADENCE
 }
+
+enum equipment_type {
+  SHOE
+  BIKE
+}

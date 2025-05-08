@@ -102,6 +102,8 @@ model event_activity {
   related_training    event_training?
   related_competition event_competition?
   records             record[]
+  equipment           equipment?         @relation(fields: [equipment_id], references: [equipment_id])
+  equipment_id        Int?
 }
 
 model event_template {
