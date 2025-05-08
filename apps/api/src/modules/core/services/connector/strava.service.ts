@@ -151,6 +151,33 @@ export class StravaConnectorService {
 
     const compressedActivityStream = compressActivityStream(mergedData);
 
+    const sport = mapStravaSportType(activity.sport_type);
+
+    const athlete = await this.prisma.athlete.findFirst({
+      where: {
+        user: {
+          user_id,
+        },
+      },
+      select: {
+        athlete_id: true,
+      },
+    });
+
+    if (!athlete) {
+      throw new InternalServerErrorException('Athlete not found');
+    }
+
+    const defaultEquipment = await this.prisma.equipment.findFirst({
+      where: {
+        athlete_id: athlete.athlete_id,
+        sports: {
+          has: sport,
+        },
+        is_default: true,
+      },
+    });
+
     const savedActivity = await this.prisma.event_activity.create({
       data: {
         provider: connector_provider.STRAVA,
@@ -166,7 +193,7 @@ export class StravaConnectorService {
         average_heartrate: activity.average_heartrate,
         max_heartrate: activity.max_heartrate,
         kilojoules: activity.kilojoules,
-        sport: mapStravaSportType(activity.sport_type),
+        sport,
         stream: compressedActivityStream as object,
         external_id: activity.id.toString(),
         event: {
@@ -174,25 +201,30 @@ export class StravaConnectorService {
             event_id: event.event_id,
           },
         },
+        equipment: defaultEquipment
+          ? {
+              connect: {
+                equipment_id: defaultEquipment.equipment_id,
+              },
+            }
+          : undefined,
       },
     });
 
-    if (records.length > 0) {
-      const athlete = await this.prisma.athlete.findFirst({
+    if (defaultEquipment) {
+      await this.prisma.equipment.update({
         where: {
-          user: {
-            user_id,
+          equipment_id: defaultEquipment.equipment_id,
+        },
+        data: {
+          total_distance: {
+            increment: activity.distance,
           },
         },
-        select: {
-          athlete_id: true,
-        },
       });
+    }
 
-      if (!athlete) {
-        throw new InternalServerErrorException('Athlete not found');
-      }
-
+    if (records.length > 0) {
       await this.prisma.record.createMany({
         data: records.map((record) => ({
           ...record,
