@@ -21,6 +21,7 @@
     "@hookform/resolvers": "^4.1.3",
     "@openathlete/shared": "workspace:*",
     "@radix-ui/react-avatar": "^1.1.3",
+    "@radix-ui/react-checkbox": "^1.3.1",
     "@radix-ui/react-collapsible": "^1.1.3",
     "@radix-ui/react-context-menu": "^2.2.6",
     "@radix-ui/react-dialog": "^1.1.6",
@@ -60,6 +61,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
+    "@inlang/cli": "^3.0.0",
+    "@inlang/paraglide-js": "2.0.12",
     "@openathlete/eslint-config": "workspace:*",
     "@openathlete/prettier-config": "workspace:*",
     "@types/jsonwebtoken": "^9.0.9",
@@ -74,8 +77,6 @@
     "globals": "^15.15.0",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0",
-    "@inlang/paraglide-js": "2.0.12",
-    "@inlang/cli": "^3.0.0"
+    "vite": "^6.2.0"
   }
 }
