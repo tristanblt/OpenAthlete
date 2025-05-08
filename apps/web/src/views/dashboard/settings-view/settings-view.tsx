@@ -5,6 +5,7 @@ import { m } from '@/paraglide/messages';
 import { AthletesTab } from './athletes-tab';
 import { CoachesTab } from './coaches-tab';
 import { ConnectorsTab } from './connectors-tab';
+import { EquipmentTab } from './equipment-tab';
 import { ProfileTab } from './profile-tab';
 import { TrainingZonesTab } from './training-zones-tab';
 
@@ -17,6 +18,7 @@ export function SettingsView() {
         <TabsList>
           <TabsTrigger value="connectors">{m.connectors()}</TabsTrigger>
           <TabsTrigger value="profile">{m.profile()}</TabsTrigger>
+          <TabsTrigger value="equipment">{m.equipment()}</TabsTrigger>
           <TabsTrigger value="training_zones">{m.training_zones()}</TabsTrigger>
           {roles?.includes('COACH') && (
             <TabsTrigger value="athletes">{m.athletes()}</TabsTrigger>
@@ -30,6 +32,9 @@ export function SettingsView() {
         </TabsContent>
         <TabsContent value="profile">
           <ProfileTab />
+        </TabsContent>
+        <TabsContent value="equipment">
+          <EquipmentTab />
         </TabsContent>
         <TabsContent value="training_zones">
           <TrainingZonesTab />
