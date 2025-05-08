@@ -68,6 +68,7 @@ export interface ActivityEvent
   type: EVENT_TYPE.ACTIVITY;
   sport: SPORT_TYPE;
   records?: Record[];
+  equipment?: Equipment;
 }
 
 export type Event =
