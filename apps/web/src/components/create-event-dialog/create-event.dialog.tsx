@@ -229,7 +229,9 @@ export function CreateEventDialog({ open, onClose, ...rest }: P) {
                 <div className="text-sm text-gray-500 flex items-center col-span-2">
                   {m.pace()}:{' '}
                   {formatSpeed(goalDistanceValue / goalDurationValue, 'min/km')}{' '}
-                  {m.per_km()}
+                  {m.per_km()} -{' '}
+                  {formatSpeed(goalDistanceValue / goalDurationValue, 'km/h')}{' '}
+                  {m.kilometers_per_hour()}
                 </div>
               )}
               <RHFElevation
