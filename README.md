@@ -14,8 +14,7 @@ Self-host it. Extend it. Contribute to it. Or just use it to become your stronge
 
 ✅ Integrations (only Strava for the moment)  
 ✅ Workout tracking and progress visualization  
-✅ Community-contributed training logic and insights  
-✅ Fully self-hostable with simple deployment  
+✅ Fully self-hostable
 ✅ Respectful of your data and privacy
 
 > 🧠 *Everything we build is open and transparent — and you’re invited to help shape it.*
@@ -29,8 +28,7 @@ OpenAthlete is just getting started. Here’s what’s coming next:
 - 🧩 Modular training logic (custom goals, coach import)
 - 📈 Intuitive dashboards & data visualizations
 - 🔗 More integrations (Garmin, Suunto, Wahoo…)
-- 📅 Weekly and monthly training views
-- 🔐 User privacy and data export features
+- 📅 Weekly training view
 
 👉 See the [full roadmap here](https://github.com/tristanblt/openathlete/projects)
 
