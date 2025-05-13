@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -42,7 +43,7 @@ export class EquipmentController {
   }
 
   @UseGuards(AuthGuard('jwt'), UserTypeGuard)
-  @Put(':id')
+  @Patch(':id')
   updateEquipment(
     @JwtUser() user: AuthUser,
     @Param('id', ParseIntPipe) id: number,

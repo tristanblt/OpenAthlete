@@ -24,7 +24,7 @@ export class EquipmentService {
     id: number;
     body: UpdateEquipmentDto;
   }): Promise<Equipment> {
-    const res = await client.put(routes.equipment.updateEquipment(id), body);
+    const res = await client.patch(routes.equipment.updateEquipment(id), body);
     return res.data;
   }
 
