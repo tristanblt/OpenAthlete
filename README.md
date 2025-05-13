@@ -8,7 +8,9 @@ Self-host it. Extend it. Contribute to it. Or just use it to become your stronge
 
 🌐 https://openathlete.org
 
----
+
+![OpenAthlete showcase](/doc/imgs/openathlete-showcase.png)
+
 
 ## ✨ Features
 
