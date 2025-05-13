@@ -1,3 +1,6 @@
+
+![OpenAthlete showcase](/doc/imgs/openathlete-showcase.png)
+
 # OpenAthlete
 
 **OpenAthlete** is an **open-source training platform** for athletes.  
@@ -7,9 +10,6 @@ Built by the community, for the community.
 Self-host it. Extend it. Contribute to it. Or just use it to become your strongest self.
 
 🌐 https://openathlete.org
-
-
-![OpenAthlete showcase](/doc/imgs/openathlete-showcase.png)
 
 
 ## ✨ Features
