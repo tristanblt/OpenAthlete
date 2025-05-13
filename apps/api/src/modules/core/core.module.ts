@@ -10,6 +10,7 @@ import { EquipmentController } from './controllers/equipment.controller';
 import { EventTemplateController } from './controllers/event-template.controller';
 import { RecordController } from './controllers/record.controller';
 import { StatisticsController } from './controllers/statistics.controller';
+import { TrainingZoneController } from './controllers/training-zone.controller';
 import { EventService } from './services';
 import { AthleteService } from './services/athlete.service';
 import { StravaConnectorService } from './services/connector/strava.service';
@@ -17,6 +18,7 @@ import { EquipmentService } from './services/equipment.service';
 import { EventTemplateService } from './services/event-template.service';
 import { RecordService } from './services/record.service';
 import { StatisticsService } from './services/statistics.service';
+import { TrainingZoneService } from './services/training-zone.service';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), AuthModule],
@@ -28,6 +30,7 @@ import { StatisticsService } from './services/statistics.service';
     StatisticsController,
     RecordController,
     EquipmentController,
+    TrainingZoneController,
   ],
   providers: [
     EventService,
@@ -38,6 +41,7 @@ import { StatisticsService } from './services/statistics.service';
     PrismaService,
     RecordService,
     EquipmentService,
+    TrainingZoneService,
   ],
   exports: [EventService],
 })
