@@ -34,7 +34,7 @@ export function TrainingZoneForm({
       min: 0,
       max: 0,
       color: '#cccccc',
-      sports: [],
+      sports: defaultValues?.sports ?? ALL_SPORTS,
       ...defaultValues,
     },
   });
@@ -56,7 +56,7 @@ export function TrainingZoneForm({
         label="Color"
         type="color"
         required
-        className="w-16 h-10 p-0 border-none"
+        className="w-16 h-10 p-0 border-none radi"
       />
       <Controller
         name="sports"
