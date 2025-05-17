@@ -32,8 +32,6 @@ OpenAthlete is just getting started. Here’s what’s coming next:
 - 🔗 More integrations (Garmin, Suunto, Wahoo…)
 - 📅 Weekly training view
 
-👉 See the [full roadmap here](https://github.com/tristanblt/openathlete/projects)
-
 ---
 
 ## 🚀 Get Started
