@@ -16,7 +16,7 @@ Self-host it. Extend it. Contribute to it. Or just use it to become your stronge
 
 ✅ Integrations (only Strava for the moment)  
 ✅ Workout tracking and progress visualization  
-✅ Fully self-hostable
+✅ Fully self-hostable 
 ✅ Respectful of your data and privacy
 
 > 🧠 *Everything we build is open and transparent — and you’re invited to help shape it.*
